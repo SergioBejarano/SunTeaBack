@@ -18,7 +18,7 @@ public class Reserve {
     private String reason; //reason why this reserve was created
     private String state; //state of this reserve at moment
     private int userId; //id of user that made it
-    private int scheduleId; //id of its schedule
+    private String scheduleId; //id of its schedule
 
     /**
      * Constructs a Reserve object with a specified type, reason, and user.
@@ -51,7 +51,7 @@ public class Reserve {
      * Sets the schedule of the reserve.
      * @param schedule The new schedule of the reserve
      */
-    public void setSchedule(int schedule){
+    public void setSchedule(String schedule){
         this.scheduleId = schedule;
     }
 
@@ -125,5 +125,5 @@ public class Reserve {
      * Gets the schedule associated with this reserve.
      * @return The schedule of the reserve
      */
-    public int getSchedule() { return scheduleId; }
+    public String getSchedule() { return scheduleId; }
 }

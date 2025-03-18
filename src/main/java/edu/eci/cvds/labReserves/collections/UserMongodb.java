@@ -11,11 +11,13 @@ import java.util.List;
 @Document(collection = "user")
 public  class UserMongodb extends User {
     @Id
-    private String id;
+    private int id;
 
+    public UserMongodb() {}
 
     public UserMongodb(User user) throws LabReserveException {
         super(user.getId(), user.getName(), user.getMail(), user.getPassword(), user.getRol());
+        this.id = user.getId();
     }
 
 }

@@ -36,7 +36,7 @@ public interface ScheduleMongoRepository extends MongoRepository<ScheduleMongodb
      *
      * @param id The ID of the schedule to delete.
      */
-    void deleteById(int id);
+    void deleteById(String id);
 
     /**
      * Finds a ScheduleMongodb entity by its ID.
@@ -44,5 +44,6 @@ public interface ScheduleMongoRepository extends MongoRepository<ScheduleMongodb
      * @param id The ID of the schedule to find.
      * @return The matching ScheduleMongodb entity or null if not found.
      */
-    ScheduleMongodb findById(int id);
+    @Query("{ '_id' : ?0 }")
+    ScheduleMongodb findByScheduleId(String id);
 }

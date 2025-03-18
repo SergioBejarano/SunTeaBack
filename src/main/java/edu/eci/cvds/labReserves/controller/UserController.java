@@ -1,4 +1,5 @@
 package edu.eci.cvds.labReserves.controller;
+import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.services.UserService;
 import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.User;
@@ -21,14 +22,14 @@ public class UserController {
      * @throws LabReserveException
      */
     @PostMapping("/signin")
-    public ResponseEntity<?> createUser(@RequestBody User user) throws LabReserveException {
+    public UserMongodb createUser(@RequestBody User user) throws LabReserveException {
         try{
             User createdUser = userServ.createUser(user);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+            return userServ.createUser(user);
         }catch(LabReserveException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new LabReserveException(e.getMessage());
         }catch (Exception e) {
-            return new ResponseEntity<>("Error inesperado: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error inesperado: " + e.getMessage());
         }
     }
 

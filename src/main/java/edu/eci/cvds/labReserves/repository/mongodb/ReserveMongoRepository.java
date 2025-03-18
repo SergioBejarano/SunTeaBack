@@ -41,14 +41,15 @@ public interface ReserveMongoRepository extends MongoRepository<ReserveMongodb, 
      * @param id The ID of the reservation.
      * @return The matching reservation or null if not found.
      */
-    ReserveMongodb findById(int id);
+    @Query("{ '_id' : ?0 }")
+    ReserveMongodb findByReserveId(String id);
 
     /**
      * Deletes a reservation by its ID.
      *
      * @param id The ID of the reservation to be deleted.
      */
-    void deleteById(int id);
+    void deleteById(String id);
 
     /**
      * Finds a reservation by its schedule ID.
@@ -57,7 +58,7 @@ public interface ReserveMongoRepository extends MongoRepository<ReserveMongodb, 
      * @return The matching reservation or null if not found.
      */
     @Query("{ 'scheduleId' : ?0 }")
-    ReserveMongodb findByScheduleId(int scheduleId);
+    ReserveMongodb findByScheduleId(String scheduleId);
 
     /**
      * Retrieves all reservations associated with a specific user ID.

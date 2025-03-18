@@ -1,6 +1,7 @@
 package edu.eci.cvds.labReserves.collections;
 import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.Schedule;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ScheduleMongodb extends Schedule {
 
     @Id
-    private int id; //identifier for the scheduleMongodb (auto-generated).
+    private String id = new ObjectId().toString(); //identifier for the scheduleMongodb (auto-generated).
 
     /**
      * Default constructor for ScheduleMongodb.
@@ -30,7 +31,6 @@ public class ScheduleMongodb extends Schedule {
     public ScheduleMongodb(Schedule schedule) throws LabReserveException {
         super(schedule.getStartHour(), schedule.getNumberDay(),
                 schedule.getDay(), schedule.getMonth(), schedule.getYear(), schedule.getLaboratory());
-        this.id = schedule.getId();
     }
 
     /**
@@ -38,8 +38,11 @@ public class ScheduleMongodb extends Schedule {
      *
      * @return The schedule ID.
      */
-    @Override
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

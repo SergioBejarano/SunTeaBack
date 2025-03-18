@@ -23,7 +23,7 @@ public class UserService{
      * @param user
      * @return the saved user
      */
-    public User createUser(User user) throws LabReserveException {
+    public UserMongodb createUser(User user) throws LabReserveException {
         try{
             UserMongodb userMongo = new UserMongodb(user);
             return userRepo.save(userMongo);

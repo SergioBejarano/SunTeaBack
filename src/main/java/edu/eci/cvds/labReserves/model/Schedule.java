@@ -11,8 +11,6 @@ import java.time.LocalTime;
  */
 public class Schedule {
 
-    private int id; //id of schedule (autogenerate)
-
     private LocalTime startHour; //start of resource
     private LocalTime endHour; //end of resource
 
@@ -160,22 +158,6 @@ public class Schedule {
      */
     public void setYear(int year) throws LabReserveException {
         this.year = year;
-    }
-
-    /**
-     * Gets the ID of the schedule.
-     * @return The schedule ID
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the ID of the schedule.
-     * @param id The schedule ID
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

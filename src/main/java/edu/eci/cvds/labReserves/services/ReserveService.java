@@ -36,10 +36,10 @@ public class ReserveService{
         Schedule schedule = new Schedule(reserveRequest.getStartHour(), reserveRequest.getNumberDay(),
                 reserveRequest.getDay(), reserveRequest.getMonth(),
                 reserveRequest.getYear(), reserveRequest.getLaboratoryName());
+        ScheduleMongodb scheduleMongodb = new ScheduleMongodb(schedule);
         Reserve reserve = new Reserve(reserveRequest.getType(),
                 reserveRequest.getReason(), reserveRequest.getUserId());
-        reserve.setSchedule(schedule.getId());
-        ScheduleMongodb scheduleMongodb = new ScheduleMongodb(schedule);
+        reserve.setSchedule(scheduleMongodb.getId());
         ReserveMongodb resMongo = new ReserveMongodb(reserve);
         if (!anotherReserve(scheduleMongodb)){
             throw new LabReserveException(LabReserveException.RESERVE_ALREADY_EXIST);
@@ -56,7 +56,7 @@ public class ReserveService{
      * @return A {@code ResponseEntity} indicating success or failure.
      * @throws LabReserveException If the reservation cannot be found.
      */
-    public ResponseEntity<Void> deleteReserveByScheduleId(int scheduleId) throws LabReserveException {
+    public ResponseEntity<Void> deleteReserveByScheduleId(String scheduleId) throws LabReserveException {
         ReserveMongodb resMongo = reserveRepo.findByScheduleId(scheduleId);
         reserveRepo.deleteById(resMongo.getId());
         return ResponseEntity.noContent().build();
@@ -67,7 +67,7 @@ public class ReserveService{
      *
      * @param scheduleId The ID of the schedule to delete.
      */
-    public void deleteById(int scheduleId){
+    public void deleteById(String scheduleId){
         scheduleRepo.deleteById(scheduleId);
     }
 
@@ -78,7 +78,7 @@ public class ReserveService{
      * @return A {@code ResponseEntity} indicating success or failure.
      * @throws LabReserveException If the reservation cannot be found.
      */
-    public ResponseEntity<Void> deleteReserveById(int id) throws LabReserveException {
+    public ResponseEntity<Void> deleteReserveById(String id) throws LabReserveException {
         reserveRepo.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -94,7 +94,7 @@ public class ReserveService{
         List<ReserveRequest> reserveRequests = new ArrayList<>();
         for (ReserveMongodb reserveMongodb : reserve) {
             ReserveRequest request = new ReserveRequest(reserveMongodb,
-                    scheduleRepo.findById(reserveMongodb.getSchedule()));
+                    scheduleRepo.findByScheduleId(reserveMongodb.getSchedule()));
             reserveRequests.add(request);
         }
         return reserveRequests;
@@ -108,8 +108,8 @@ public class ReserveService{
         List<ReserveRequest> labReserves = new ArrayList<>();
         List<ReserveMongodb> reserves = reserveRepo.findAll();
         for (ReserveMongodb reserveMongodb : reserves) {
-            int scheduleId = reserveMongodb.getSchedule();
-            ScheduleMongodb scheduleMongodb = scheduleRepo.findById(scheduleId);
+            String scheduleId = reserveMongodb.getSchedule();
+            ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(scheduleId);
             String abreviation = scheduleMongodb.getLaboratory();
             if (abreviation.equals(laboratoryAbbreviation)) {
                 ReserveRequest request = new ReserveRequest(reserveMongodb, scheduleMongodb);
@@ -127,8 +127,8 @@ public class ReserveService{
         List<ReserveMongodb> reserves = reserveRepo.findByUserId(userId);
         List<ReserveRequest> reserveRequests = new ArrayList<>();
         for (ReserveMongodb reserveMongodb : reserves) {
-            int scheduleId = reserveMongodb.getSchedule();
-            ScheduleMongodb scheduleMongodb = scheduleRepo.findById(scheduleId);
+            String  scheduleId = reserveMongodb.getSchedule();
+            ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(scheduleId);
             ReserveRequest request = new ReserveRequest(reserveMongodb, scheduleMongodb);
             reserveRequests.add(request);
         }
@@ -143,7 +143,7 @@ public class ReserveService{
         List<ReserveRequest> labReserves = new ArrayList<>();
         List<ReserveMongodb> reserves = reserveRepo.findAll();
         for (ReserveMongodb reserveMongodb : reserves) {
-            ScheduleMongodb scheduleMongodb = scheduleRepo.findById(reserveMongodb.getSchedule());
+            ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(reserveMongodb.getSchedule());
             DayOfWeek dayReserves = scheduleMongodb.getDay();
             if (day.equals(dayReserves)) {
                 ReserveRequest request = new ReserveRequest(reserveMongodb, scheduleMongodb);
@@ -161,7 +161,7 @@ public class ReserveService{
         List<ReserveMongodb> labReserves = new ArrayList<>();
          List<ReserveMongodb> reserves = reserveRepo.findAll();
          for (ReserveMongodb reserveMongodb : reserves) {
-             ScheduleMongodb scheduleMongodb = scheduleRepo.findById(reserveMongodb.getSchedule());
+             ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(reserveMongodb.getSchedule());
              Month monthReserves = scheduleMongodb.getMonth();
              if (month.equals(monthReserves)) {
                 labReserves.add(reserveMongodb);
@@ -180,15 +180,15 @@ public class ReserveService{
     /**
      * Retrieves a reservation by its ID.
      */
-    public ReserveMongodb getReserveById(int id) throws LabReserveException {
-        return reserveRepo.findById(id);
+    public ReserveMongodb getReserveById(String id) throws LabReserveException {
+        return reserveRepo.findByReserveId(id);
     }
 
     /**
      * Retrieves a schedule by its ID.
      */
-    public ScheduleMongodb getScheduleById(int id) throws LabReserveException {
-        return scheduleRepo.findById(id);
+    public ScheduleMongodb getScheduleById(String id) throws LabReserveException {
+        return scheduleRepo.findByScheduleId(id);
     }
 
     /**
