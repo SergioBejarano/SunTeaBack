@@ -142,7 +142,12 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/{id}")
-    public ReserveMongodb getReserveById(@PathVariable String id) throws LabReserveException {
+    public ReserveRequest getReserveById(@PathVariable String id) throws LabReserveException {
         return reserveService.getReserveById(id);
+    }
+
+    @GetMapping("/reserves/{id}")
+    public ReserveMongodb getOnlyReserveById(@PathVariable String id) throws LabReserveException {
+        return reserveService.getOnlyReserveById(id);
     }
 }

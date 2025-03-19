@@ -159,15 +159,15 @@ public class ReserveService{
     public List<ReserveMongodb> getReserveByMonth(Month month) throws LabReserveException {
         //return reserveRepo.findByMonth(month);
         List<ReserveMongodb> labReserves = new ArrayList<>();
-         List<ReserveMongodb> reserves = reserveRepo.findAll();
-         for (ReserveMongodb reserveMongodb : reserves) {
-             ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(reserveMongodb.getSchedule());
-             Month monthReserves = scheduleMongodb.getMonth();
-             if (month.equals(monthReserves)) {
+        List<ReserveMongodb> reserves = reserveRepo.findAll();
+        for (ReserveMongodb reserveMongodb : reserves) {
+            ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(reserveMongodb.getSchedule());
+            Month monthReserves = scheduleMongodb.getMonth();
+            if (month.equals(monthReserves)) {
                 labReserves.add(reserveMongodb);
-             }
-         }
-         return labReserves;
+            }
+        }
+        return labReserves;
     }
 
     /**
@@ -180,7 +180,14 @@ public class ReserveService{
     /**
      * Retrieves a reservation by its ID.
      */
-    public ReserveMongodb getReserveById(String id) throws LabReserveException {
+    public ReserveRequest getReserveById(String id) throws LabReserveException {
+        ReserveMongodb reserveMongodb = reserveRepo.findByReserveId(id);
+        ScheduleMongodb scheduleMongodb = scheduleRepo.findByScheduleId(reserveMongodb.getSchedule());
+        ReserveRequest request = new ReserveRequest(reserveMongodb, scheduleMongodb);
+        return request;
+    }
+
+    public ReserveMongodb getOnlyReserveById(String id) throws LabReserveException {
         return reserveRepo.findByReserveId(id);
     }
 
@@ -196,7 +203,7 @@ public class ReserveService{
      */
     public ScheduleMongodb getScheduleBySchedule(Schedule schedule) throws LabReserveException {
         return scheduleRepo.findByTime(schedule.getStartHour(), schedule.getNumberDay(),
-                schedule.getDay(), schedule.getMonth(), schedule.getYear());
+                schedule.getDay(), schedule.getMonth(), schedule.getYear(), schedule.getLaboratory());
     }
 
     private boolean anotherReserve(ScheduleMongodb schedule){
