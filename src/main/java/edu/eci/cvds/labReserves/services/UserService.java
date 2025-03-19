@@ -6,7 +6,10 @@ import edu.eci.cvds.labReserves.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The {@code UserService} class provides business logic for managing reserves within the application.
@@ -118,6 +121,31 @@ public class UserService{
      */
     public void deleteUser(User user) throws LabReserveException {
         userRepo.deleteById(user.getId());
+    }
+
+    /**
+     *
+     * @return all users
+     */
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        for (UserMongodb userMongo : userRepo.findAll()) {
+            try {
+                users.add(new User(userMongo.getId(), userMongo.getName(), userMongo.getMail(),"*", userMongo.getRol()));
+            } catch (LabReserveException e) {
+                System.err.println("Error al convertir usuario con ID " + userMongo.getId() + ": " + e.getMessage());
+            }
+        }
+        return users;
+    }
+
+    public List<String> getUserInfor(int user) throws LabReserveException{
+        User actualUser = userRepo.findById(user);
+        List<String> userInfo = new ArrayList<>();
+        userInfo.add(actualUser.getName());
+        userInfo.add(actualUser.getMail());
+        userInfo.add(actualUser.getRol());
+        return userInfo;
     }
 
 

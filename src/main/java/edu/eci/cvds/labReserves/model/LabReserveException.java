@@ -12,7 +12,7 @@ public class LabReserveException extends Exception{
     public static final String HOUR_BEFORE_ACTUALLY = "hour selected before actually"; //hour is before to current
     public static final String RESERVE_ALREADY_EXIST = "this reserve already exist";
     public static final String INVALID_ROL_TYPE = "this rol is not admited";
-
+    public static final String USER_NOT_FOUND = "user not found";
     public LabReserveException(String message){
         super(message);
     }
