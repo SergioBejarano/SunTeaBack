@@ -13,6 +13,7 @@ public class LabReserveException extends Exception{
     public static final String RESERVE_ALREADY_EXIST = "this reserve already exist";
     public static final String INVALID_ROL_TYPE = "this rol is not admited";
     public static final String USER_NOT_FOUND = "user not found";
+    public static final String USER_NOT_CREATED = "user not created";
     public LabReserveException(String message){
         super(message);
     }

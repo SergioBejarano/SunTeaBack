@@ -32,7 +32,6 @@ public class UserService{
             return userRepo.save(userMongo);
     
         } catch(Exception e){
-            e.printStackTrace();
             throw new LabReserveException("Error al crear el usuario: " + e.getMessage());
         }
     }
@@ -147,14 +146,4 @@ public class UserService{
         userInfo.add(actualUser.getRol());
         return userInfo;
     }
-
-
-
-
-
-
-
-
-
-
 }

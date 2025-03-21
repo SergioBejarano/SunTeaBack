@@ -125,6 +125,11 @@
 						<configuration>
 							<excludes>
 								<exclude>/configurators/</exclude>
+								<exclude>edu/eci/cvds/labReserves/services/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/controller/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/collections/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/dto/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/repository.mongodb/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>
