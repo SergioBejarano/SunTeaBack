@@ -145,4 +145,9 @@ public class ReserveController {
     public ReserveMongodb getReserveById(@PathVariable String id) throws LabReserveException {
         return reserveService.getReserveById(id);
     }
+
+    @PostMapping("/random")
+    public List<ReserveRequest> postReservesRandom() throws LabReserveException{
+        return reserveService.generateRandomReserves();
+    }
 }
