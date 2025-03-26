@@ -96,7 +96,7 @@ public class UserService{
      * @return
      */
     public User changeUserName(String newName, User user) throws LabReserveException {
-        user.setMail(newName);
+        user.setName(newName);
         UserMongodb userMongodb = new UserMongodb(user);
         return userRepo.save(userMongodb);
     }

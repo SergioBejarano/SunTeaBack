@@ -130,6 +130,8 @@
 								<exclude>edu/eci/cvds/labReserves/collections/**</exclude>
 								<exclude>edu/eci/cvds/labReserves/dto/**</exclude>
 								<exclude>edu/eci/cvds/labReserves/repository.mongodb/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/LabReserve.*</exclude>
+
 							</excludes>
 						</configuration>
 					</execution>

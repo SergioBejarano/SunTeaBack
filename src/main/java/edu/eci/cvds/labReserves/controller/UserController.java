@@ -147,13 +147,13 @@ public class UserController {
 
     /**
      *
-     * @param id
+     * @param mail
      * @return
      * @throws LabReserveException
      */
     @GetMapping("/{id}")
-    public User getUserByMail(@PathVariable int id) throws LabReserveException{
-        Optional<User> userOptional = userServ.findUserById(id);
+    public User getUserByMail(@PathVariable String mail) throws LabReserveException{
+        Optional<User> userOptional = userServ.findUserByMail(mail);
         if(userOptional.isPresent()){
             return userOptional.get();
         }else{
@@ -168,9 +168,13 @@ public class UserController {
      * @throws LabReserveException
      */
     @GetMapping("/userinfo/{id}")
-    public List<String> getUserInfoById(@PathVariable int id) throws LabReserveException{
-        List<String> userInfo = userServ.getUserInfor(id);
-        return userInfo;
+    public User getUserInfoById(@PathVariable int id) throws LabReserveException{
+        Optional<User> userOptional = userServ.findUserById(id);
+        if(userOptional.isPresent()){
+            return userOptional.get();
+        }else{
+            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        }
     }
 
 
