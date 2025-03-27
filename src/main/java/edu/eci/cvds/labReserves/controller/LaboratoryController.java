@@ -68,8 +68,10 @@ public class LaboratoryController {
      * @param abbreviation Abreviatura del laboratorio a actualizar.
      */
     @PutMapping("/update/{abbreviation}")
-    public void updateLaboratoryScheduleReference(@PathVariable String abbreviation) {
-         laboratoryService.updateLaboratoryScheduleReference(abbreviation);
+    public void updateLaboratoryScheduleReference(@PathVariable String abbreviation, @RequestBody Map<String, Integer> requestBody) {
+        int totalCapacity = requestBody.get("totalCapacity");
+
+        laboratoryService.updateLaboratoryScheduleReference(abbreviation, totalCapacity);
     }
 
     /**

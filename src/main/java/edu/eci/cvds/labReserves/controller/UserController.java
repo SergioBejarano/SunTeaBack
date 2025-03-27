@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -35,25 +38,42 @@ public class UserController {
 
     /**
      *
-     * @param user
+     * @param id
      * @throws LabReserveException
      */
-    @DeleteMapping("/delete")
-    public void deleteUser(@RequestBody User user) throws LabReserveException{
-            userServ.deleteUser(user);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
+
+        if (userOptional.isPresent()) {
+            userServ.deleteUser(userOptional.get());
+            return ResponseEntity.ok("Usuario eliminado correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
     }
+
+
 
     /**
      *
      * @param password
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/password/{password}")
-    public User changePassword(@PathVariable String password, @RequestBody User user) throws LabReserveException {
-        return userServ.changeUserPassword(password, user);
+    public ResponseEntity<String> changePassword(@PathVariable String password, @RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
+
+        if (userOptional.isPresent()) {
+            userServ.changeUserPassword(password, userOptional.get());
+            return ResponseEntity.ok("Contraseña actualizada correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
     }
+
 
 
 
@@ -61,41 +81,101 @@ public class UserController {
     /**
      *
      * @param mail
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/mail/{mail}")
-    public User changeMail(@PathVariable String mail,@RequestBody User user) throws LabReserveException {
-        return userServ.changeUserMail(mail,user);
+    public ResponseEntity<String> changeMail(@PathVariable String mail,@RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
+
+        if (userOptional.isPresent()) {
+            userServ.changeUserMail(mail, userOptional.get());
+            return ResponseEntity.ok("Correo actualizado correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
     }
 
     /**
      *
      * @param name
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/name/{name}")
-    public User changeUserName(@PathVariable String name,@RequestBody User user) throws LabReserveException {
-        return userServ.changeUserName(name,user);
+    public ResponseEntity<String> changeUserName(@PathVariable String name,@RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
+        if (userOptional.isPresent()) {
+            userServ.changeUserName(name, userOptional.get());
+            return ResponseEntity.ok("Nombre actualizado correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
     }
 
     /**
      *
      * @param rol
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/rol/{rol}")
-    public User changeRol(@PathVariable String rol,@RequestBody User user) throws LabReserveException {
-        return userServ.changeUserRol(rol,user);
+    public ResponseEntity<String> changeRol(@PathVariable String rol, @RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
+
+        if (userOptional.isPresent()) {
+            userServ.changeUserRol(rol, userOptional.get());
+            return ResponseEntity.ok("Rol actualizado correctamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
     }
 
+    /**
+     * Retrieves all users
+     * @return list with all users
+     * @throws LabReserveException
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers() throws LabReserveException{
+        List<User> users = userServ.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
 
+    /**
+     *
+     * @param mail
+     * @return
+     * @throws LabReserveException
+     */
+    @GetMapping("/{id}")
+    public User getUserByMail(@PathVariable String mail) throws LabReserveException{
+        Optional<User> userOptional = userServ.findUserByMail(mail);
+        if(userOptional.isPresent()){
+            return userOptional.get();
+        }else{
+            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        }
+    }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws LabReserveException
+     */
+    @GetMapping("/userinfo/{id}")
+    public User getUserInfoById(@PathVariable int id) throws LabReserveException{
+        Optional<User> userOptional = userServ.findUserById(id);
+        if(userOptional.isPresent()){
+            return userOptional.get();
+        }else{
+            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        }
+    }
 
 
 }
