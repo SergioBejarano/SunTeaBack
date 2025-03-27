@@ -14,7 +14,7 @@ public class User {
 
     public User() {}
 
-    public User(int id, String name, String mail, String password, String rol) throws LabReserveException {
+    public User(int id, String name, String mail, String password, String rol) throws  LabReserveException {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -78,5 +78,11 @@ public class User {
      * set a new rol for a user
      * @param newRol
      */
-    public void setRol(String newRol){this.rol = newRol;}
+    public void setRol(String newRol) throws LabReserveException {
+        if (rolType.contains(newRol)){
+            this.rol = newRol;
+        }else{
+            throw new LabReserveException(LabReserveException.INVALID_ROL_TYPE);
+        }
+    }
 }

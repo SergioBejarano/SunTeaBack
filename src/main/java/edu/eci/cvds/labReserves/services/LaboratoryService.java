@@ -53,7 +53,7 @@ public class LaboratoryService {
      * Actualiza la referencia de horario de un laboratorio existente.
      * @param abbreviation Abreviatura del laboratorio a actualizar.
      */
-    public void updateLaboratoryScheduleReference(String abbreviation) {
+    public void updateLaboratoryScheduleReference(String abbreviation, int totalCapacity) {
         LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
         // Esta linea se va mañana RECORDATORIOOOO (2 lineas)
         /*List<ScheduleReference> listschedule = existingLab.getScheduleReferences();
@@ -63,9 +63,10 @@ public class LaboratoryService {
                 schedule.setClosingTime(schedulereference.getClosingTime());
             }
         }
-        existingLab.setScheduleReferences(listschedule);*/
+        existingLab.setScheduleReferences(listschedule);
+        */
+        existingLab.setTotalCapacity(totalCapacity);
         laboratoryRepository.save(existingLab);
-
     }
 
     /**

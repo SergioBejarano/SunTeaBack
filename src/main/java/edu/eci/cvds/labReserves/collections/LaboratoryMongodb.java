@@ -18,7 +18,7 @@ import org.springframework.data.annotation.Id;
 public class LaboratoryMongodb extends Laboratory {
 
     @Id
-    private int id;
+    private String id;
 
     public LaboratoryMongodb(){
         super();
@@ -29,13 +29,14 @@ public class LaboratoryMongodb extends Laboratory {
      */
     public LaboratoryMongodb(Laboratory laboratory) {
         super(laboratory.getName(), laboratory.getAbbreviation(), laboratory.getTotalCapacity(), laboratory.getLocation(), laboratory.getScheduleReferences());
+        this.id = laboratory.getAbbreviation();
     }
 
     /**
      * Gets the id time of the laboratory.
      * @return The id
      */
-    public int getId(){
+    public String getId(){
         return id;
     }
 }

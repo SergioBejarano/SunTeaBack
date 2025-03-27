@@ -1,10 +1,7 @@
 package edu.eci.cvds.labReserves.repository.mongodb;
 
-import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.collections.UserMongodb;
-import edu.eci.cvds.labReserves.model.Reserve;
 import edu.eci.cvds.labReserves.model.User;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
@@ -23,4 +20,8 @@ public interface UserMongoRepository extends MongoRepository<UserMongodb, String
     UserMongodb searchById(int id);
 
     void deleteById(int id);
+
+    List<UserMongodb> findAll();
+
+
 }
