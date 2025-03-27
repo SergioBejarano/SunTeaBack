@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * The {@code ReserveService} class provides business logic for managing reserves within the application.
@@ -220,5 +222,62 @@ public class ReserveService{
             }
         }
         return true;
+    }
+
+    public List<ReserveRequest> generateRandomReserves() throws LabReserveException {
+        Random random = new Random();
+        int numReserve = random.nextInt(100, 1001);
+        String[] typeReserve = new String[]{"lesson", "available"};
+        String[] reasonReserve = new String[]{"AYPR", "AYED", "CVDS", "POOB", "CNYT", "IETI", "ARSW", "MBDA", "ACSO", "RECO",
+                "SPTI", "TSOR", "AUPN", "AREP"};
+        int yearReserve = 2026;
+        String[] laboratoyReserve = new String[]{"LABISW", "LABICO", "LABPLA", "EDEI", "LABISIS", "EDFI"};
+        String typeReserves, reasons, laboratories;
+
+        LocalTime[] possibleTimes = {LocalTime.of(7, 0), LocalTime.of(8, 30),
+                LocalTime.of(10, 0), LocalTime.of(11, 30), LocalTime.of(13, 0),
+                LocalTime.of(14, 30), LocalTime.of(16, 0), LocalTime.of(17, 30)};
+
+        Schedule schedule;
+        Reserve reserve;
+        ScheduleMongodb scheduleMongodb;
+        ReserveMongodb reserveMongodb;
+
+        List<ReserveRequest> reserveList = new ArrayList<>();
+        ReserveRequest reserveRequest;
+
+        for (int i=0; i<numReserve; i++){
+            int priorityReserve = random.nextInt(1, 6);
+            int userIdReserve = random.nextInt(1000000407, 1000007948);
+            int numberDayReserve = random.nextInt(1, 31);
+            DayOfWeek dayReserve = DayOfWeek.of(random.nextInt(1,8));
+            Month monthReserve = Month.of(random.nextInt(1,13));
+            typeReserves = typeReserve[random.nextInt(typeReserve.length)];
+            reasons = reasonReserve[random.nextInt(reasonReserve.length)];
+            laboratories = laboratoyReserve[random.nextInt(laboratoyReserve.length)];
+
+            LocalTime timeReserve = possibleTimes[random.nextInt(possibleTimes.length)];
+
+            schedule = new Schedule(timeReserve, numberDayReserve, dayReserve, monthReserve, yearReserve, laboratories);
+            scheduleMongodb = new ScheduleMongodb(schedule);
+
+            reserve = new Reserve(typeReserves, reasons, userIdReserve);
+            reserve.setSchedule(scheduleMongodb.getId());
+
+            reserveMongodb = new ReserveMongodb(reserve);
+            reserveMongodb.setPriority(priorityReserve);
+
+            if (!anotherReserve(scheduleMongodb)){
+                throw new LabReserveException(LabReserveException.RESERVE_ALREADY_EXIST);
+            }
+
+            scheduleRepo.save(scheduleMongodb);
+            reserveRepo.save(reserveMongodb);
+
+            reserveRequest = new ReserveRequest(reserveMongodb, scheduleMongodb);
+            reserveList.add(reserveRequest);
+
+        }
+        return reserveList;
     }
 }

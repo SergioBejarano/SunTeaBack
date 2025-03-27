@@ -19,6 +19,7 @@ public class Reserve {
     private String state; //state of this reserve at moment
     private int userId; //id of user that made it
     private String scheduleId; //id of its schedule
+    private int priority; //priority of Reserve
 
     /**
      * Constructs a Reserve object with a specified type, reason, and user.
@@ -126,4 +127,16 @@ public class Reserve {
      * @return The schedule of the reserve
      */
     public String getSchedule() { return scheduleId; }
+
+    public void setPriority(int priority) throws LabReserveException{
+        if (priority>0 && priority<6) {
+            this.priority = priority;
+        }else {
+            throw new LabReserveException(LabReserveException.PRIORITY_NOT_IN_RANGE);
+        }
+    }
+
+    public int getPriority(){
+        return priority;
+    }
 }
