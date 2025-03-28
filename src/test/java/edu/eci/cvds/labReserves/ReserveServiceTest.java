@@ -108,7 +108,7 @@ public class ReserveServiceTest {
         ReserveMongodb reserveMongodbB = new ReserveMongodb(reserveB);
         reserveMongodbB.setId(reserveId2);
         Schedule scheduleB = new Schedule(LocalTime.of(14, 30), 1,
-                DayOfWeek.MONDAY, Month.JANUARY, 2025, "LABISW");
+                DayOfWeek.MONDAY, Month.DECEMBER, 2025, "LABISW");
         ScheduleMongodb scheduleMongodbB = new ScheduleMongodb(scheduleB);
         scheduleMongodbB.setId(scheduleId2);
         ReserveRequest request2 = new ReserveRequest(reserveMongodbB, scheduleMongodbB);

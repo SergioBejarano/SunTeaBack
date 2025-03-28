@@ -11,6 +11,8 @@ public class LabReserveException extends Exception{
     public static final String INVALID_ROL_TYPE = "this rol is not admited";
     public static final String USER_NOT_FOUND = "user not found";
     public static final String USER_NOT_CREATED = "user not created";
+    public static final String PRIORITY_NOT_IN_RANGE = "Priority isn't in range (1 to 5)";
+
     public LabReserveException(String message){
         super(message);
     }
