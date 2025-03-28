@@ -15,7 +15,7 @@ public interface UserMongoRepository extends MongoRepository<UserMongodb, String
 
     String findByRol(String rol);
 
-    User findByName(String name);
+    UserMongodb findByName(String name);
 
     UserMongodb searchById(int id);
 
