@@ -28,8 +28,8 @@ public interface ScheduleMongoRepository extends MongoRepository<ScheduleMongodb
      * @param year       The year.
      * @return The matching ScheduleMongodb entity or null if not found.
      */
-    @Query("{ 'startHour' : ?0, 'numberDay' : ?1, 'day' : ?2, 'month' : ?3, 'year' : ?4 }")
-    ScheduleMongodb findByTime(LocalTime startHour, int numberDay, DayOfWeek day, Month month, int year);
+    @Query("{ 'startHour' : ?0, 'numberDay' : ?1, 'day' : ?2, 'month' : ?3, 'year' : ?4, 'laboratory' : ?5  }")
+    ScheduleMongodb findByTime(LocalTime startHour, int numberDay, DayOfWeek day, Month month, int year, String laboratory);
 
     /**
      * Deletes a ScheduleMongodb entity by its ID.

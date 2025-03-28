@@ -1,19 +1,19 @@
-name: Build and deploy JAR app to Azure Web App - LabReserveEciDevelop
+name: Build and deploy JAR app to Azure Web App - LabReserveEci
 
 on:
   push:
     branches:
-      - develop
+      - main
   pull_request:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -67,14 +67,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CBF14071B02344A3A4DF7504FE82E674 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_019809C0F18044BF8FCF289B4C0020ED }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_285EFD323D3443BEA2E602A3AFED1B26 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DF46C6B1AF4D48FB8866E59DC59C8067 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7AED436C02C47D7A0DC24AD33FB2EB4 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BE688ED24FF54E74B9BCB10E004A8784 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'LabReserveEciDevelop'
+          app-name: 'LabReserveEci'
           slot-name: 'Production'
           package: '*.jar'
+          

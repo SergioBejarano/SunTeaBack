@@ -46,6 +46,17 @@ Among these we will have
 ![image](https://github.com/user-attachments/assets/fccf69fa-56bc-4efb-9aec-5ae76e36a7b9)
 
 ### Unit Test and JACOCO
+For the unit tests, all classes referenced by model were considered, the classes in the other packages were not considered, since the tests of services, controllers and interfaces are done with mockito, which only simulates the procedure, it's not a real test; collections have the same methods as models, since all classes are extended, and the main LabReserve only has the main execution method.
+
+![image](https://github.com/user-attachments/assets/68ffa7e3-3d72-411e-9311-8baeb56319f1)
+using the mvn test command, we test all created unit tests:
+
+![image](https://github.com/user-attachments/assets/d6022ca1-3bcf-45c8-965e-f0cce071a7f0)
+
+and the coverage shown by jacoco, in this case has a percentage of 87%:
+
+![image](https://github.com/user-attachments/assets/f6848898-cbab-4206-afca-ac27c6ec0d2a)
+![image](https://github.com/user-attachments/assets/f995be5f-00a2-4ba8-a466-d1b41ca52b43)
 
 
 ### MongoDB
@@ -93,3 +104,49 @@ Tests for User:
 
 
 Tests for Laboratory:
+
+![image](https://github.com/user-attachments/assets/c0e2065d-57a7-4bd5-8b4b-227a77c4dd1a)
+
+
+## CI/CD
+### Pruebas Unitarias para ReserveService
+To generate the unit tests of the services, we implemented the Mockito library. It helps us to simulate the behaviour of the methods implemented in the service, which store in the database and return the json: this is what we call Mockito:
+![image](https://github.com/user-attachments/assets/4f1c0ffd-c69b-447c-a600-4f4ee14a068a)
+
+example of the use of mockito:
+![image](https://github.com/user-attachments/assets/727c0894-3252-4780-9226-c13d233e5f08)
+
+functionality test of the ReserveService tests:
+
+![image](https://github.com/user-attachments/assets/7e1f0633-2635-45d1-992d-43c780321d3b)
+
+### Git Flow Actions:
+Before implementing the gitflow actions in this repository, a copy repository, identical to the main repository, was created to test the generation, creation and structure of the .yml files.
+This structure has the same project creation details as shown at the beginning of this document.
+It also has a task structure of: Build, Test, Deploy (each requiring the previous to function).
+
+test repository for pipelines: https://github.com/Waldron63/copySunTeaBack
+
+There are 2 types of files required for the development of this part:
+1. pipeline that is triggered by push or pull request to main: main_labrreserveeci.yml
+   app-name: LabReserveEci -> [labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net](https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/)
+
+   ![image](https://github.com/user-attachments/assets/b448ced8-6a16-4974-89f6-1215ddc2a0c7)
+   ![image](https://github.com/user-attachments/assets/9907c540-8696-454e-b837-48284dae823b)
+
+3. pipeline that is triggered by a push or pull request to develop: develop_labrreserveecidevelop.yml
+   app-name: LabReserveEciDevelop -> [labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net](https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/)
+
+   ![image](https://github.com/user-attachments/assets/873b0279-dfe5-45e6-ac80-91a858f283b3)
+   ![image](https://github.com/user-attachments/assets/db178270-1dae-4ef5-a7f3-a1df5f94624f)
+
+## REACT
+In this case, a first code was generated in HTML, CSS and JS, which has a complete functionality between the back and the front. 
+But we moved the code to React, where we also restructured the graphic design of the site:
+Link to see the mockup of the final design of the site (FIGMA):
+https://www.figma.com/design/ywe4fMaXpMjBt53KG8gCqE/CVDS-PROYECTO-1?m=auto&t=KPdovwRh6Pr1C1jy-1
+
+Link to the frontend repository where the HTML and React codes are located:
+https://github.com/Waldron63/FrutiFront
+
+## SEGURIDAD
