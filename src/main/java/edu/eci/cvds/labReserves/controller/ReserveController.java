@@ -9,6 +9,7 @@ import edu.eci.cvds.labReserves.model.Schedule;
 import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.services.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -142,7 +143,17 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/{id}")
-    public ReserveMongodb getReserveById(@PathVariable String id) throws LabReserveException {
+    public ReserveRequest getReserveById(@PathVariable String id) throws LabReserveException {
         return reserveService.getReserveById(id);
+    }
+
+    @GetMapping("/reserves/{id}")
+    public ReserveMongodb getOnlyReserveById(@PathVariable String id) throws LabReserveException {
+        return reserveService.getOnlyReserveById(id);
+    }
+
+    @PostMapping("/random")
+    public List<ReserveRequest> postReservesRandom() throws LabReserveException{
+        return reserveService.generateRandomReserves();
     }
 }

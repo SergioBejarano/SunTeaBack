@@ -9,13 +9,13 @@ import java.util.List;
 @Repository
 public interface UserMongoRepository extends MongoRepository<UserMongodb, String>{
 
-    User findById(int id);
+    UserMongodb findById(int id);
 
-    User findByMail(String mail);
+    UserMongodb findByMail(String mail);
 
     String findByRol(String rol);
 
-    User findByName(String name);
+    UserMongodb findByName(String name);
 
     UserMongodb searchById(int id);
 

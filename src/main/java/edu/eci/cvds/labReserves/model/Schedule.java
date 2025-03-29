@@ -1,8 +1,6 @@
 package edu.eci.cvds.labReserves.model;
 
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.LocalTime;
+import java.time.*;
 
 /**
  * The Schedule class represents a time schedule with a specific time of reserve
@@ -37,12 +35,18 @@ public class Schedule {
      */
     public Schedule(LocalTime startHour, int numberDay, DayOfWeek day,
                     Month month, int year, String laboratory) throws LabReserveException {
-        setStartHour(startHour);
-        setNumberDay(numberDay);
-        setDay(day);
-        setMonth(month);
-        setYear(year);
-        setLaboratory(laboratory);
+        LocalDateTime referenceNow = LocalDateTime.now();
+        boolean correctSchedule = validateCorrectDateTime(numberDay,month,year,startHour,referenceNow);
+        if(correctSchedule){
+            setStartHour(startHour);
+            setNumberDay(numberDay);
+            setDay(day);
+            setMonth(month);
+            setYear(year);
+            setLaboratory(laboratory);
+        }else{
+            throw new LabReserveException(LabReserveException.INVALID_SCHEDULE_TIME);
+        }
     }
 
     /**
@@ -175,5 +179,14 @@ public class Schedule {
      */
     public String getLaboratory() {
         return laboratory;
+    }
+
+    public static boolean validateCorrectDateTime(int numberDay, Month month, int year, LocalTime givenHour, LocalDateTime referenceNow) throws LabReserveException {
+        try {
+            LocalDateTime inputDateTime = LocalDateTime.of(year, month, numberDay, givenHour.getHour(), givenHour.getMinute());
+            return !inputDateTime.isBefore(referenceNow);
+        } catch (DateTimeException e) {
+            throw new LabReserveException("Invalid date provided: " + e.getMessage());
+        }
     }
 }

@@ -27,7 +27,6 @@ public class UserController {
     @PostMapping("/signin")
     public UserMongodb createUser(@RequestBody User user) throws LabReserveException {
         try{
-            User createdUser = userServ.createUser(user);
             return userServ.createUser(user);
         }catch(LabReserveException e){
             throw new LabReserveException(e.getMessage());
@@ -58,13 +57,13 @@ public class UserController {
     /**
      *
      * @param password
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/password/{password}")
-    public ResponseEntity<String> changePassword(@PathVariable String password, @RequestBody User user) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(user.getId());
+    public ResponseEntity<String> changePassword(@PathVariable String password, @RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserPassword(password, userOptional.get());
@@ -81,13 +80,13 @@ public class UserController {
     /**
      *
      * @param mail
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/mail/{mail}")
-    public ResponseEntity<String> changeMail(@PathVariable String mail,@RequestBody User user) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(user.getId());
+    public ResponseEntity<String> changeMail(@PathVariable String mail,@RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserMail(mail, userOptional.get());
@@ -100,13 +99,13 @@ public class UserController {
     /**
      *
      * @param name
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/name/{name}")
-    public ResponseEntity<String> changeUserName(@PathVariable String name,@RequestBody User user) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(user.getId());
+    public ResponseEntity<String> changeUserName(@PathVariable String name,@RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
         if (userOptional.isPresent()) {
             userServ.changeUserName(name, userOptional.get());
             return ResponseEntity.ok("Nombre actualizado correctamente.");
@@ -118,13 +117,13 @@ public class UserController {
     /**
      *
      * @param rol
-     * @param user
+     * @param id
      * @return
      * @throws LabReserveException
      */
     @PutMapping("/rol/{rol}")
-    public ResponseEntity<String> changeRol(@PathVariable String rol, @RequestBody User user) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(user.getId());
+    public ResponseEntity<String> changeRol(@PathVariable String rol, @RequestBody int id) throws LabReserveException {
+        Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserRol(rol, userOptional.get());
@@ -151,7 +150,7 @@ public class UserController {
      * @return
      * @throws LabReserveException
      */
-    @GetMapping("/{mail}")
+    @GetMapping("/{id}")
     public User getUserByMail(@PathVariable String mail) throws LabReserveException{
         Optional<User> userOptional = userServ.findUserByMail(mail);
         if(userOptional.isPresent()){
@@ -168,9 +167,13 @@ public class UserController {
      * @throws LabReserveException
      */
     @GetMapping("/userinfo/{id}")
-    public List<String> getUserInfoById(@PathVariable int id) throws LabReserveException{
-        List<String> userInfo = userServ.getUserInfor(id);
-        return userInfo;
+    public User getUserInfoById(@PathVariable int id) throws LabReserveException{
+        Optional<User> userOptional = userServ.findUserById(id);
+        if(userOptional.isPresent()){
+            return userOptional.get();
+        }else{
+            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        }
     }
 
 

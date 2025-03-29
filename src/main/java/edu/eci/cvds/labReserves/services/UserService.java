@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserService{
+
     @Autowired
     private UserMongoRepository userRepo;
-
 
     /**
      * Save a user
@@ -32,7 +32,6 @@ public class UserService{
             return userRepo.save(userMongo);
     
         } catch(Exception e){
-            e.printStackTrace();
             throw new LabReserveException("Error al crear el usuario: " + e.getMessage());
         }
     }
@@ -97,7 +96,7 @@ public class UserService{
      * @return
      */
     public User changeUserName(String newName, User user) throws LabReserveException {
-        user.setMail(newName);
+        user.setName(newName);
         UserMongodb userMongodb = new UserMongodb(user);
         return userRepo.save(userMongodb);
     }
@@ -147,14 +146,4 @@ public class UserService{
         userInfo.add(actualUser.getRol());
         return userInfo;
     }
-
-
-
-
-
-
-
-
-
-
 }
