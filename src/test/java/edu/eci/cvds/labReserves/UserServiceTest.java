@@ -64,7 +64,11 @@ public class UserServiceTest {
         when(userRepo.findById(1)).thenReturn(userMongo);
         Optional<User> result = userService.findUserById(1);
         assertTrue(result.isPresent(), "El usuario debería estar presente");
-        assertEquals(user, result.get(), "El usuario devuelto no coincide");
+        assertEquals(user.getId(),result.get().getId());
+        assertEquals(user.getMail(),result.get().getMail());
+        assertEquals(user.getName(),result.get().getName());
+        assertEquals(user.getPassword(),result.get().getPassword());
+        assertEquals(user.getRol(),result.get().getRol());
         verify(userRepo, times(1)).findById(1);
     }
 
@@ -84,11 +88,15 @@ public class UserServiceTest {
      * Test a user is found by Mail
      */
     @Test
-    void testFindUserByMail_UserExists() {
+    void testFindUserByMail_UserExists() throws LabReserveException {
         when(userRepo.findByMail("juan@mail.com")).thenReturn(userMongo);
         Optional<User> result = userService.findUserByMail("juan@mail.com");
         assertTrue(result.isPresent(), "El usuario debería estar presente");
-        assertEquals(user, result.get(), "El usuario devuelto no coincide");
+        assertEquals(user.getId(),result.get().getId());
+        assertEquals(user.getMail(),result.get().getMail());
+        assertEquals(user.getName(),result.get().getName());
+        assertEquals(user.getPassword(),result.get().getPassword());
+        assertEquals(user.getRol(),result.get().getRol());
         verify(userRepo, times(1)).findByMail("juan@mail.com");
     }
 

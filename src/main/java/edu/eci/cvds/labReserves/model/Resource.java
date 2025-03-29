@@ -1,4 +1,7 @@
 package edu.eci.cvds.labReserves.model;
+
+import java.io.InputStream;
+
 /**
  * Representa un recurso que puede estar disponible en un laboratorio.
  */
@@ -38,4 +41,5 @@ public class Resource {
     public void setName(String name) {
         this.name = name;
     }
+
 }
