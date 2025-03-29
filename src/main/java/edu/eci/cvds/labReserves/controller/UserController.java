@@ -27,7 +27,6 @@ public class UserController {
     @PostMapping("/signin")
     public UserMongodb createUser(@RequestBody User user) throws LabReserveException {
         try{
-            User createdUser = userServ.createUser(user);
             return userServ.createUser(user);
         }catch(LabReserveException e){
             throw new LabReserveException(e.getMessage());

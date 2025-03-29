@@ -61,7 +61,7 @@ public class UserServiceTest {
      */
     @Test
     void testFindUserById_UserExists() {
-        when(userRepo.findById(1)).thenReturn(user);
+        when(userRepo.findById(1)).thenReturn(userMongo);
         Optional<User> result = userService.findUserById(1);
         assertTrue(result.isPresent(), "El usuario debería estar presente");
         assertEquals(user, result.get(), "El usuario devuelto no coincide");
@@ -85,7 +85,7 @@ public class UserServiceTest {
      */
     @Test
     void testFindUserByMail_UserExists() {
-        when(userRepo.findByMail("juan@mail.com")).thenReturn(user);
+        when(userRepo.findByMail("juan@mail.com")).thenReturn(userMongo);
         Optional<User> result = userService.findUserByMail("juan@mail.com");
         assertTrue(result.isPresent(), "El usuario debería estar presente");
         assertEquals(user, result.get(), "El usuario devuelto no coincide");

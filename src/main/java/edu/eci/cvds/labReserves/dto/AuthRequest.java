@@ -2,23 +2,23 @@ package edu.eci.cvds.labReserves.dto;
 
 public class AuthRequest {
 
-    private String name;
+    private String email;
     private String password;
 
     public AuthRequest() {
     }
 
     public AuthRequest(String username, String password) {
-        this.name = username;
+        this.email = username;
         this.password = password;
     }
 
-    public String getUsername() {
-        return name;
+    public String getUserEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.name = username;
+    public void setUserEmail(String username) {
+        this.email = username;
     }
 
     public String getPassword() {

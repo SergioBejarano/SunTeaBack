@@ -2,12 +2,17 @@ package edu.eci.cvds.labReserves.controller;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.dto.AuthRequest;
+import edu.eci.cvds.labReserves.dto.TokenResponse;
+import edu.eci.cvds.labReserves.model.LabReserveException;
+import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
 import edu.eci.cvds.labReserves.dto.AuthRequest;
 import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.security.CustomUserDetailsService;
+import edu.eci.cvds.labReserves.services.AuthService;
 import edu.eci.cvds.labReserves.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,43 +20,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthService service;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private UserMongoRepository userRepo;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthController(AuthService service) {
+        this.service = service;
+    }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody UserMongodb user) {
-        // Encode the user's password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Save the user to the database
-        userRepo.save(user);
-        return "User registered successfully";
+    public ResponseEntity<TokenResponse> registerUser(@RequestBody User user) throws LabReserveException {
+        TokenResponse token = service.register(user);
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody AuthRequest authRequest) throws Exception {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-        );
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails);
-
-        return jwt;
+    public ResponseEntity<TokenResponse> loginUser(@RequestBody AuthRequest authRequest) throws Exception {
+        TokenResponse token = service.login(authRequest);
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping("/hello")
