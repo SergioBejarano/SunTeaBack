@@ -13,11 +13,11 @@ public class AuthRequest {
         this.password = password;
     }
 
-    public String getUserEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setUserEmail(String username) {
+    public void setEmail(String username) {
         this.email = username;
     }
 

@@ -59,9 +59,9 @@ public class reserveConfig {
     @Bean
     public UserDetailsService userDetailService(){
         return name -> {
-            UserMongodb user = userMongoRepository.findByName(name);
+            UserMongodb user = userMongoRepository.findByMail(name);
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getName())
+                    .username(user.getMail())
                     .password(user.getPassword())
                     .build();
         };

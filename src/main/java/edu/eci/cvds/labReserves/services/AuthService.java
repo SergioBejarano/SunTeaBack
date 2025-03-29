@@ -51,15 +51,13 @@ public class AuthService {
     public TokenResponse login(AuthRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authRequest.getUserEmail(),
+                        authRequest.getEmail(),
                         authRequest.getPassword()
                 )
         );
-        UserMongodb userMongodb = userRepo.findByMail(authRequest.getUserEmail());
+        UserMongodb userMongodb = userRepo.findByMail(authRequest.getEmail());
         String token = jwtUtil.generateToken(userMongodb);
         String refreshToken = jwtUtil.generateRefreshToken(userMongodb);
         return new TokenResponse(token, refreshToken);
     }
-
-
 }
