@@ -215,7 +215,10 @@
 								<exclude>edu/eci/cvds/labReserves/dto/**</exclude>
 								<exclude>edu/eci/cvds/labReserves/repository.mongodb/**</exclude>
 								<exclude>edu/eci/cvds/labReserves/LabReserve.*</exclude>
-
+								<exclude>edu/eci/cvds/labReserves/security/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/util/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/security/**</exclude>
+								<exclude>edu/eci/cvds/labReserves/config/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>
