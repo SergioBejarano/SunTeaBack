@@ -1,6 +1,7 @@
 package edu.eci.cvds.labReserves.services;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
+import edu.eci.cvds.labReserves.config.RestTemplateConf;
 import edu.eci.cvds.labReserves.dto.AuthRequest;
 import edu.eci.cvds.labReserves.dto.TokenResponse;
 import edu.eci.cvds.labReserves.model.LabReserveException;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * AuthService provides authentication and registration functionalities for the system.
@@ -37,6 +40,8 @@ public class AuthService {
 
     @Autowired
     private JwtUtil jwtUtil; //Utility class for generating JWT tokens.
+    @Autowired
+    private RestTemplateConf restTemplateConf;
 
     /**
      * Registers a new user in the system.
@@ -67,7 +72,7 @@ public class AuthService {
      * @param authRequest The authentication request containing user credentials.
      * @return A TokenResponse containing the JWT token and refresh token.
      */
-    public TokenResponse login(AuthRequest authRequest) {
+    public TokenResponse login(AuthRequest authRequest) throws Exception {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),

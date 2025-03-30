@@ -43,7 +43,7 @@ public class ReserveController {
      * @return The created ReserveMongodb object.
      * @throws LabReserveException If an error occurs during reservation creation.
      */
-    @PostMapping("")
+    @PostMapping("/")
     public ReserveMongodb createReserve(@RequestBody ReserveRequest reserveRequest) throws LabReserveException {
         return reserveService.saveReserve(reserveRequest);
     }
