@@ -1,6 +1,7 @@
 package edu.eci.cvds.labReserves.services;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
+import edu.eci.cvds.labReserves.config.RestTemplateConf;
 import edu.eci.cvds.labReserves.dto.AuthRequest;
 import edu.eci.cvds.labReserves.dto.TokenResponse;
 import edu.eci.cvds.labReserves.model.LabReserveException;
@@ -14,6 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,9 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private RestTemplateConf restTemplateConf;
+
     public TokenResponse register(User user) throws LabReserveException {
         try{
             UserMongodb userMongo = new UserMongodb(user);
@@ -48,7 +55,7 @@ public class AuthService {
         }
     }
 
-    public TokenResponse login(AuthRequest authRequest) {
+    public TokenResponse login(AuthRequest authRequest) throws Exception {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),
