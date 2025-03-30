@@ -147,11 +147,24 @@ public class ReserveController {
         return reserveService.getReserveById(id);
     }
 
+    /**
+     * Retrieves only the reservation details by its ID.
+     *
+     * @param id The ID of the reservation.
+     * @return The reservation details with the specified ID.
+     * @throws LabReserveException If an error occurs during retrieval.
+     */
     @GetMapping("/reserves/{id}")
     public ReserveMongodb getOnlyReserveById(@PathVariable String id) throws LabReserveException {
         return reserveService.getOnlyReserveById(id);
     }
 
+    /**
+     * Generates and returns a list of random reservations.
+     *
+     * @return A list of randomly generated reservations.
+     * @throws LabReserveException If an error occurs during generation.
+     */
     @PostMapping("/random")
     public List<ReserveRequest> postReservesRandom() throws LabReserveException{
         return reserveService.generateRandomReserves();

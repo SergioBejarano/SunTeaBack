@@ -1,16 +1,11 @@
 package edu.eci.cvds.labReserves.repository.mongodb;
-import edu.eci.cvds.labReserves.collections.ScheduleMongodb;
-import edu.eci.cvds.labReserves.model.Laboratory;
-import edu.eci.cvds.labReserves.model.Reserve;
+
 import edu.eci.cvds.labReserves.model.Resource;
-import edu.eci.cvds.labReserves.model.Schedule;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import edu.eci.cvds.labReserves.collections.LaboratoryMongodb;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The LaboratoryMongoRepository interface provides the data access layer for Laboratories entities.
@@ -18,13 +13,6 @@ import java.util.Optional;
  */
 @Repository
 public interface LaboratoryMongoRepository extends MongoRepository<LaboratoryMongodb, String> {
-
-
-
-    // consultar detalles del aula
-
-    // consultar horarios disponibles por dia
-    //List<ScheduleMongodb> findAllByDay(String day);
 
     /**
      * Busca todos los recursos asociados a un laboratorio.
@@ -88,8 +76,5 @@ public interface LaboratoryMongoRepository extends MongoRepository<LaboratoryMon
      */
     @Query(value = "{ 'abbreviation' : ?0 }", delete = true)
     void deleteByAbbreviation(String abbreviation);
-
-    // @Query("{ 'abbreviaton'n : ?0 }")
-    // void updateLaboratory (LaboratoryMongodb laboratoryMongodb);
 
 }

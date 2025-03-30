@@ -1,8 +1,8 @@
 package edu.eci.cvds.labReserves.model;
 
 /**
- * Representa un recurso de software en el sistema de reservas de laboratorios.
- * Extiende la clase Resource e incluye información adicional sobre el sistema operativo y partición.
+ * Represents a software resource in the lab reservation system.
+ * Extends the Resource class and includes additional information about the operating system and partition.
  */
 public class Software extends Resource {
 
@@ -10,19 +10,19 @@ public class Software extends Resource {
     private boolean partition;
 
     /**
-     * Constructor por defecto.
-     * Inicializa una instancia de Software sin valores específicos.
+     * Default constructor.
+     * Initializes a Software instance with no specific values.
      */
     public Software() {
         super();
     }
 
     /**
-     * Constructor con parámetros.
+     * Constructor with parameters.
      *
-     * @param name Nombre del software.
-     * @param operativeSystem Sistema operativo en el que se ejecuta el software.
-     * @param partition Indica si el software requiere una partición especial.
+     * @param name Name of the software.
+     * @param operativeSystem Operating system the software runs on.
+     * @param partition Indicates if the software requires a special partition.
      */
     public Software(String name, String operativeSystem, boolean partition) {
         super(name);
@@ -31,37 +31,38 @@ public class Software extends Resource {
     }
     
     // Getters y setters
+
     /**
-     * Obtiene el sistema operativo en el que se ejecuta el software.
+     * Get the operating system on which the software is running.
      *
-     * @return El sistema operativo del software.
+     * @return The operating system of the software.
      */
     public String getOperativeSystem() {
         return operativeSystem;
     }
 
     /**
-     * Establece el sistema operativo en el que se ejecuta el software.
+     * Set the operating system on which the software runs.
      *
-     * @param operativeSystem El sistema operativo a asignar.
+     * @param operativeSystem The operating system to assign.
      */
     public void setOperativeSystem(String operativeSystem) {
         this.operativeSystem = operativeSystem;
     }
 
     /**
-     * Indica si el software requiere una partición especial.
+     * Get the software requires a special partition.
      *
-     * @return true si requiere partición, false en caso contrario.
+     * @return true if partition is required, false otherwise.
      */
     public boolean isPartition() {
         return partition;
     }
 
     /**
-     * Establece si el software requiere una partición especial.
+     * Set the software requires a special partition.
      *
-     * @param partition true si requiere partición, false en caso contrario.
+     * @param partition true if partition is required, false otherwise.
      */
     public void setPartition(boolean partition) {
         this.partition = partition;

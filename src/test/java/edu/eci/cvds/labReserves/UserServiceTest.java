@@ -86,7 +86,7 @@ public class UserServiceTest {
     @Test
     void testFindUserByMail_UserExists() {
         when(userRepo.findByMail("juan@mail.com")).thenReturn(userMongo);
-        Optional<User> result = userService.findUserByMail("juan@mail.com");
+        Optional<UserMongodb> result = userService.findUserByMail("juan@mail.com");
         assertTrue(result.isPresent(), "El usuario debería estar presente");
         assertEquals(user, result.get(), "El usuario devuelto no coincide");
         verify(userRepo, times(1)).findByMail("juan@mail.com");

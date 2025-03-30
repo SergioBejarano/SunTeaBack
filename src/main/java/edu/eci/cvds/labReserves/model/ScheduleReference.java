@@ -17,9 +17,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * Representa un horario de referencia para un laboratorio, incluyendo el día de la semana,
- * la hora de apertura y la hora de cierre. También proporciona métodos para verificar
- * si un horario específico está dentro del rango permitido o si está disponible.
+ * Represents a reference timetable for a laboratory, including the day of the week,
+ * opening time and closing time. It also provides methods to verify
+ * if a specific schedule is within the allowed range or if it is available.
  */
 public class ScheduleReference {
 
@@ -34,32 +34,35 @@ public class ScheduleReference {
     @JsonSerialize(using = DayOfWeekSerializer.class)
     @JsonDeserialize(using = DayOfWeekDeserializer.class)
     private DayOfWeek dayOfWeek;
-    //private List<Schedule> reservedTimes;
 
     /**
-     * Constructor por defecto que inicializa el horario sin valores definidos.
+     * Default constructor that initializes the schedule without defined values.
      */
     public ScheduleReference() {
         this.openingTime = null;
         this.closingTime = null;
         this.dayOfWeek = null;
-        //this.reservedTimes = new ArrayList<>();
     }
 
     /**
-     * Constructor que permite definir un horario de referencia.
+     * Constructor that allows to define a reference timetable.
      *
-     * @param dayOfWeek   Día de la semana en el que aplica el horario.
-     * @param openingTime Hora de apertura.
-     * @param closingTime Hora de cierre.
+     * @param dayOfWeek Day of the week in which the timetable applies.
+     * @param openingTime Opening time.
+     * @param closingTime Closing time.
      */
     public ScheduleReference(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.dayOfWeek = dayOfWeek;
-        //this.reservedTimes = new ArrayList<>();
     }
 
+    /**
+     * Checks if a given schedule is in the set time range.
+     *
+     * @param schedule Schedule to check.
+     * @return true if the schedule is available, false otherwise.
+     */
     public boolean isWithinSchedule(Schedule schedule) {
         DayOfWeek scheduleDay = schedule.getDay();
         if (!dayOfWeek.equals(scheduleDay)) {
@@ -69,10 +72,10 @@ public class ScheduleReference {
     }
 
     /**
-     * Verifica si un horario dado está disponible en este horario de reserva.
+     * Checks if a given time slot is available at this reservation time.
      *
-     * @param schedule Horario a verificar.
-     * @return true si el horario está disponible, false en caso contrario.
+     * @param schedule Schedule to check.
+     * @return true if the schedule is available, false otherwise.
      */
     public boolean isAvailable(Schedule schedule) {
         DayOfWeek scheduleDay = schedule.getDay();
@@ -85,63 +88,64 @@ public class ScheduleReference {
         return isDayAvailable && isTimeWithinRange;
     }
 
-
     // Getters y setters
+
     /**
-     * Obtiene la hora de apertura del laboratorio.
+     * Get the opening time of the lab.
      *
-     * @return Hora de apertura.
+     * @return Opening time.
      */
     public LocalTime getOpeningTime() {
         return openingTime;
     }
 
     /**
-     * Establece la hora de apertura del laboratorio.
+     * Set the opening time of the laboratory.
      *
-     * @param openingTime Nueva hora de apertura.
+     * @param openingTime New opening time.
      */
     public void setOpeningTime(LocalTime openingTime) {
         this.openingTime = openingTime;
     }
 
     /**
-     * Obtiene la hora de cierre del laboratorio.
+     * Get the closing time of the laboratory.
      *
-     * @return Hora de cierre.
+     * @return Closing time.
      */
     public LocalTime getClosingTime() {
         return closingTime;
     }
 
     /**
-     * Establece la hora de cierre del laboratorio.
+     * Set the closing time of the laboratory.
      *
-     * @param closingTime Nueva hora de cierre.
+     * @param closingTime New closing time.
      */
     public void setClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
     }
 
     /**
-     * Obtiene el día de la semana en el que aplica este horario.
+     * Get the day of the week on which this schedule applies.
      *
-     * @return Día de la semana.
+     * @return Day of the week.
      */
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
     /**
-     * Establece el día de la semana en el que aplica este horario.
+     * Set the day of the week on which this schedule applies.
      *
-     * @param dayOfWeek Nuevo día de la semana.
+     * @param dayOfWeek New day of the week.
      */
     public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
     // Clases internas para la serialización y deserialización de LocalTime y DayOfWeek
+
     public static class LocalTimeSerializer extends JsonSerializer<LocalTime> {
         @Override
         public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {

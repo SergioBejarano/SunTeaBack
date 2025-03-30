@@ -1,18 +1,14 @@
 package edu.eci.cvds.labReserves.controller;
 
 import edu.eci.cvds.labReserves.collections.LaboratoryMongodb;
-import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.model.Schedule;
 import edu.eci.cvds.labReserves.model.Laboratory;
-import edu.eci.cvds.labReserves.model.ScheduleReference;
 import edu.eci.cvds.labReserves.services.LaboratoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +28,8 @@ public class LaboratoryController {
      * @return ResponseEntity con el laboratorio creado y el estado HTTP.
      */
     @PostMapping("/")
-    public ResponseEntity<Laboratory> createLaboratory(@RequestBody Laboratory laboratory) {
-        Laboratory createdLab = laboratoryService.createLaboratory(laboratory);
+    public ResponseEntity<LaboratoryMongodb> createLaboratory(@RequestBody Laboratory laboratory) {
+        LaboratoryMongodb createdLab = laboratoryService.createLaboratory(laboratory);
         return new ResponseEntity<>(createdLab, HttpStatus.CREATED);
     }
 
@@ -68,7 +64,8 @@ public class LaboratoryController {
      * @param abbreviation Abreviatura del laboratorio a actualizar.
      */
     @PutMapping("/update/{abbreviation}")
-    public void updateLaboratoryScheduleReference(@PathVariable String abbreviation, @RequestBody Map<String, Integer> requestBody) {
+    public void updateLaboratoryScheduleReference(@PathVariable String abbreviation,
+                                                  @RequestBody Map<String, Integer> requestBody) {
         int totalCapacity = requestBody.get("totalCapacity");
 
         laboratoryService.updateLaboratoryScheduleReference(abbreviation, totalCapacity);

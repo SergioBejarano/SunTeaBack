@@ -1,6 +1,5 @@
 package edu.eci.cvds.labReserves.repository.mongodb;
 
-import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.collections.ScheduleMongodb;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.List;
 
 /**
  * Repository interface for managing ScheduleMongodb entities in MongoDB.

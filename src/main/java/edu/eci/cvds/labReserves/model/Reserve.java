@@ -1,9 +1,5 @@
 package edu.eci.cvds.labReserves.model;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.Arrays;
 
 /**
@@ -25,7 +21,6 @@ public class Reserve {
      * Constructs a Reserve object with a specified type, reason, and user.
      */
     public Reserve() {
-
     }
 
     /**
@@ -49,44 +44,13 @@ public class Reserve {
     }
 
     /**
-     * Sets the schedule of the reserve.
-     * @param schedule The new schedule of the reserve
+     * Get the type of the reserve.
+     * @return The type of the reserve
      */
-    public void setSchedule(String schedule){
-        this.scheduleId = schedule;
-    }
+    public String getType() { return type; }
 
     /**
-     * Sets the reason for the reserve.
-     * @param reason The new reason for the reserve
-     */
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    /**
-     * Sets the user for the reserve.
-     * @param user The user who created the reserve
-     */
-    public void setUser(int user) {
-        this.userId = user;
-    }
-
-    /**
-     * Sets the state of the reserve.
-     * @param state The new state of the reserve
-     * @throws LabReserveException If the state is invalid
-     */
-    public void setState(String state) throws LabReserveException {
-        if (Arrays.asList(stateReserve).contains(state)) {
-            this.state = state;
-        } else {
-            throw new LabReserveException(LabReserveException.STATE_RESERVE_NOT_FOUND);
-        }
-    }
-
-    /**
-     * Sets the type of the reserve.
+     * Set the type of the reserve.
      * @param type The new type of the reserve
      * @throws LabReserveException If the type is invalid
      */
@@ -99,34 +63,69 @@ public class Reserve {
     }
 
     /**
-     * Gets the type of the reserve.
-     * @return The type of the reserve
-     */
-    public String getType() { return type; }
-
-    /**
-     * Gets the reason for the reserve.
+     * Get the reason for the reserve.
      * @return The reason for the reserve
      */
     public String getReason() { return reason; }
 
     /**
-     * Gets the current state of the reserve.
+     * Set the reason for the reserve.
+     * @param reason The new reason for the reserve
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    /**
+     * Get the current state of the reserve.
      * @return The current state of the reserve
      */
     public String getState() { return state; }
 
     /**
-     * Gets the user who created the reserve.
+     * Set the state of the reserve.
+     * @param state The new state of the reserve
+     * @throws LabReserveException If the state is invalid
+     */
+    public void setState(String state) throws LabReserveException {
+        if (Arrays.asList(stateReserve).contains(state)) {
+            this.state = state;
+        } else {
+            throw new LabReserveException(LabReserveException.STATE_RESERVE_NOT_FOUND);
+        }
+    }
+
+    /**
+     * Get the user who created the reserve.
      * @return The user who created the reserve
      */
     public int getUser() { return userId; }
 
     /**
-     * Gets the schedule associated with this reserve.
+     * Set the user for the reserve.
+     * @param user The user who created the reserve
+     */
+    public void setUser(int user) {
+        this.userId = user;
+    }
+
+    /**
+     * Get the schedule associated with this reserve.
      * @return The schedule of the reserve
      */
     public String getSchedule() { return scheduleId; }
+
+    /**
+     * Set the schedule of the reserve.
+     * @param schedule The new schedule of the reserve
+     */
+    public void setSchedule(String schedule){
+        this.scheduleId = schedule;
+    }
+
+    public int getPriority(){
+        return priority;
+    }
 
     public void setPriority(int priority) throws LabReserveException{
         if (priority>0 && priority<6) {
@@ -134,9 +133,5 @@ public class Reserve {
         }else {
             throw new LabReserveException(LabReserveException.PRIORITY_NOT_IN_RANGE);
         }
-    }
-
-    public int getPriority(){
-        return priority;
     }
 }

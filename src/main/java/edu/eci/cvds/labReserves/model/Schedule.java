@@ -64,7 +64,7 @@ public class Schedule {
     // Getters y setters
 
     /**
-     * Gets the start time of the schedule.
+     * Get the start time of the schedule.
      * @return The start time
      */
     public LocalTime getStartHour() {
@@ -72,16 +72,16 @@ public class Schedule {
     }
 
     /**
-     * Sets the start time of the schedule.
+     * Set the start time of the schedule.
      * @param startHour The start time
      * @throws LabReserveException If the start time is before the current time
      */
-    public void setStartHour(LocalTime startHour) throws LabReserveException {
+    public void setStartHour(LocalTime startHour) {
         this.startHour = startHour;
     }
 
     /**
-     * Gets the end time of the schedule.
+     * Get the end time of the schedule.
      * @return The end time
      */
     public LocalTime getEndHour() {
@@ -89,7 +89,7 @@ public class Schedule {
     }
 
     /**
-     * Sets the end time of the schedule.
+     * Set the end time of the schedule.
      * @param endHour The end time
      */
     public void setEndHour(LocalTime endHour) {
@@ -97,7 +97,7 @@ public class Schedule {
     }
 
     /**
-     * Gets the day of the month.
+     * Get the day of the month.
      * @return The day of the month
      */
     public int getNumberDay() {
@@ -105,16 +105,16 @@ public class Schedule {
     }
 
     /**
-     * Sets the day of the month.
+     * Set the day of the month.
      * @param numberDay The day of the month
      * @throws LabReserveException If the day is before the current day
      */
-    public void setNumberDay(int numberDay) throws LabReserveException {
+    public void setNumberDay(int numberDay) {
         this.numberDay = numberDay;
     }
 
     /**
-     * Gets the day of the week.
+     * Get the day of the week.
      * @return The day of the week
      */
     public DayOfWeek getDay() {
@@ -122,16 +122,16 @@ public class Schedule {
     }
 
     /**
-     * Sets the day of the week.
+     * Set the day of the week.
      * @param day The day of the week
      * @throws LabReserveException If the day is before the current day
      */
-    public void setDay(DayOfWeek day) throws LabReserveException {
+    public void setDay(DayOfWeek day) {
         this.day = day;
     }
 
     /**
-     * Gets the month of the schedule.
+     * Get the month of the schedule.
      * @return The month of the schedule
      */
     public Month getMonth() {
@@ -139,16 +139,16 @@ public class Schedule {
     }
 
     /**
-     * Sets the month of the schedule.
+     * Set the month of the schedule.
      * @param month The month of the schedule
      * @throws LabReserveException If the month is before the current month
      */
-    public void setMonth(Month month) throws LabReserveException {
+    public void setMonth(Month month) {
         this.month = month;
     }
 
     /**
-     * Gets the year of the schedule.
+     * Get the year of the schedule.
      * @return The year of the schedule
      */
     public int getYear() {
@@ -156,16 +156,16 @@ public class Schedule {
     }
 
     /**
-     * Sets the year of the schedule.
+     * Set the year of the schedule.
      * @param year The year of the schedule
      * @throws LabReserveException If the year is before the current year
      */
-    public void setYear(int year) throws LabReserveException {
+    public void setYear(int year) {
         this.year = year;
     }
 
     /**
-     * Sets the Laboratory of the schedule.
+     * Set the Laboratory of the schedule.
      * @param laboratory The schedule ID
      */
     public void setLaboratory(String laboratory) {
@@ -173,7 +173,7 @@ public class Schedule {
     }
 
     /**
-     * Gets the Laboratory of the schedule.
+     * Get the Laboratory of the schedule.
      *
      * @return The Laboratory
      */
@@ -181,7 +181,19 @@ public class Schedule {
         return laboratory;
     }
 
-    public static boolean validateCorrectDateTime(int numberDay, Month month, int year, LocalTime givenHour, LocalDateTime referenceNow) throws LabReserveException {
+    /**
+     * Validates that a given date and time are not earlier than the provided reference date and time.
+     *
+     * @param numberDay     Day of the month to validate.
+     * @param month         Month corresponding to the provided day.
+     * @param year          Year corresponding to the provided date.
+     * @param givenHour     Specific time to validate.
+     * @param referenceNow  Reference date and time for validation.
+     * @return {@code true} if the provided date and time are not earlier than the reference, {@code false} otherwise.
+     * @throws LabReserveException If the provided date is invalid (e.g., February 30th).
+     */
+    public static boolean validateCorrectDateTime(int numberDay, Month month, int year,
+                                                  LocalTime givenHour, LocalDateTime referenceNow) throws LabReserveException {
         try {
             LocalDateTime inputDateTime = LocalDateTime.of(year, month, numberDay, givenHour.getHour(), givenHour.getMinute());
             return !inputDateTime.isBefore(referenceNow);

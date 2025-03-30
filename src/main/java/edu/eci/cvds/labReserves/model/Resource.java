@@ -1,39 +1,40 @@
 package edu.eci.cvds.labReserves.model;
+
 /**
- * Representa un recurso que puede estar disponible en un laboratorio.
+ * Represents a resource that may be available in a laboratory.
  */
 public class Resource {
 
     private String name;
 
     /**
-     * Constructor por defecto de la clase Resource.
+     * Default constructor of the Resource class.
      */
     public Resource() {
     }
 
     /**
-     * Constructor que inicializa un recurso con un nombre específico.
+     * Constructor that initializes a resource with a specific name.
      *
-     * @param name Nombre del recurso.
+     * @param name Name of the resource.
      */
     public Resource(String name) {
         this.name = name;
     }
 
     /**
-     * Obtiene el nombre del recurso.
+     * Get the name of the resource.
      *
-     * @return Nombre del recurso.
+     * @return Resource name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Establece el nombre del recurso.
+     * Set the name of the resource.
      *
-     * @param name Nombre del recurso.
+     * @param name Resource name.
      */
     public void setName(String name) {
         this.name = name;

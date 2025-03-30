@@ -34,7 +34,7 @@ public class ScheduleMongodb extends Schedule {
     }
 
     /**
-     * Retrieves the schedule ID.
+     * Get the schedule ID.
      *
      * @return The schedule ID.
      */
@@ -42,6 +42,11 @@ public class ScheduleMongodb extends Schedule {
         return id;
     }
 
+    /**
+     * Set the schedule ID.
+     *
+     * @param id The schedule ID.
+     */
     public void setId(String id) {
         this.id = id;
     }

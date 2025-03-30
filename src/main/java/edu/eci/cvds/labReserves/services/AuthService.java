@@ -15,25 +15,37 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * AuthService provides authentication and registration functionalities for the system.
+ * It handles user registration, login, and JWT token generation.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager; //Manages authentication processes.
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService; //Service for loading user details.
 
     @Autowired
-    private UserMongoRepository userRepo;
+    private UserMongoRepository userRepo; //Repository for interacting with the user database.
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; //Handles password encryption.
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtil jwtUtil; //Utility class for generating JWT tokens.
 
+    /**
+     * Registers a new user in the system.
+     * Encrypts the password before storing it in the database and generates authentication tokens.
+     *
+     * @param user The user to be registered.
+     * @return A TokenResponse containing the JWT token and refresh token.
+     * @throws LabReserveException If an error occurs during user registration.
+     */
     public TokenResponse register(User user) throws LabReserveException {
         try{
             UserMongodb userMongo = new UserMongodb(user);
@@ -48,6 +60,13 @@ public class AuthService {
         }
     }
 
+    /**
+     * Authenticates a user based on the provided email and password.
+     * Generates and returns authentication tokens if authentication is successful.
+     *
+     * @param authRequest The authentication request containing user credentials.
+     * @return A TokenResponse containing the JWT token and refresh token.
+     */
     public TokenResponse login(AuthRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
