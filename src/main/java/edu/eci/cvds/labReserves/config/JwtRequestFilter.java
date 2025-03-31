@@ -53,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
     
         // Skip authentication for /api/auth endpoints
-        if (request.getServletPath().contains("/api/auth")) {
+        if (request.getServletPath().contains("/api/**")) {
             filterChain.doFilter(request, response);
             return;
         }
