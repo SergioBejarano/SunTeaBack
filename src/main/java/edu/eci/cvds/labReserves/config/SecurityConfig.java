@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // Define authorization rules
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/auth/**")
+                        req.requestMatchers("/api/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
