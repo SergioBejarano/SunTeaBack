@@ -9,6 +9,7 @@ import edu.eci.cvds.labReserves.model.Schedule;
 import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.services.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +43,7 @@ public class ReserveController {
      * @return The created ReserveMongodb object.
      * @throws LabReserveException If an error occurs during reservation creation.
      */
-    @PostMapping("")
+    @PostMapping("/")
     public ReserveMongodb createReserve(@RequestBody ReserveRequest reserveRequest) throws LabReserveException {
         return reserveService.saveReserve(reserveRequest);
     }
@@ -146,11 +147,24 @@ public class ReserveController {
         return reserveService.getReserveById(id);
     }
 
+    /**
+     * Retrieves only the reservation details by its ID.
+     *
+     * @param id The ID of the reservation.
+     * @return The reservation details with the specified ID.
+     * @throws LabReserveException If an error occurs during retrieval.
+     */
     @GetMapping("/reserves/{id}")
     public ReserveMongodb getOnlyReserveById(@PathVariable String id) throws LabReserveException {
         return reserveService.getOnlyReserveById(id);
     }
 
+    /**
+     * Generates and returns a list of random reservations.
+     *
+     * @return A list of randomly generated reservations.
+     * @throws LabReserveException If an error occurs during generation.
+     */
     @PostMapping("/random")
     public List<ReserveRequest> postReservesRandom() throws LabReserveException{
         return reserveService.generateRandomReserves();

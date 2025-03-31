@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Representa un laboratorio con sus respectivos recursos físicos, de software y horarios disponibles.
+ * Represents a laboratory with its respective physical and software resources and available schedules.
  */
 public class Laboratory {
 
@@ -20,20 +20,20 @@ public class Laboratory {
     private List<ScheduleReference> scheduleReferences;
 
     /**
-     * Constructor por defecto. Inicializa las listas de recursos físicos, de software y referencias de horario.
+     * Default builder. Initializes the lists of physical resources, software resources and schedule references.
      */
     public Laboratory() {
         this.scheduleReferences = new ArrayList<>();
     }
 
     /**
-     * Constructor con parámetros para inicializar un laboratorio con datos específicos.
+     * Constructor with parameters to initialize a laboratory with specific data.
      *
-     * @param name              Nombre del laboratorio.
-     * @param abbreviation      Abreviatura del laboratorio.
-     * @param totalCapacity     Capacidad total del laboratorio.
-     * @param location          Ubicación del laboratorio.
-     * @param scheduleReferences Lista de horarios de referencia del laboratorio.
+     * @param name Name of the laboratory.
+     * @param abbreviation Abbreviation of the laboratory.
+     * @param totalCapacity Total capacity of the laboratory.
+     * @param location Location of the laboratory.
+     * @param scheduleReferences List of laboratory reference schedules.
      */
     public Laboratory(String name, String abbreviation, int totalCapacity, String location, List<ScheduleReference> scheduleReferences) {
         this.name = name;
@@ -44,19 +44,19 @@ public class Laboratory {
     }
 
     /**
-     * Establece los horarios de referencia del laboratorio a partir de un mapa de días y horarios.
+     * Establishes the laboratory's reference times from a map of days and times.
      *
-     * @param daySchedules Mapa que asocia días de la semana con horarios de referencia.
+     * @param daySchedules Map associating days of the week with reference times.
      */
     public void setReferenceSchedules(Map<DayOfWeek, ScheduleReference> daySchedules) {
         this.scheduleReferences = new ArrayList<>(daySchedules.values());
     }
 
     /**
-     * Agrega o actualiza un horario de referencia en función del día de la semana.
-     * Si ya existe un horario para ese día, lo actualiza; de lo contrario, lo agrega.
+     * Adds or updates a reference timetable according to the day of the week.
+     * If a schedule already exists for that day, it updates it; otherwise, it adds it.
      *
-     * @param scheduleReference Horario de referencia a agregar o actualizar.
+     * @param scheduleReference Reference schedule to add or update.
      */
     public void addScheduleReference(ScheduleReference scheduleReference) {
         DayOfWeek day = scheduleReference.getDayOfWeek();
@@ -70,140 +70,150 @@ public class Laboratory {
     }
 
     /**
-     * Agrega un día disponible con un horario de apertura y cierre.
+     * Add a day available with an opening and closing time.
      *
-     * @param day          Día de la semana en el que el laboratorio estará disponible.
-     * @param openingTime  Hora de apertura.
-     * @param closingTime  Hora de cierre.
+     * @param day Day of the week when the lab will be available.
+     * @param openingTime Opening time.
+     * @param closingTime Closing time.
      */
     public void addAvailableDay(DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
         ScheduleReference reference = new ScheduleReference(day, openingTime, closingTime);
         addScheduleReference(reference);
     }
 
+    // Getters and setters
 
     /**
-     * Agrega un recurso físico al laboratorio.
+     * Get the name of the laboratory.
      *
-     * @param physicalResource Recurso físico a agregar.
-     */
-    public void setPhysicalResource(Physical physicalResource) {
-        this.physicalResource = physicalResource;
-    }
-
-    public void setSoftwareResource(Software softwareResource) {
-        this.softwareResource = softwareResource;
-    }
-
-    // Getters y setters
-    /**
-     * Obtiene el nombre del laboratorio.
-     *
-     * @return Nombre del laboratorio.
+     * @return Laboratory name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Establece el nombre del laboratorio.
+     * Set the name of the laboratory.
      *
-     * @param name Nuevo nombre del laboratorio.
+     * @param name New lab name.
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Obtiene la abreviatura del laboratorio.
+     * Get the abbreviation of the laboratory.
      *
-     * @return Abreviatura del laboratorio.
+     * @return Laboratory abbreviation.
      */
     public String getAbbreviation() {
         return abbreviation;
     }
 
     /**
-     * Establece la abreviatura del laboratorio.
+     * Set the abbreviation of the laboratory.
      *
-     * @param abbreviation Nueva abreviatura del laboratorio.
+     * @param abbreviation New laboratory abbreviation.
      */
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 
     /**
-     * Obtiene la capacidad total del laboratorio.
+     * Get the total capacity of the laboratory.
      *
-     * @return Capacidad total.
+     * @return Total capacity.
      */
     public int getTotalCapacity() {
         return totalCapacity;
     }
 
     /**
-     * Establece la capacidad total del laboratorio.
+     * Set the total capacity of the laboratory.
      *
-     * @param totalCapacity Nueva capacidad total del laboratorio.
+     * @param totalCapacity New total capacity of the lab.
      */
     public void setTotalCapacity(int totalCapacity) {
         this.totalCapacity = totalCapacity;
     }
 
     /**
-     * Obtiene la ubicación del laboratorio.
+     * Get the location of the laboratory.
      *
-     * @return Ubicación del laboratorio.
+     * @return Lab location.
      */
     public String getLocation() {
         return location;
     }
 
     /**
-     * Establece la ubicación del laboratorio.
+     * Set the location of the laboratory.
      *
-     * @param location Nueva ubicación del laboratorio.
+     * @param location New lab location.
      */
     public void setLocation(String location) {
         this.location = location;
     }
 
     /**
-     * Obtiene la lista de recursos físicos del laboratorio.
+     * Get the list of physical resources of the laboratory.
      *
-     * @return Lista de recursos físicos.
+     * @return List of physical resources.
      */
     public Physical getPhysicalResource() {
         return physicalResource;
     }
 
+    /**
+     * Get the list of software resources of the laboratory.
+     *
+     * @return List of software resources.
+     */
     public Software getSoftwareResource() {
         return softwareResource;
     }
 
     /**
-     * Obtiene la lista de horarios de referencia del laboratorio.
+     * Set the physical resource to the laboratory.
      *
-     * @return Lista de horarios de referencia.
+     * @param physicalResource Physical resource to add.
+     */
+    public void setPhysicalResource(Physical physicalResource) {
+        this.physicalResource = physicalResource;
+    }
+
+    /**
+     * Set the software resource to the laboratory.
+     *
+     * @param softwareResource software resource to add.
+     */
+    public void setSoftwareResource(Software softwareResource) {
+        this.softwareResource = softwareResource;
+    }
+
+    /**
+     * Get the list of reference times from the laboratory.
+     *
+     * @return List of reference schedules.
      */
     public List<ScheduleReference> getScheduleReferences() {
         return scheduleReferences;
     }
 
     /**
-     * Establece la lista de horarios de referencia del laboratorio.
+     * Set the list of laboratory reference times.
      *
-     * @param scheduleReferences Nueva lista de horarios de referencia.
+     * @param scheduleReferences New reference schedule list.
      */
     public void setScheduleReferences(List<ScheduleReference> scheduleReferences) {
         this.scheduleReferences = scheduleReferences;
     }
 
     /**
-     * Obtiene el horario de referencia para un día específico.
+     * Get the reference time for a specific day.
      *
-     * @param day Día de la semana a consultar.
-     * @return Horario de referencia correspondiente, o null si no existe.
+     * @param day Day of the week to query.
+     * @return Corresponding reference time, or null if it does not exist.
      */
     public ScheduleReference getScheduleReferenceForDay(DayOfWeek day) {
         for (ScheduleReference ref : scheduleReferences) {
@@ -213,6 +223,4 @@ public class Laboratory {
         }
         return null;
     }
-
-
 }

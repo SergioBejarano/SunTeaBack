@@ -37,13 +37,17 @@ public class ReserveMongodb extends Reserve {
     }
 
     /**
-     * Gets the id time of the reserve.
+     * Get the id of the reserve.
      * @return The id
      */
     public String getId(){
         return id;
     }
 
+    /**
+     * Set the id of the reserve.
+     * @param id The id of reserveMongo
+     */
     public void setId(String id){
         this.id = id;
     }

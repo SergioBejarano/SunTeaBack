@@ -1,14 +1,10 @@
 package edu.eci.cvds.labReserves.repository.mongodb;
 
 import edu.eci.cvds.labReserves.collections.ReserveMongodb;
-import edu.eci.cvds.labReserves.model.Reserve;
-import edu.eci.cvds.labReserves.model.Schedule;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.time.DayOfWeek;
-import java.time.Month;
 import java.util.List;
 
 /**

@@ -20,6 +20,9 @@ public class LaboratoryMongodb extends Laboratory {
     @Id
     private String id;
 
+    /**
+     * Default constructor for LaboratoryMongodb.
+     */
     public LaboratoryMongodb(){
         super();
     }

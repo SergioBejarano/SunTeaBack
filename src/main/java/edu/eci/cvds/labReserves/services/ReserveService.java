@@ -1,4 +1,5 @@
 package edu.eci.cvds.labReserves.services;
+
 import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.collections.ScheduleMongodb;
 import edu.eci.cvds.labReserves.dto.ReserveRequest;
@@ -276,7 +277,6 @@ public class ReserveService{
 
             reserveRequest = new ReserveRequest(reserveMongodb, scheduleMongodb);
             reserveList.add(reserveRequest);
-
         }
         return reserveList;
     }

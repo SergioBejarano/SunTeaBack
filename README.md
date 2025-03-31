@@ -19,11 +19,20 @@ The purpose of this project is to develop an application for laboratory reservat
 - Santiago Gualdron
 
 ## Procedure:
+
 ### Diagram
 To start this project, we begin by creating a class diagram, to understand how objects are related within the database (in this case MongoDB).
 
+![image](https://github.com/user-attachments/assets/aac2eab8-47a5-4081-8c34-54313a63d38e)
 
-![image](https://github.com/user-attachments/assets/f97c31c1-b686-4164-bc43-c901b09971a0)
+understanding which tools we are going to use, we generate an architecture model, showing which tools we use to generate the whole project; besides being a base for the code generation.
+
+![image](https://github.com/user-attachments/assets/c7bb5cc7-e33d-46fe-863d-43b2e97dacd4)
+
+Finally, we generate a component diagram, which helps us to understand how the generated packages work, how they will be related and what will be the flow of the classes.
+
+![image](https://github.com/user-attachments/assets/70b329b1-10ce-4365-8649-564dddf6381b)
+
 
 ### maven
 Once we understand the relationship of the objects, we create the project with maven in SpringBoot; and the respective dependencies for the web, mongo, Jacoco, etc.
@@ -140,6 +149,9 @@ There are 2 types of files required for the development of this part:
    ![image](https://github.com/user-attachments/assets/873b0279-dfe5-45e6-ac80-91a858f283b3)
    ![image](https://github.com/user-attachments/assets/db178270-1dae-4ef5-a7f3-a1df5f94624f)
 
+Test of functionallity
+![image](https://github.com/user-attachments/assets/2625b989-53df-408e-b02b-af0890404125)
+
 ## REACT
 In this case, a first code was generated in HTML, CSS and JS, which has a complete functionality between the back and the front. 
 But we moved the code to React, where we also restructured the graphic design of the site:
@@ -149,4 +161,47 @@ https://www.figma.com/design/ywe4fMaXpMjBt53KG8gCqE/CVDS-PROYECTO-1?m=auto&t=KPd
 Link to the frontend repository where the HTML and React codes are located:
 https://github.com/Waldron63/FrutiFront
 
-## SEGURIDAD
+## SECURITY
+
+for the first part of security, we generate a JWT system for the encryption of passwords of the users who are going to register; taking into account that there are 2 roles (administrator and teacher)
+several classes were generated to be able to use the Tokens, besides a new controller class where we made login and register to be able to encrypt passwords:
+
+![image](https://github.com/user-attachments/assets/b767446a-d644-42b4-aa45-690178133b4b)
+
+In addition to these new classes shown below, where the JWTs are created, service security configuration, authentication configuration, templates and Request to facilitate the user's request when logging in:
+
+![image](https://github.com/user-attachments/assets/d583e424-5627-4d8b-8fce-918f7b9e9c60)
+![image](https://github.com/user-attachments/assets/27da400e-5a10-4d9a-8889-6178c36446c5)
+
+showing the use of the new tokens, a random admin user was generated and registered to the database:
+
+![image](https://github.com/user-attachments/assets/24cbad73-3321-4b80-a6a3-3b31519b6cd9)
+![image](https://github.com/user-attachments/assets/589849bb-ad65-4747-82f7-d1c916fe5c9e)
+
+This way we confirm that the JWT is working correctly.
+
+### SST
+Finally, we generate a data encryption with SSL self-certification:
+
+![image](https://github.com/user-attachments/assets/33888001-2bb7-4de0-a60b-51f59a2ffd24)
+
+we add in the application.properties some configurations necessary for the protocol to work:
+
+![image](https://github.com/user-attachments/assets/5d5b468a-945a-4f21-a37f-5f6a909c7ff4)
+
+And thus the SSL protocol was implemented.
+The unit tests did not happen due to logistical issues.
+
+## Final Model
+
+With the BackEnd already finished, the final model of our project looks like this:
+where:
+- orange: object and data model.
+- purple: documents to be stored in mongoDB
+- green: interfaces extending MongoRepository
+- red: services with CRUD logic of the controllers
+- brown: drivers communicating with FrontEnd
+- blue: security for users and Links
+- gray: other necessary resources such as exceptions, extra classes, dto, etc.
+
+![image](https://github.com/user-attachments/assets/97b13ab0-64c0-4f48-9f8c-c30515e58dee)
