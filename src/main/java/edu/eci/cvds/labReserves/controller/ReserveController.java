@@ -31,7 +31,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/reserve")
-@CrossOrigin("*")
 public class ReserveController {
 
     @Autowired
