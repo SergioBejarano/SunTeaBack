@@ -53,7 +53,7 @@ public class LabReserve {
             @Override
             public void addCorsMappings(CorsRegistry registry){
                 registry.addMapping("/api/**")
-                        .allowedOrigins("https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/")
+                        .allowedOrigins("https://labreserveeci-hcfwbkh6czhhggba.eastus2-01.azurewebsites.net/")
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }
