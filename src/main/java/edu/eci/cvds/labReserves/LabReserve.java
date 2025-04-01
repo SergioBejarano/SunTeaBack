@@ -10,6 +10,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 //import org.springframework.http.converter.json.Jackson2ObjectMapperBuilderCustomizer;
 
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Clase principal de la aplicación LabReserve.
@@ -42,6 +44,19 @@ public class LabReserve {
         return builder -> {
             builder.modules(new JavaTimeModule());
             builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        };
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry){
+                registry.addMapping("/api/**")
+                        .allowedOrigins("https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/")
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
+            }
         };
     }
 
