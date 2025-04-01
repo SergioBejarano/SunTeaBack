@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 /**
  * SecurityConfig is responsible for configuring security settings for the application.
  * It defines authentication mechanisms, session policies, and request authorization rules.
