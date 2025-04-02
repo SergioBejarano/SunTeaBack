@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- * Service for managing laboratories within the system.
+ * Servicio para la gestión de laboratorios en el sistema.
  */
 @Service
 public class LaboratoryService {
@@ -20,37 +23,38 @@ public class LaboratoryService {
     private LaboratoryMongoRepository laboratoryRepository;
 
     /**
-     * Creates a new laboratory in the database.
-     * @param laboratory Laboratory object containing the lab information.
-     * @return The created laboratory.
+     * Crea un nuevo laboratorio en la base de datos.
+     * @param laboratory Objeto Laboratory con la información del laboratorio.
+     * @return El laboratorio creado.
      */
-    public LaboratoryMongodb createLaboratory(Laboratory laboratory) {
+    public Laboratory createLaboratory(Laboratory laboratory) {
         LaboratoryMongodb labMongo = new LaboratoryMongodb(laboratory);
         return laboratoryRepository.save(labMongo);
     }
 
     /**
-     * Retrieves all registered laboratories from the database.
-     * @return A list of all laboratories.
+     * Obtiene todos los laboratorios registrados en la base de datos.
+     * @return Lista de todos los laboratorios.
      */
     public List<LaboratoryMongodb> getAllLaboratories() {
         return laboratoryRepository.findAll();
     }
 
     /**
-     * Searches for a laboratory by its abbreviation.
-     * @param abbreviation The abbreviation of the laboratory.
-     * @return The found laboratory or null if it does not exist.
+     * Busca un laboratorio por su abreviatura.
+     * @param abbreviation Abreviatura del laboratorio.
+     * @return El laboratorio encontrado o null si no existe.
      */
     public LaboratoryMongodb getLaboratoryByAbbreviation(String abbreviation) {
         return laboratoryRepository.findByAbbreviation(abbreviation);
     }
 
     /**
-     * Updates the schedule reference of an existing laboratory.
-     * @param abbreviation The abbreviation of the laboratory to update.
+     * Actualiza la referencia de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param totalcapacity nueva capacidad del laboratorio.
      */
-    public void updateLaboratoryScheduleReference(String abbreviation, int totalCapacity) {
+    public void updateLaboratoryTotalCapacity(String abbreviation, int totalcapacity) {
         LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
         // Esta linea se va mañana RECORDATORIOOOO (2 lineas)
         /*List<ScheduleReference> listschedule = existingLab.getScheduleReferences();
@@ -60,64 +64,143 @@ public class LaboratoryService {
                 schedule.setClosingTime(schedulereference.getClosingTime());
             }
         }
-        existingLab.setScheduleReferences(listschedule);
-        */
-        existingLab.setTotalCapacity(totalCapacity);
+        existingLab.setScheduleReferences(listschedule);*/
+        existingLab.setTotalCapacity(totalcapacity);
         laboratoryRepository.save(existingLab);
+
     }
 
     /**
-     * Deletes a laboratory by its reference object.
-     * @param laboratory The Laboratory object to be deleted.
-     * @return true if the laboratory was deleted, false if it does not exist.
+     * Actualiza la referencia de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param newAbbreviation nueva abreviatura del laboratorio.
+     */
+    public void updateLaboratoryAbbreviation(String abbreviation, String newAbbreviation) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setAbbreviation(newAbbreviation);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Actualiza el nombre de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param newName nuevo nombre del laboratorio a actualizar.
+     */
+    public void updateLaboratoryName(String abbreviation, String newName) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setName(newName);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Actualiza el nombre de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param newLocation nueva locación del laboratorio a actualizar.
+     */
+    public void updateLaboratoryLocation(String abbreviation, String newLocation) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setLocation(newLocation);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Actualiza el nombre de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param physical nueva locación del laboratorio a actualizar.
+     */
+    public void updateLaboratoryPhysicsResources(String abbreviation, Physical physical) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setPhysicalResource(physical);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Actualiza el nombre de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param software nueva locación del laboratorio a actualizar.
+     */
+    public void updateLaboratorySoftwareResources(String abbreviation, Software software) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setSoftwareResource(software);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Actualiza el nombre de horario de un laboratorio existente.
+     * @param abbreviation Abreviatura del laboratorio a actualizar.
+     * @param scheduleReference nueva locación del laboratorio a actualizar.
+     */
+    public void updateLaboratoryScheduleReference(String abbreviation, ScheduleReference scheduleReference) {
+        LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
+        existingLab.setScheduleReference(scheduleReference);
+        laboratoryRepository.save(existingLab);
+
+    }
+
+    /**
+     * Elimina un laboratorio por su objeto de referencia.
+     * @param laboratory Objeto Laboratory que se desea eliminar.
+     * @return true si el laboratorio fue eliminado, false si no existe.
      */
     public boolean deleteLaboratory(Laboratory laboratory) {
         if (laboratoryRepository.existsByAbbreviation(laboratory.getAbbreviation())) {
-            LaboratoryMongodb lab = getLaboratoryByAbbreviation(laboratory.getAbbreviation());
-            laboratoryRepository.deleteByAbbreviation(lab.getAbbreviation());
+            Laboratory lab = getLaboratoryByAbbreviation(laboratory.getAbbreviation());
+            laboratoryRepository.deleteByAbbreviation(laboratory.getAbbreviation());
             return true;
         }
         return false;
     }
 
     /**
-     * Deletes a laboratory by its abbreviation.
-     * @param abbreviation The abbreviation of the laboratory to be deleted.
+     * Elimina un laboratorio por su abreviatura.
+     * @param abbreviation Abreviatura del laboratorio a eliminar.
      */
     public void deleteByAbbreviation(String abbreviation) {
         laboratoryRepository.deleteByAbbreviation(abbreviation);
     }
 
     /**
-     * Adds an available schedule to a laboratory.
-     * @param abbreviation The abbreviation of the laboratory.
-     * @param day The day of the week when the laboratory will be available.
-     * @param openingTime The opening time.
-     * @param closingTime The closing time.
+     * Agrega un horario disponible a un laboratorio.
+     * @param abbreviation Abreviatura del laboratorio.
+     * @param day Día de la semana en el que el laboratorio estará disponible.
+     * @param openingTime Hora de apertura.
+     * @param closingTime Hora de cierre.
      */
     public void addAvailableDay(String abbreviation, DayOfWeek day, LocalTime openingTime,
                                       LocalTime closingTime) {
         LaboratoryMongodb lab = laboratoryRepository.findByAbbreviation(abbreviation);
+
         ScheduleReference newSchedule = new ScheduleReference(day, openingTime, closingTime);
         lab.getScheduleReferences().add(newSchedule);
         laboratoryRepository.save(lab);
     }
 
     /**
-     * Checks if a laboratory is available for a specific schedule.
-     * @param abbreviation The abbreviation of the laboratory.
-     * @param schedule The Schedule object with the schedule to verify.
-     * @return true if the laboratory is available, false otherwise.
+     * Verifica si un laboratorio está disponible para un horario específico.
+     * @param abbreviation Abreviatura del laboratorio.
+     * @param schedule Objeto Schedule con el horario a verificar.
+     * @return true si el laboratorio está disponible, false en caso contrario.
      */
     public boolean isLaboratoryAvailable(String abbreviation, Schedule schedule) {
-        LaboratoryMongodb lab = getLaboratoryByAbbreviation(abbreviation);
+        Laboratory lab = getLaboratoryByAbbreviation(abbreviation);
+
         if (lab != null) {
             ScheduleReference scheduleRef = lab.getScheduleReferenceForDay(schedule.getDay());
+            DayOfWeek scheduleDay = schedule.getDay();
+            LocalTime scheduleStartTime = schedule.getStartHour();
+            LocalTime scheduleEndTime = schedule.getEndHour();
             if (scheduleRef != null) {
-                return scheduleRef.isAvailable(schedule);
+                return scheduleRef.isAvailable(scheduleDay, scheduleStartTime, scheduleEndTime);
             }
         }
+
         return false;
     }
+
 
 }
