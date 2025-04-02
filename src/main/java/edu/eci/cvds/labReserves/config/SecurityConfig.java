@@ -57,13 +57,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // Disable CSRF protection as JWT is used for authentication
-                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 // Define authorization rules
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/**")
+                        req.requestMatchers("/api/**")
                                 .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                //.anyRequest()
+                                //.authenticated()
                 )
                 // Set session management policy to stateless as JWT is used
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

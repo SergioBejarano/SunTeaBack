@@ -56,8 +56,9 @@ public class LabReserve {
                         .allowedOrigins("https://labreserveeci-hcfwbkh6czhhggba.eastus2-01.azurewebsites.net/",
                                 "https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/",
                                 "http://localhost:8080/")
-                        .allowedMethods("*")
-                        .allowedHeaders("*");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
