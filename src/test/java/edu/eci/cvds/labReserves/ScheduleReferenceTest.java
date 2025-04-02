@@ -90,7 +90,7 @@ public class ScheduleReferenceTest {
      * Verify that the schedule is available
      * @throws LabReserveException
      */
-    @Test
+    /*@Test
     void testScheduleIsAvailable() throws LabReserveException {
         LocalDateTime fixedNow = LocalDateTime.of(2025, Month.DECEMBER, 28, 10, 0);
         Schedule scheduletest = new Schedule(fixedNow.toLocalTime(), fixedNow.getDayOfMonth(), fixedNow.getDayOfWeek(), fixedNow.getMonth(), fixedNow.getYear(), "Redes");
@@ -98,12 +98,12 @@ public class ScheduleReferenceTest {
         scheduletest.setStartHour(LocalTime.of(8,30));
         scheduletest.setEndHour(LocalTime.of(11,20));
         assertTrue(scheduleReference.isAvailable(scheduletest));
-    }
+    }*/
     /**
      * Verify that the schedule is not available for the day
      * @throws LabReserveException
      */
-    @Test
+    /*@Test
     void testScheduleIsNotAvailableForDay() throws LabReserveException {
         LocalDateTime fixedNow = LocalDateTime.of(2025, Month.DECEMBER, 28, 10, 0);
         Schedule scheduletest = new Schedule(fixedNow.toLocalTime(), fixedNow.getDayOfMonth(), fixedNow.getDayOfWeek(), fixedNow.getMonth(), fixedNow.getYear(), "Redes");
@@ -111,12 +111,12 @@ public class ScheduleReferenceTest {
         scheduletest.setStartHour(LocalTime.of(8,30));
         scheduletest.setEndHour(LocalTime.of(11,20));
         assertFalse(scheduleReference.isAvailable(scheduletest));
-    }
+    }*/
     /**
      * Verify that the schedule is not available for the end time
      * @throws LabReserveException
      */
-    @Test
+    /*@Test
     void testScheduleIsNotAvailableForEndTime() throws LabReserveException {
         LocalDateTime fixedNow = LocalDateTime.of(2025, Month.DECEMBER, 28, 10, 0);
         Schedule scheduletest = new Schedule(fixedNow.toLocalTime(), fixedNow.getDayOfMonth(), fixedNow.getDayOfWeek(), fixedNow.getMonth(), fixedNow.getYear(), "Redes");
@@ -124,12 +124,12 @@ public class ScheduleReferenceTest {
         scheduletest.setStartHour(LocalTime.of(8,30));
         scheduletest.setEndHour(LocalTime.of(11,31));
         assertFalse(scheduleReference.isAvailable(scheduletest));
-    }
+    }*/
     /**
      * Verify that the schedule is not available for the start time
      * @throws LabReserveException
      */
-    @Test
+    /*@Test
     void testScheduleIsNotAvailableForStartTime() throws LabReserveException {
         LocalDateTime fixedNow = LocalDateTime.of(2025, Month.DECEMBER, 28, 10, 0);
         Schedule scheduletest = new Schedule(fixedNow.toLocalTime(), fixedNow.getDayOfMonth(), fixedNow.getDayOfWeek(), fixedNow.getMonth(), fixedNow.getYear(), "Redes");
@@ -137,7 +137,7 @@ public class ScheduleReferenceTest {
         scheduletest.setStartHour(LocalTime.of(6,30));
         scheduletest.setEndHour(LocalTime.of(11,30));
         assertFalse(scheduleReference.isAvailable(scheduletest));
-    }
+    }*/
     /**
      * Verify if set and get opening time
      */

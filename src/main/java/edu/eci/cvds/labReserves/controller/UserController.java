@@ -157,7 +157,7 @@ public class UserController {
      * @return The user with the specified email.
      * @throws LabReserveException If the user is not found.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/emails/{mail}")
     public UserMongodb getUserByMail(@PathVariable String mail) throws LabReserveException{
         Optional<UserMongodb> userOptional = userServ.findUserByMail(mail);
         if(userOptional.isPresent()){
