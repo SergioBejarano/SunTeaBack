@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -59,10 +60,10 @@ public class SecurityConfig {
                 //.csrf(AbstractHttpConfigurer::disable)
                 // Define authorization rules
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/**")
+                        req.requestMatchers("/**")
                                 .permitAll()
-                                //.anyRequest()
-                                //.authenticated()
+                                .anyRequest()
+                                .authenticated()
                 )
                 // Set session management policy to stateless as JWT is used
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

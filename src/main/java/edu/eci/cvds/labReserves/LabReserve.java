@@ -52,7 +52,7 @@ public class LabReserve {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry){
-                registry.addMapping("/api/**")
+                registry.addMapping("/**")
                         .allowedOrigins("https://labreserveeci-hcfwbkh6czhhggba.eastus2-01.azurewebsites.net/")
                         .allowedMethods("*")
                         .allowedHeaders("*");
