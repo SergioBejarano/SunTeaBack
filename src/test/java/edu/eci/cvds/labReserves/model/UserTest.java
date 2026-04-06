@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserTest {
+class UserTest {
 
     private User userTeacher;
 
@@ -15,10 +15,9 @@ public class UserTest {
 
     /**
      * Verify If a user can be created with an unknown rol
-     * @throws LabReserveException
      */
     @Test
-    public void testShouldNotCreateUserByRol() throws LabReserveException {
+    void testShouldNotCreateUserByRol() {
         try{
             User invalidUser = new User(14529,"ricardo","irchard@gmail.com","ricardo:D","director");
             fail("Should have thrown an exception");
@@ -31,7 +30,7 @@ public class UserTest {
      * Verify if a user can be created
      */
     @Test
-    public void testShouldCreateUser() {
+    void testShouldCreateUser() {
         assertEquals(10229, userTeacher.getId());
         assertEquals("pepito@gmail.com", userTeacher.getMail());
         assertEquals("pepe", userTeacher.getName());
@@ -43,7 +42,7 @@ public class UserTest {
      * Verify if change user name is correct
      */
     @Test
-    public void testUserChangeName() {
+    void testUserChangeName() {
         String testName = "new name";
         userTeacher.setName(testName);
         assertSame(testName, userTeacher.getName(), "nombre actualizado correctamente");
@@ -52,7 +51,7 @@ public class UserTest {
      * Verify if change user id is correct
      */
     @Test
-    public void testUserChangeID() {
+    void testUserChangeID() {
         int testid = 1;
         userTeacher.setId(testid);
         assertEquals(1,testid);
@@ -61,7 +60,7 @@ public class UserTest {
      * Verify if change user password is correct
      */
     @Test
-    public void testUserChangePssw() {
+    void testUserChangePssw() {
         String newPssw = "newPssw";
         userTeacher.setPassword(newPssw);
         assertEquals(newPssw,userTeacher.getPassword());
@@ -70,7 +69,7 @@ public class UserTest {
      * Verify if change user mail is correct
      */
     @Test
-    public void testUserChangeMail() {
+    void testUserChangeMail() {
         String testMail = "new@gmail.com";
         userTeacher.setMail(testMail);
         assertEquals(testMail,userTeacher.getMail());
@@ -80,7 +79,7 @@ public class UserTest {
      * @throws LabReserveException
      */
     @Test
-    public void testUserChangeRol() throws LabReserveException{
+    void testUserChangeRol() throws LabReserveException{
         String rol = "admin";
         userTeacher.setRol(rol);
         assertEquals(rol,userTeacher.getRol());
@@ -89,7 +88,7 @@ public class UserTest {
      * Verify if change user rol is incorrect for invalid type of rol
      */
     @Test
-    public void testShouldNotChangeRol() {
+    void testShouldNotChangeRol() {
         try{
             userTeacher.setRol("estudiante");
         }catch (LabReserveException e){

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 
-public class ScheduleReferenceTest {
+class ScheduleReferenceTest {
     private ScheduleReference scheduleReference;
 
     @BeforeEach
@@ -22,9 +22,9 @@ public class ScheduleReferenceTest {
      */
     @Test
     void testUndefinedScheduleReference() {
-        ScheduleReference scheduleReference = new ScheduleReference();
-        assertNull(scheduleReference.getOpeningTime());
-        assertNull(scheduleReference.getDayOfWeek());
+        ScheduleReference scheduleReference1 = new ScheduleReference();
+        assertNull(scheduleReference1.getOpeningTime());
+        assertNull(scheduleReference1.getDayOfWeek());
     }
 
     /**

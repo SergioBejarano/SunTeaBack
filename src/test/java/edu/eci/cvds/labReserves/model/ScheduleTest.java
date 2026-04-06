@@ -7,7 +7,7 @@ import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ScheduleTest {
+class ScheduleTest {
     private Schedule schedule;
 
     @BeforeEach

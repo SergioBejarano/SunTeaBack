@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReserveTest {
+class ReserveTest {
 
     private Reserve reseve;
 
@@ -30,10 +30,9 @@ public class ReserveTest {
 
     /**
      * Verify an admin can make a reserve
-     * @throws LabReserveException
      */
     @Test
-    void testMakeReserveOfAdmin() throws LabReserveException {
+    void testMakeReserveOfAdmin() {
         try {
             Reserve reserveTest = new Reserve("lesson", "MBDA", 3);
             assertEquals("MBDA", reserveTest.getReason());

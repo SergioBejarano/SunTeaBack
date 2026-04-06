@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ReserveServiceTest {
+class ReserveServiceTest {
 
     @Mock
     private ReserveMongoRepository reserveMongoRepository;
@@ -48,7 +48,7 @@ public class ReserveServiceTest {
 
 
     @BeforeEach
-    public void setUp() throws LabReserveException {
+    void setUp() throws LabReserveException {
         String reserveId1 = "dsk123dcs";
         String scheduleId1 = "aasfj863g";
         MockitoAnnotations.openMocks(this);
@@ -62,13 +62,13 @@ public class ReserveServiceTest {
     }
 
     @AfterEach
-    public void tearDown() throws LabReserveException {
+    void tearDown() throws LabReserveException {
         reserveService.deleteReserveById("dsk123dcs");
         reserveService.deleteById("aasfj863g");
     }
 
     @Test
-    public void testConsultReserve() throws LabReserveException {
+    void testConsultReserve() throws LabReserveException {
         reserveService.saveReserve(request1);
         when(reserveMongoRepository.findByReserveId("dsk123dcs")).thenReturn(reserveMongodbA); //obtener la reserva por reserveService
         when(scheduleMongoRepository.findByScheduleId("aasfj863g")).thenReturn(scheduleMongodbA);
@@ -88,7 +88,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testfindAllReservesEmpty() throws LabReserveException {
+    void testfindAllReservesEmpty() {
         when(reserveMongoRepository.findAll()).thenReturn(new ArrayList<>());
         List<ReserveRequest> reserveMongodbs = reserveService.getAllReserves();
         verify(reserveMongoRepository, times(1)).findAll();
@@ -96,7 +96,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testCreateNewReserve() throws LabReserveException {
+     void testCreateNewReserve() throws LabReserveException {
         //generar schedule y reserve para ReserveRequest
         String reserveId2 = "ddfs3456s";
         String scheduleId2 = "zpnt783m";
@@ -119,7 +119,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testDeleteReserve() throws LabReserveException {
+    void testDeleteReserve() throws LabReserveException {
         when(reserveMongoRepository.save(reserveMongodbA)).thenReturn(reserveMongodbA);
         reserveService.saveReserve(request1);
         when(reserveMongoRepository.findAll()).thenReturn(new ArrayList<>());
@@ -135,7 +135,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testConsultWhenDeleteReserve() throws LabReserveException {
+    void testConsultWhenDeleteReserve() throws LabReserveException {
         when(reserveMongoRepository.save(reserveMongodbA)).thenReturn(reserveMongodbA);
         reserveService.saveReserve(request1);
         doNothing().when(reserveMongoRepository).deleteById(reserveMongodbA.getId());
@@ -146,14 +146,14 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testDeleteReserveByScheduleId() throws LabReserveException {
+    void testDeleteReserveByScheduleId() throws LabReserveException {
         when(reserveMongoRepository.findByScheduleId("aasfj863g")).thenReturn(reserveMongodbA);
         reserveService.deleteReserveByScheduleId("aasfj863g");
         verify(reserveMongoRepository, times(1)).deleteById(reserveMongodbA.getId());
     }
 
     @Test
-    public void testGetReserveByLaboratory() throws LabReserveException {
+    void testGetReserveByLaboratory() {
         List<ReserveMongodb> reserves = new ArrayList<>();
         reserves.add(reserveMongodbA);
         when(reserveMongoRepository.findAll()).thenReturn(reserves);
@@ -161,11 +161,11 @@ public class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByLaboratory("LABISW");
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.get(0).getReason());
+        assertEquals("LCAT", requests.getFirst().getReason());
     }
 
     @Test
-    public void testGetReserveByUser() throws LabReserveException {
+    void testGetReserveByUser() {
         List<ReserveMongodb> reserves = new ArrayList<>();
         reserves.add(reserveMongodbA);
         when(reserveMongoRepository.findByUserId(1000095482)).thenReturn(reserves);
@@ -173,11 +173,11 @@ public class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByUser(1000095482);
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.get(0).getReason());
+        assertEquals("LCAT", requests.getFirst().getReason());
     }
 
     @Test
-    public void testGetReserveByDay() throws LabReserveException {
+    void testGetReserveByDay()  {
         List<ReserveMongodb> reserves = new ArrayList<>();
         reserves.add(reserveMongodbA);
         when(reserveMongoRepository.findAll()).thenReturn(reserves);
@@ -185,11 +185,11 @@ public class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByDay(DayOfWeek.WEDNESDAY);
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.get(0).getReason());
+        assertEquals("LCAT", requests.getFirst().getReason());
     }
 
     @Test
-    public void testGetReserveByMonth() throws LabReserveException {
+    void testGetReserveByMonth() {
         List<ReserveMongodb> reserves = new ArrayList<>();
         reserves.add(reserveMongodbA);
         when(reserveMongoRepository.findAll()).thenReturn(reserves);
@@ -200,7 +200,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testGetReserveByUserId() {
+    void testGetReserveByUserId() {
         List<ReserveMongodb> reserves = new ArrayList<>();
         reserves.add(reserveMongodbA);
         when(reserveMongoRepository.getAllByUserId(1000095482)).thenReturn(reserves);
@@ -209,7 +209,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testGetReserveById() throws LabReserveException {
+    void testGetReserveById()  {
         when(reserveMongoRepository.findByReserveId("dsk123dcs")).thenReturn(reserveMongodbA);
         when(scheduleMongoRepository.findByScheduleId(reserveMongodbA.getSchedule())).thenReturn(scheduleMongodbA);
 
@@ -219,7 +219,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testGetScheduleBySchedule() throws LabReserveException {
+    void testGetScheduleBySchedule()  {
         when(scheduleMongoRepository.findByTime(any(), anyInt(), any(), any(), anyInt(), any())).thenReturn(scheduleMongodbA);
         ScheduleMongodb result = reserveService.getScheduleBySchedule(scheduleA);
         assertNotNull(result);
@@ -227,7 +227,7 @@ public class ReserveServiceTest {
     }
 
     @Test
-    public void testReserveAlreadyExists() throws LabReserveException {
+    void testReserveAlreadyExists() throws LabReserveException {
         ScheduleMongodb existingSchedule = new ScheduleMongodb(
             new Schedule(LocalTime.of(7, 30), 1, DayOfWeek.WEDNESDAY, Month.DECEMBER, 2030, "LABISW"));
         List<ScheduleMongodb> schedules = new ArrayList<>();
