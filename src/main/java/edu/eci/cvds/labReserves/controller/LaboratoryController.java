@@ -58,7 +58,7 @@ public class LaboratoryController {
      */
     @GetMapping("/abbreviation/{abbreviation}")
     public LaboratoryMongodb getLaboratoryByAbbreviation(@PathVariable String abbreviation) {
-        return laboratoryService.getLaboratoryByAbbreviation(abbreviation);    
+        return laboratoryService.getLaboratoryByAbbreviation(abbreviation);
     }
 
     /**

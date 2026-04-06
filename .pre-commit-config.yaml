@@ -1,0 +1,117 @@
+# =============================================================================
+# .pre-commit-config.yaml — Hooks de seguridad pre-commit
+# Instalación: pip install pre-commit && pre-commit install
+# Ejecución manual: pre-commit run --all-files
+# Documentación: https://pre-commit.com
+# =============================================================================
+
+# Versión mínima de pre-commit requerida
+minimum_pre_commit_version: "3.0.0"
+
+# ---------------------------------------------------------------------------
+# Configuración global
+# ---------------------------------------------------------------------------
+default_stages: [commit]
+fail_fast: false   # false = ejecuta todos los hooks aunque alguno falle,
+                   # para mostrar todos los problemas de una vez.
+                   # Cambia a true si prefieres fallo inmediato.
+
+repos:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # 1. Hooks básicos de calidad (sin dependencias externas)
+  # ─────────────────────────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace        # Elimina espacios al final de línea
+      - id: end-of-file-fixer          # Asegura newline al final de archivos
+      - id: check-yaml                 # Valida sintaxis YAML
+      - id: check-json                 # Valida sintaxis JSON
+      - id: check-xml                  # Valida sintaxis XML
+      - id: check-merge-conflict       # Detecta markers de merge sin resolver
+      - id: check-added-large-files    # Bloquea archivos > 500KB
+        args: ['--maxkb=500']
+      - id: detect-private-key         # Detecta claves privadas SSH/RSA
+      - id: check-case-conflict        # Evita conflictos de case en nombres de archivo
+      - id: mixed-line-ending          # Normaliza line endings
+        args: ['--fix=lf']
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # 2. Detección avanzada de secretos con detect-secrets
+  #    Detecta: API keys, tokens, contraseñas, credenciales hardcodeadas
+  # ─────────────────────────────────────────────────────────────────────────
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: "🔑 Detectar secretos y credenciales"
+        args:
+          - '--baseline'
+          - '.secrets.baseline'
+          # Excluye archivos de prueba con datos ficticios:
+          - '--exclude-files'
+          - 'src/test/.*'
+        exclude: |
+          (?x)^(
+            \.secrets\.baseline|
+            .*\.lock|
+            package-lock\.json
+          )$
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # 3. Análisis SAST con Semgrep (gratuito, sin cuenta requerida)
+  #    Bloquea el commit si detecta vulnerabilidades de severidad ERROR
+  #    Requiere: pip install semgrep
+  # ─────────────────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: semgrep-sast
+        name: "🔍 Semgrep SAST — Análisis de seguridad estático"
+        language: system
+        entry: bash -c 'command -v semgrep >/dev/null 2>&1 || { echo "Semgrep no encontrado. Instala con pip install semgrep"; exit 1; }; semgrep scan --config auto --severity ERROR --error --exclude=target --exclude=build --exclude=node_modules .'
+        pass_filenames: false
+        always_run: false              # Solo corre si hay archivos staged
+        stages: [commit]
+        verbose: true
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # 4. Validaciones del Makefile local (lint + build + test)
+  #    Garantiza que el pipeline local es superado antes del commit
+  # ─────────────────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: makefile-check
+        name: "🛠 Makefile — lint + build + test"
+        language: system
+        entry: bash -c 'make lint build test'
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+        verbose: true
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # 5. Validación de archivos de configuración CI/CD
+  # ─────────────────────────────────────────────────────────────────────────
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.28.4
+    hooks:
+      - id: check-github-workflows     # Valida sintaxis de GitHub Actions workflows
+        name: "⚙ Validar GitHub Actions workflows"
+      - id: check-github-actions       # Valida action.yml/action.yaml
+        name: "⚙ Validar GitHub Actions"
+
+# ---------------------------------------------------------------------------
+# Configuración de exclusiones globales
+# Se aplican a TODOS los hooks anteriores
+# ---------------------------------------------------------------------------
+exclude: |
+  (?x)^(
+    \.git/.*|
+    target/.*|
+    build/.*|
+    \.mvn/.*|
+    node_modules/.*|
+    .*\.min\.js|
+    .*\.min\.css
+  )$

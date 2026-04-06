@@ -26,11 +26,11 @@ public class ScheduleReference {
     @JsonSerialize(using = LocalTimeSerializer.class)
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime openingTime;
-    
+
     @JsonSerialize(using = LocalTimeSerializer.class)
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime closingTime;
-    
+
     @JsonSerialize(using = DayOfWeekSerializer.class)
     @JsonDeserialize(using = DayOfWeekDeserializer.class)
     private DayOfWeek dayOfWeek;
@@ -155,7 +155,7 @@ public class ScheduleReference {
             return timeString != null ? LocalTime.parse(timeString) : null;
         }
     }
-    
+
     public static class DayOfWeekSerializer extends JsonSerializer<DayOfWeek> {
         @Override
         public void serialize(DayOfWeek value, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -164,7 +164,7 @@ public class ScheduleReference {
             }
         }
     }
-    
+
     public static class DayOfWeekDeserializer extends JsonDeserializer<DayOfWeek> {
         @Override
         public DayOfWeek deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {

@@ -30,7 +30,7 @@ public class Physical extends Resource {
         this.TV = TV;
         this.totalComputer = totalComputer;
     }
-    
+
     // Getters y setters
 
     /**

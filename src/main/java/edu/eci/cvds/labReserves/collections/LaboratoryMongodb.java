@@ -43,4 +43,3 @@ public class LaboratoryMongodb extends Laboratory {
         return id;
     }
 }
-

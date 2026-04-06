@@ -1,5 +1,9 @@
 # Laboratory Reservation System
 
+> **DevSecOps Pipeline** — This project includes a security architecture integrated into CI/CD.
+> - **[DEVSECOPS.md](DEVSECOPS.md)** — Architecture comparison, security findings, and evaluation criteria
+> - **[SETUP.md](SETUP.md)** — Full setup guide for the pipeline
+
 The purpose of this project is to develop an application for laboratory reservations, specifically for the laboratories in the systems area of the Universidad Escuela Colombiana de Ingeniería Julio Garavito. This application will allow users to reserve each laboratory within the permitted schedule, as well as cancel reservations if necessary, and consult any type of information about each laboratory they need, all through a user-friendly and intuitive web interface. This repository is specifically for the Backend area; if you want to check the status of the front, follow this link: https://github.com/Waldron63/FrutiFront
 
 ## Tech Stack
@@ -89,7 +93,7 @@ In order to coordinate the activities, repositories, pipelines and others, we us
 
 ![image](https://github.com/user-attachments/assets/93c70162-a2f9-49d8-b0e5-3f7b837da4da)
 
-And generate an epic that includes both front-end and back-end tasks. 4 functions to distribute the main areas of the project: 
+And generate an epic that includes both front-end and back-end tasks. 4 functions to distribute the main areas of the project:
 1. Consult details of laboratories, reservations and users: the code is generated to be able to visualise the important of each of the objects that will be necessary for the front (GET). Person in charge: Juan David Martinez Mendez
 2. Management of laboratories: the corresponding code for the laboratory and its embedded objects, as well as the initial CRUD that can be used by the front end. Person in charge: Maria Paula Sanchez Macias
 3. Manage Reservations: the respective code for Reserve and Schedule, plus the initial CRUD that can be used by the front-end and its relationship with Laboratory and User. Person in charge: Santiago Gualdron Rincon
@@ -153,7 +157,7 @@ Test of functionallity
 ![image](https://github.com/user-attachments/assets/2625b989-53df-408e-b02b-af0890404125)
 
 ## REACT
-In this case, a first code was generated in HTML, CSS and JS, which has a complete functionality between the back and the front. 
+In this case, a first code was generated in HTML, CSS and JS, which has a complete functionality between the back and the front.
 But we moved the code to React, where we also restructured the graphic design of the site:
 Link to see the mockup of the final design of the site (FIGMA):
 https://www.figma.com/design/ywe4fMaXpMjBt53KG8gCqE/CVDS-PROYECTO-1?m=auto&t=KPdovwRh6Pr1C1jy-1

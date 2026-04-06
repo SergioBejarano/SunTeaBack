@@ -29,7 +29,7 @@ public class Software extends Resource {
         this.operativeSystem = operativeSystem;
         this.partition = partition;
     }
-    
+
     // Getters y setters
 
     /**

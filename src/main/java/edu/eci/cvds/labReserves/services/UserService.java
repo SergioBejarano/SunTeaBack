@@ -31,7 +31,7 @@ public class UserService{
         try{
             UserMongodb userMongo = new UserMongodb(user);
             return userRepo.save(userMongo);
-    
+
         } catch(Exception e){
             throw new LabReserveException("Error al crear el usuario: " + e.getMessage());
         }
