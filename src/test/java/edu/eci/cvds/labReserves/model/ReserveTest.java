@@ -1,8 +1,5 @@
-package edu.eci.cvds.labReserves;
+package edu.eci.cvds.labReserves.model;
 
-import edu.eci.cvds.labReserves.model.User;
-import edu.eci.cvds.labReserves.model.LabReserveException;
-import edu.eci.cvds.labReserves.model.Reserve;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,21 +11,18 @@ public class ReserveTest {
 
     @BeforeEach
     void setUp() throws LabReserveException {
-        User rodrigo = new User(1, "Rodrigo", "rodrigo@mail", "rodrigo","teacher");
         reseve = new Reserve("lesson", "CVDS", 1);
     }
 
     /**
      * Verify a teacher can make a reserve
-     * @throws LabReserveException
      */
     @Test
-    void testMakeReserveOfTeachers() throws LabReserveException {
-        User irma = new User(2, "Irma", "irma@mail", "irma","teacher");
+    void testMakeReserveOfTeachers() {
         try {
             Reserve reserveTest = new Reserve("lesson", "POOB", 2);
-            assertEquals(reserveTest.getReason(), "POOB");
-            assertEquals(reserveTest.getUser(), 2);
+            assertEquals("POOB", reserveTest.getReason());
+            assertEquals(2, reserveTest.getUser());
         }catch (LabReserveException e){
             fail(e.getMessage());
         }
@@ -40,11 +34,10 @@ public class ReserveTest {
      */
     @Test
     void testMakeReserveOfAdmin() throws LabReserveException {
-        User aurora = new User(3, "Aurora", "aurora@mail", "aurora","admin");
         try {
             Reserve reserveTest = new Reserve("lesson", "MBDA", 3);
-            assertEquals(reserveTest.getReason(), "MBDA");
-            assertEquals(reserveTest.getUser(), 3);
+            assertEquals("MBDA", reserveTest.getReason());
+            assertEquals(3, reserveTest.getUser());
         }catch (LabReserveException e) {
             fail(e.getMessage());
         }
@@ -52,11 +45,9 @@ public class ReserveTest {
 
     /**
      * Validate Can not create a reserve for invalid type
-     * @throws LabReserveException
      */
     @Test
-    void testShouldNotCreateReserveforInvalidType() throws LabReserveException{
-        User irma = new User(2, "Irma", "irma@mail", "irma","teacher");
+    void testShouldNotCreateReserveforInvalidType() {
         LabReserveException exception = assertThrows(LabReserveException.class, () -> {
             new Reserve("semillero", "MBDA", 3);
         });
@@ -66,11 +57,9 @@ public class ReserveTest {
 
     /**
      * Validate can not create a reserve for null reason
-     * @throws LabReserveException
      */
     @Test
-    void testShouldNotCreateReserveforInvalidReason() throws LabReserveException{
-        User irma = new User(2, "Irma", "irma@mail", "irma","teacher");
+    void testShouldNotCreateReserveforInvalidReason() {
         LabReserveException exception = assertThrows(LabReserveException.class, () -> {
             new Reserve("lesson", "", 3);
         });
@@ -80,11 +69,9 @@ public class ReserveTest {
 
     /**
      * Validate can not create a reserve for invalid user id
-     * @throws LabReserveException
      */
     @Test
-    void testShouldNotCreateReserveforInvalidUserId() throws LabReserveException{
-        User irma = new User(2, "Irma", "irma@mail", "irma","teacher");
+    void testShouldNotCreateReserveforInvalidUserId() {
         LabReserveException exception = assertThrows(LabReserveException.class, () -> {
             new Reserve("lesson", "gdgfe", -1);
         });
@@ -93,20 +80,18 @@ public class ReserveTest {
 
     /**
      * Validate can change reserve schedule
-     * @throws LabReserveException
      */
     @Test
-    void testReserveChangeSchedule() throws LabReserveException{
+    void testReserveChangeSchedule() {
         reseve.setSchedule("3");
         assertEquals("3",reseve.getSchedule());
     }
 
     /**
      * Validate can change reserve reason
-     * @throws LabReserveException
      */
     @Test
-    void testReserveChangeReason() throws LabReserveException{
+    void testReserveChangeReason() {
         reseve.setReason("test new reason");
         assertEquals("test new reason",reseve.getReason());
     }
@@ -124,10 +109,9 @@ public class ReserveTest {
 
     /**
      * validate can change reserve type
-     * @throws LabReserveException
      */
     @Test
-    void testShouldSetReserveType() throws LabReserveException{
+    void testShouldSetReserveType() {
         try {
             reseve.setType("available");
             assertEquals("available", reseve.getType());
@@ -138,10 +122,9 @@ public class ReserveTest {
 
     /**
      * Validate can not change reserve type
-     * @throws LabReserveException
      */
     @Test
-    void testShouldNotSetReserveType() throws LabReserveException{
+    void testShouldNotSetReserveType() {
         try {
             reseve.setType("not found");
         }catch (LabReserveException e) {
@@ -161,10 +144,9 @@ public class ReserveTest {
 
     /**
      * validate can not change reserve state for invalid state
-     * @throws LabReserveException
      */
     @Test
-    void testShouldNotSetState() throws LabReserveException{
+    void testShouldNotSetState() {
         try {
             reseve.setState("libre");
         }catch (LabReserveException e) {
