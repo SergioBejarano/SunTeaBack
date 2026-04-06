@@ -1,6 +1,7 @@
 package edu.eci.cvds.labReserves.repository.mongodb;
 
 import edu.eci.cvds.labReserves.collections.ScheduleMongodb;
+import jakarta.annotation.Nonnull;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -34,7 +35,7 @@ public interface ScheduleMongoRepository extends MongoRepository<ScheduleMongodb
      *
      * @param id The ID of the schedule to delete.
      */
-    void deleteById(String id);
+    void deleteById(@Nonnull String id);
 
     /**
      * Finds a ScheduleMongodb entity by its ID.

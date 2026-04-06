@@ -1,18 +1,19 @@
 package edu.eci.cvds.labReserves.collections;
-import edu.eci.cvds.labReserves.model.LabReserveException;
-import edu.eci.cvds.labReserves.model.Reserve;
-import edu.eci.cvds.labReserves.model.User;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import edu.eci.cvds.labReserves.model.LabReserveException;
+import edu.eci.cvds.labReserves.model.User;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Represents a MongoDB user entity that extends the base {@code User} class.
  * This class is annotated with {@code @Document} to specify the collection name in MongoDB.
  */
 @Document(collection = "user")
+@Getter
+@Setter
 public  class UserMongodb extends User {
     @Id
     private int id; // The unique identifier for the user.

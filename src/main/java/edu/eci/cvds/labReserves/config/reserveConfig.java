@@ -3,7 +3,6 @@ package edu.eci.cvds.labReserves.config;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableMongoRepositories(basePackages = "edu.eci.cvds.labReserves.repository.mongodb")
 public class reserveConfig {
 
-    @Autowired
     private final UserMongoRepository userMongoRepository; //Repository for accessing user data from MongoDB.
 
     /**

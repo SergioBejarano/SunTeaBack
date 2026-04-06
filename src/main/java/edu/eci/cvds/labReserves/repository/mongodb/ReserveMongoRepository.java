@@ -15,14 +15,6 @@ import java.util.List;
 public interface ReserveMongoRepository extends MongoRepository<ReserveMongodb, String>{
 
     /**
-     * Deletes all reservations associated with a specific user ID.
-     *
-     * @param userId The ID of the user whose reservations should be deleted.
-     */
-    @Query("{ 'userId' : ?0 }")
-    void deleteAllByUserId(int userId);
-
-    /**
      * Finds all reservations made by a specific user.
      *
      * @param userId The ID of the user.

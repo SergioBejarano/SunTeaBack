@@ -14,4 +14,10 @@ public record TokenResponse (
         @JsonProperty("refresh_token")
         String refreshToken //The refresh token used to obtain a new access token when the current one expires.
 ){
+        public String getJwtToken() {
+                return accessToken;
+        }
+        public String getRefreshToken() {
+                return refreshToken;
+        }
 }

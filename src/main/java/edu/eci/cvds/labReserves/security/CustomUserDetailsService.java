@@ -3,7 +3,6 @@ package edu.eci.cvds.labReserves.security;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,8 +17,11 @@ import java.util.ArrayList;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserMongoRepository userRepo; //Repository for interacting with the user database.
+    private final UserMongoRepository userRepo; //Repository for interacting with the user database.
+
+    public CustomUserDetailsService(UserMongoRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     /**
      * Loads a user by their username from the database.

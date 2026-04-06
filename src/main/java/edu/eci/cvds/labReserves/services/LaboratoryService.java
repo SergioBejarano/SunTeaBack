@@ -3,15 +3,11 @@ package edu.eci.cvds.labReserves.services;
 import edu.eci.cvds.labReserves.collections.LaboratoryMongodb;
 import edu.eci.cvds.labReserves.repository.mongodb.LaboratoryMongoRepository;
 import edu.eci.cvds.labReserves.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Servicio para la gestión de laboratorios en el sistema.
@@ -19,8 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class LaboratoryService {
 
-    @Autowired
-    private LaboratoryMongoRepository laboratoryRepository;
+    private final LaboratoryMongoRepository laboratoryRepository;
+
+    public LaboratoryService(LaboratoryMongoRepository laboratoryRepository) {
+        this.laboratoryRepository = laboratoryRepository;
+    }
 
     /**
      * Crea un nuevo laboratorio en la base de datos.
@@ -56,15 +55,6 @@ public class LaboratoryService {
      */
     public void updateLaboratoryTotalCapacity(String abbreviation, int totalcapacity) {
         LaboratoryMongodb existingLab = laboratoryRepository.findByAbbreviation(abbreviation);
-        // Esta linea se va mañana RECORDATORIOOOO (2 lineas)
-        /*List<ScheduleReference> listschedule = existingLab.getScheduleReferences();
-        for (ScheduleReference schedule : listschedule){
-            if (schedule.getDayOfWeek().equals(schedulereference.getDayOfWeek())){
-                schedule.setOpeningTime(schedulereference.getOpeningTime());
-                schedule.setClosingTime(schedulereference.getClosingTime());
-            }
-        }
-        existingLab.setScheduleReferences(listschedule);*/
         existingLab.setTotalCapacity(totalcapacity);
         laboratoryRepository.save(existingLab);
 
@@ -149,7 +139,6 @@ public class LaboratoryService {
      */
     public boolean deleteLaboratory(Laboratory laboratory) {
         if (laboratoryRepository.existsByAbbreviation(laboratory.getAbbreviation())) {
-            Laboratory lab = getLaboratoryByAbbreviation(laboratory.getAbbreviation());
             laboratoryRepository.deleteByAbbreviation(laboratory.getAbbreviation());
             return true;
         }

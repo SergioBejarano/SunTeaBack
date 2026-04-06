@@ -1,8 +1,5 @@
 package edu.eci.cvds.labReserves.config;
 
-import edu.eci.cvds.labReserves.security.CustomUserDetailsService;
-import edu.eci.cvds.labReserves.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,14 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private JwtRequestFilter jwtRequestFilter; //Filter that processes JWT authentication for incoming requests.
-    private AuthenticationProvider authenticationProvider; //Authentication provider for handling user authentication.
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService; //Service to load user details.
-
-    @Autowired
-    private JwtUtil jwtUtil; //Utility class for handling JWT token operations.
+    private final JwtRequestFilter jwtRequestFilter; //Filter that processes JWT authentication for incoming requests.
+    private final AuthenticationProvider authenticationProvider; //Authentication provider for handling user authentication.
 
     /**
      * Constructor to initialize dependencies.

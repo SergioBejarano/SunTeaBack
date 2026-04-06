@@ -1,47 +1,37 @@
 package edu.eci.cvds.labReserves.services;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
-import edu.eci.cvds.labReserves.config.RestTemplateConf;
 import edu.eci.cvds.labReserves.dto.AuthRequest;
 import edu.eci.cvds.labReserves.dto.TokenResponse;
 import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
-import edu.eci.cvds.labReserves.security.CustomUserDetailsService;
 import edu.eci.cvds.labReserves.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 /**
  * AuthService provides authentication and registration functionalities for the system.
  * It handles user registration, login, and JWT token generation.
  */
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager; //Manages authentication processes.
+    private final AuthenticationManager authenticationManager; //Manages authentication processes.
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService; //Service for loading user details.
+    private final UserMongoRepository userRepo; //Repository for interacting with the user database.
 
-    @Autowired
-    private UserMongoRepository userRepo; //Repository for interacting with the user database.
+    private final PasswordEncoder passwordEncoder; //Handles password encryption.
 
-    @Autowired
-    private PasswordEncoder passwordEncoder; //Handles password encryption.
+    private final JwtUtil jwtUtil; //Utility class for generating JWT tokens.
 
-    @Autowired
-    private JwtUtil jwtUtil; //Utility class for generating JWT tokens.
-    @Autowired
-    private RestTemplateConf restTemplateConf;
+    public AuthService(AuthenticationManager authenticationManager, UserMongoRepository userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     /**
      * Registers a new user in the system.
@@ -72,7 +62,7 @@ public class AuthService {
      * @param authRequest The authentication request containing user credentials.
      * @return A TokenResponse containing the JWT token and refresh token.
      */
-    public TokenResponse login(AuthRequest authRequest) throws Exception {
+    public TokenResponse login(AuthRequest authRequest){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),

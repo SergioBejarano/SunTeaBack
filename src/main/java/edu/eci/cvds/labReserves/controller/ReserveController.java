@@ -4,12 +4,8 @@ import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.collections.ScheduleMongodb;
 import edu.eci.cvds.labReserves.dto.ReserveRequest;
 import edu.eci.cvds.labReserves.model.LabReserveException;
-import edu.eci.cvds.labReserves.model.Reserve;
 import edu.eci.cvds.labReserves.model.Schedule;
-import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.services.ReserveService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.DayOfWeek;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -33,8 +27,11 @@ import java.util.Optional;
 @RequestMapping("/api/reserve")
 public class ReserveController {
 
-    @Autowired
-    private ReserveService reserveService; //Service of Reserve (logic code)
+    private final ReserveService reserveService; //Service of Reserve (logic code)
+
+    public ReserveController (ReserveService reserveService) {
+        this.reserveService = reserveService;
+    }
 
     /**
      * Creates a new reservation.

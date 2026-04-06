@@ -25,9 +25,7 @@ public class RestTemplateConf {
     private String trustStorePassword;
 
     @Bean
-    public RestTemplate restTemplate() throws Exception {
-        SSLContext sslContext = createSSLContext();
-        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+    public RestTemplate restTemplate() {
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
 

@@ -1,20 +1,55 @@
 package edu.eci.cvds.labReserves.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * Represents a physical resource available in a laboratory, such as projectors, televisions and computers.
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Physical extends Resource {
 
-    private boolean projector;
-    private boolean TV;
-    private int totalComputer;
-
     /**
-     * Default constructor of the Physical class.
+     * -- GETTER --
+     *  Gets the resource has a projector available.
+     *
+     *
+     * -- SETTER --
+     *  Set the resource has a projector available.
+     *
+     @return true if it has a projector, false otherwise.
+      * @param projector true if it has a projector, false otherwise.
      */
-    public Physical() {
-        super();
-    }
+    private boolean projector;
+    /**
+     * -- GETTER --
+     *  Get the resource has a TV available.
+     *
+     *
+     * -- SETTER --
+     *  Set the resource has a TV available.
+     *
+     @return true if it has a TV, false otherwise.
+      * @param TV true if it has a TV, false otherwise.
+     */
+    private boolean TV;
+    /**
+     * -- GETTER --
+     *  Get the total number of computers available on the resource.
+     *
+     *
+     * -- SETTER --
+     *  Set the total number of computers available on the resource.
+     *
+     @return Total number of computers.
+      * @param totalComputer Total number of computers.
+     */
+    private int totalComputer;
 
     /**
      * Constructor that initializes the attributes of the Physical class.
@@ -28,62 +63,6 @@ public class Physical extends Resource {
         super(name);
         this.projector = projector;
         this.TV = TV;
-        this.totalComputer = totalComputer;
-    }
-
-    // Getters y setters
-
-    /**
-     * Gets the resource has a projector available.
-     *
-     * @return true if it has a projector, false otherwise.
-     */
-    public boolean isProjector() {
-        return projector;
-    }
-
-    /**
-     * Set the resource has a projector available.
-     *
-     * @param projector true if it has a projector, false otherwise.
-     */
-    public void setProjector(boolean projector) {
-        this.projector = projector;
-    }
-
-    /**
-     * Get the resource has a TV available.
-     *
-     * @return true if it has a TV, false otherwise.
-     */
-    public boolean isTV() {
-        return TV;
-    }
-
-    /**
-     * Set the resource has a TV available.
-     *
-     * @param TV true if it has a TV, false otherwise.
-     */
-    public void setTV(boolean TV) {
-        this.TV = TV;
-    }
-
-    /**
-     * Get the total number of computers available on the resource.
-     *
-     * @return Total number of computers.
-     */
-    public int getTotalComputer() {
-        return totalComputer;
-    }
-
-    /**
-     * Set the total number of computers available on the resource.
-     *
-     * @param totalComputer Total number of computers.
-     */
-    public void setTotalComputer(int totalComputer) {
         this.totalComputer = totalComputer;
     }
 }

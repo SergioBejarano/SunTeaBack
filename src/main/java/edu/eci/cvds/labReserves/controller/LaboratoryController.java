@@ -1,16 +1,12 @@
 package edu.eci.cvds.labReserves.controller;
 
 import edu.eci.cvds.labReserves.collections.LaboratoryMongodb;
-import edu.eci.cvds.labReserves.collections.ReserveMongodb;
 import edu.eci.cvds.labReserves.model.*;
 import edu.eci.cvds.labReserves.services.LaboratoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +17,11 @@ import java.util.Map;
 @RequestMapping("/api/laboratories")
 public class LaboratoryController {
 
-    @Autowired
-    private LaboratoryService laboratoryService;
+    private final LaboratoryService laboratoryService;
+
+    public LaboratoryController (LaboratoryService laboratoryService) {
+        this.laboratoryService = laboratoryService;
+    }
 
     /**
      * Crea un nuevo laboratorio.
@@ -43,13 +42,6 @@ public class LaboratoryController {
     public List<LaboratoryMongodb> getAllLaboratories() {
         return laboratoryService.getAllLaboratories();
     }
-
-    /**
-     * Retrieves a reserve by its ID.
-    @GetMapping("/{id}")
-    public ReserveMongodb getReserveById(@PathVariable int id) throws LabReserveException {
-        return reserveService.getReserveById(id);
-    }*/
 
     /**
      * Obtiene un laboratorio por su abreviatura.
@@ -141,30 +133,8 @@ public class LaboratoryController {
      */
     @DeleteMapping("/{abbreviation}/byelaboratory")
     public void deleteLaboratory(@PathVariable String abbreviation) {
-        // boolean deleted = laboratoryService.deleteLaboratory(abbreviation);
-
-        /*if (deleted) {
-            return new ResponseEntity<>("Laboratorio eliminado con éxito", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Laboratorio no encontrado", HttpStatus.NOT_FOUND);
-        }*/
         laboratoryService.deleteByAbbreviation(abbreviation);
     }
-
-    // Agrega un horario disponible a un laboratorio
-    /*@PutMapping("/{abbreviation}/schedule")
-    public void addAvailableDay(
-            @PathVariable String abbreviation,
-                @RequestBody Map<String, String> requestBody) {
-
-        // Convertir los valores del mapa a los tipos necesarios
-        DayOfWeek day = DayOfWeek.valueOf(requestBody.get("day").toUpperCase());
-        LocalTime openingTime = LocalTime.parse(requestBody.get("openingTime"));
-        LocalTime closingTime = LocalTime.parse(requestBody.get("closingTime"));
-
-        laboratoryService.addAvailableDay(abbreviation, day, openingTime, closingTime);
-
-    }*/
 
     /**
      * Verifica la disponibilidad de un laboratorio para un horario específico.

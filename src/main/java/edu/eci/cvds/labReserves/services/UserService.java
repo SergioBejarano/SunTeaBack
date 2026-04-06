@@ -3,7 +3,6 @@ package edu.eci.cvds.labReserves.services;
 import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.repository.mongodb.*;
 import edu.eci.cvds.labReserves.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +16,11 @@ import java.util.Optional;
 @Service
 public class UserService{
 
-    @Autowired
-    private UserMongoRepository userRepo;
+    private final UserMongoRepository userRepo;
+
+    public UserService(UserMongoRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     /**
      * Creates and saves a new user.
@@ -139,8 +141,7 @@ public class UserService{
      * @return A list of all users.
      */
     public List<UserMongodb> getAllUsers() {
-        List<UserMongodb> users = userRepo.findAll();
-        return users;
+        return userRepo.findAll();
     }
 
     /**
