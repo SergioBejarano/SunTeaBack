@@ -55,7 +55,7 @@ class LaboratoryTest {
         ScheduleReference testSchedule = new ScheduleReference(DayOfWeek.FRIDAY,LocalTime.of(7,0),LocalTime.of(8,30));
         laboratory.addScheduleReference(testSchedule);
         List<ScheduleReference> scheduleReferences = laboratory.getScheduleReferences();
-        assertEquals(testSchedule,scheduleReferences.getFirst());
+        assertEquals(testSchedule,scheduleReferences.get(0));
     }
 
     /**
@@ -144,7 +144,7 @@ class LaboratoryTest {
      */
     @Test
     void testShouldGetScheduleReferenceForDay() {
-        assertEquals(laboratory.getScheduleReferences().getFirst(),laboratory.getScheduleReferenceForDay(DayOfWeek.FRIDAY));
+        assertEquals(laboratory.getScheduleReferences().get(0),laboratory.getScheduleReferenceForDay(DayOfWeek.FRIDAY));
     }
 
     /**

@@ -161,7 +161,7 @@ class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByLaboratory("LABISW");
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.getFirst().getReason());
+        assertEquals("LCAT", requests.get(0).getReason());
     }
 
     @Test
@@ -173,7 +173,7 @@ class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByUser(1000095482);
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.getFirst().getReason());
+        assertEquals("LCAT", requests.get(0).getReason());
     }
 
     @Test
@@ -185,7 +185,7 @@ class ReserveServiceTest {
 
         List<ReserveRequest> requests = reserveService.getReserveByDay(DayOfWeek.WEDNESDAY);
         assertEquals(1, requests.size());
-        assertEquals("LCAT", requests.getFirst().getReason());
+        assertEquals("LCAT", requests.get(0).getReason());
     }
 
     @Test
