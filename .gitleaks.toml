@@ -1,0 +1,9 @@
+# Gitleaks configuration — exclude known false positives
+# https://github.com/gitleaks/gitleaks#configuration
+
+[allowlist]
+  description = "Allow known false positives"
+  paths = [
+    '''\.secrets\.baseline$''',
+    '''DEVSECOPS\.md$''',
+  ]

@@ -190,11 +190,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Solo requerido para repos privados
-        with:
-          args: |
-            --redact
-            --verbose
-            --baseline-path=.gitleaks-baseline.json
 
       - name: Comentar en PR si se detectan secretos
         if: failure()
