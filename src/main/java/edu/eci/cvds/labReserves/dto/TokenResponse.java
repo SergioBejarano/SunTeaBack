@@ -3,21 +3,33 @@ package edu.eci.cvds.labReserves.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TokenResponse is a record that represents the response containing the authentication tokens.
- * It includes both an access token and a refresh token, which are used for user authentication and session management.
+ * TokenResponse represents the response containing authentication tokens.
+ * It includes an access token and a refresh token for session management.
+ *
+ * @param accessToken The access token used for authenticating API requests.
+ * @param refreshToken The refresh token used to obtain a new access token.
  */
-public record TokenResponse (
-
+public record TokenResponse(
         @JsonProperty("access_token")
-        String accessToken, //The access token used for authenticating API requests.
-
+        String accessToken,
         @JsonProperty("refresh_token")
-        String refreshToken //The refresh token used to obtain a new access token when the current one expires.
-){
-        public String getJwtToken() {
-                return accessToken;
-        }
-        public String getRefreshToken() {
-                return refreshToken;
-        }
+        String refreshToken
+) {
+    /**
+     * Returns the access token.
+     *
+     * @return The JWT access token.
+     */
+    public String getJwtToken() {
+        return accessToken;
+    }
+
+    /**
+     * Returns the refresh token.
+     *
+     * @return The refresh token string.
+     */
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 }

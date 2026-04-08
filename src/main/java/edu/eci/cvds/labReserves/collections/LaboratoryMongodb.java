@@ -27,15 +27,18 @@ public class LaboratoryMongodb extends Laboratory {
     /**
      * Default constructor for LaboratoryMongodb.
      */
-    public LaboratoryMongodb(){
+    public LaboratoryMongodb() {
         super();
     }
 
     /**
      * Constructs a LaboratoryMongodb instance based on a Schedule object.
+     * @param laboratory
      */
-    public LaboratoryMongodb(Laboratory laboratory) {
-        super(laboratory.getName(), laboratory.getAbbreviation(), laboratory.getTotalCapacity(), laboratory.getLocation(), laboratory.getScheduleReferences());
+    public LaboratoryMongodb(final Laboratory laboratory) {
+        super(laboratory.getName(), laboratory.getAbbreviation(),
+        laboratory.getTotalCapacity(), laboratory.getLocation(),
+        laboratory.getScheduleReferences());
         this.id = laboratory.getAbbreviation();
     }
 

@@ -16,21 +16,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Configuration class for managing authentication and user repository settings.
- * This class enables MongoDB repositories and provides authentication-related beans.
+ * This class enables MongoDB repositories
+ * and provides authentication-related beans.
  */
 @Configuration
-@EnableMongoRepositories(basePackages = "edu.eci.cvds.labReserves.repository.mongodb")
-public class reserveConfig {
-
-    private final UserMongoRepository userMongoRepository; //Repository for accessing user data from MongoDB.
+@EnableMongoRepositories(basePackages =
+    "edu.eci.cvds.labReserves.repository.mongodb")
+public class ReserveConfig {
+    /** Repository for accessing user data from MongoDB. */
+    private final UserMongoRepository userMongoRepository;
 
     /**
      * Constructor that injects the user repository implementation.
      *
-     * @param userMongoRepository The user repository.
+     * @param puserMongoRepository The user repository.
      */
-    public reserveConfig(UserMongoRepository userMongoRepository) {
-        this.userMongoRepository = userMongoRepository;
+    public ReserveConfig(final UserMongoRepository puserMongoRepository) {
+        this.userMongoRepository = puserMongoRepository;
     }
 
     /**
@@ -41,7 +43,8 @@ public class reserveConfig {
      * @throws Exception If an error occurs during authentication setup.
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+    public AuthenticationManager authenticationManager(
+        final AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
@@ -51,8 +54,9 @@ public class reserveConfig {
      * @return The configured authentication provider.
      */
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider =
+            new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
@@ -64,7 +68,7 @@ public class reserveConfig {
      * @return The password encoder instance.
      */
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -75,7 +79,7 @@ public class reserveConfig {
      * @return The UserDetailsService implementation.
      */
     @Bean
-    public UserDetailsService userDetailService(){
+    public UserDetailsService userDetailService() {
         return name -> {
             UserMongodb user = userMongoRepository.findByMail(name);
             return org.springframework.security.core.userdetails.User.builder()

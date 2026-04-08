@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Represents a physical resource available in a laboratory, such as projectors, televisions and computers.
+ * Represents a physical resource in a laboratory,
+ * such as projectors, televisions and computers.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,55 +15,45 @@ import lombok.Setter;
 @Setter
 public class Physical extends Resource {
 
-    /**
-     * -- GETTER --
-     *  Gets the resource has a projector available.
-     *
-     *
-     * -- SETTER --
-     *  Set the resource has a projector available.
-     *
-     @return true if it has a projector, false otherwise.
-      * @param projector true if it has a projector, false otherwise.
-     */
+    /** Indicates if the resource has a projector available. */
     private boolean projector;
-    /**
-     * -- GETTER --
-     *  Get the resource has a TV available.
-     *
-     *
-     * -- SETTER --
-     *  Set the resource has a TV available.
-     *
-     @return true if it has a TV, false otherwise.
-      * @param TV true if it has a TV, false otherwise.
-     */
-    private boolean TV;
-    /**
-     * -- GETTER --
-     *  Get the total number of computers available on the resource.
-     *
-     *
-     * -- SETTER --
-     *  Set the total number of computers available on the resource.
-     *
-     @return Total number of computers.
-      * @param totalComputer Total number of computers.
-     */
+
+    /** Indicates if the resource has a television available. */
+    private boolean tv;
+
+    /** The total number of computers available. */
     private int totalComputer;
 
     /**
      * Constructor that initializes the attributes of the Physical class.
      *
-     * @param name Name of the physical resource.
-     * @param projector Indicates if the resource has a projector.
-     * @param TV Indicates if the resource has a TV set.
-     * @param totalComputer Total number of available computers.
+     * @param pName Name of the physical resource.
+     * @param pProjector Indicates if it has a projector.
+     * @param pTv Indicates if it has a TV set.
+     * @param pTotalComputer Total number of available computers.
      */
-    public Physical(String name, boolean projector, boolean TV, int totalComputer) {
-        super(name);
-        this.projector = projector;
-        this.TV = TV;
-        this.totalComputer = totalComputer;
+    public Physical(final String pName, final boolean pProjector,
+                    final boolean pTv, final int pTotalComputer) {
+        super(pName);
+        this.projector = pProjector;
+        this.tv = pTv;
+        this.totalComputer = pTotalComputer;
+    }
+   /**
+     * Indica si el laboratorio físico cuenta con televisor.
+     *
+     * @return true si tiene TV, false de lo contrario.
+     */
+    public final boolean isTV() {
+        return tv;
+    }
+
+    /**
+     * Define si el laboratorio físico cuenta con televisor.
+     *
+     * @param pTv booleano que indica la presencia de TV.
+     */
+    public final void setTV(final boolean pTv) {
+        this.tv = pTv;
     }
 }

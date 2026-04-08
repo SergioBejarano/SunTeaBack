@@ -24,12 +24,6 @@ concurrency:
   group: pr-security-${{ github.ref }}
   cancel-in-progress: true
 
-# Permisos mínimos necesarios
-permissions:
-  contents: read
-  pull-requests: write       # Para comentar resultados en el PR
-  security-events: write     # Para subir resultados SARIF a Security tab
-
 # ---------------------------------------------------------------------------
 # Variables de entorno globales
 # ---------------------------------------------------------------------------
@@ -46,6 +40,8 @@ jobs:
   gate-1-sonarcloud:
     name: "Gate 1 · SonarCloud Quality Gate"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -86,6 +82,9 @@ jobs:
   gate-2-codeql-sast:
     name: "Gate 2 · CodeQL SAST"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -117,6 +116,10 @@ jobs:
   gate-3-trivy-sca:
     name: "Gate 3 · Trivy SCA"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write        # Para subir SARIF
+      pull-requests: write          # Para comentar en el PR
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -138,7 +141,7 @@ jobs:
         run: mvn dependency:tree -DoutputFile=dependency-tree.txt --no-transfer-progress
 
       - name: Trivy — Escaneo de dependencias (SCA)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           scan-type: 'fs'             # Filesystem scan (analiza pom.xml, package.json, etc.)
           scan-ref: '.'
@@ -179,6 +182,9 @@ jobs:
   gate-4-secret-scanning:
     name: "Gate 4 · Secret Scanning (Gitleaks + GHAS)"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write          # Para comentar en el PR
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -186,7 +192,7 @@ jobs:
           fetch-depth: 0             # Necesario para escanear historial completo
 
       - name: Gitleaks — Detección de secretos
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Solo requerido para repos privados
@@ -216,6 +222,8 @@ jobs:
       - gate-4-secret-scanning
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      pull-requests: write          # Para comentar el resumen en el PR
     steps:
       - name: Verificar resultado de todos los gates
         uses: actions/github-script@v7

@@ -1,9 +1,5 @@
 package edu.eci.cvds.labReserves.model;
 
-import java.io.IOException;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -12,15 +8,16 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Representa un horario de referencia para un laboratorio, incluyendo el día de la semana,
- * la hora de apertura y la hora de cierre. También proporciona métodos para verificar
- * si un horario específico está dentro del rango permitido o si está disponible.
+ * Representa un horario de referencia para un laboratorio.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,47 +25,17 @@ import lombok.Setter;
 @Setter
 public class ScheduleReference {
 
-    /**
-     * -- GETTER --
-     *  Obtiene la hora de apertura del laboratorio.
-     *
-     *
-     * -- SETTER --
-     *  Establece la hora de apertura del laboratorio.
-     *
-     @return Hora de apertura.
-      * @param openingTime Nueva hora de apertura.
-     */
+    /** Hora de apertura del laboratorio. */
     @JsonSerialize(using = LocalTimeSerializer.class)
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime openingTime;
 
-    /**
-     * -- GETTER --
-     *  Obtiene la hora de cierre del laboratorio.
-     *
-     *
-     * -- SETTER --
-     *  Establece la hora de cierre del laboratorio.
-     *
-     @return Hora de cierre.
-      * @param closingTime Nueva hora de cierre.
-     */
+    /** Hora de cierre del laboratorio. */
     @JsonSerialize(using = LocalTimeSerializer.class)
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime closingTime;
 
-    /**
-     * -- GETTER --
-     *  Obtiene el día de la semana en el que aplica este horario.
-     *
-     *
-     * -- SETTER --
-     *  Establece el día de la semana en el que aplica este horario.
-     *
-     @return Día de la semana.
-      * @param dayOfWeek Nuevo día de la semana.
-     */
+    /** Día de la semana en el que aplica este horario. */
     @JsonSerialize(using = DayOfWeekSerializer.class)
     @JsonDeserialize(using = DayOfWeekDeserializer.class)
     private DayOfWeek dayOfWeek;
@@ -76,68 +43,97 @@ public class ScheduleReference {
     /**
      * Constructor que permite definir un horario de referencia.
      *
-     * @param dayOfWeek   Día de la semana en el que aplica el horario.
-     * @param openingTime Hora de apertura.
-     * @param closingTime Hora de cierre.
+     * @param pDayOfWeek   Día de la semana.
+     * @param pOpeningTime Hora de apertura.
+     * @param pClosingTime Hora de cierre.
      */
-    public ScheduleReference(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime) {
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    public boolean isWithinSchedule(Schedule schedule) {
-        DayOfWeek scheduleDay = schedule.getDay();
-        if (!dayOfWeek.equals(scheduleDay)) {
-            return false;
-        }
-        return !schedule.getStartHour().isBefore(openingTime) && !schedule.getEndHour().isAfter(closingTime);
+    public ScheduleReference(final DayOfWeek pDayOfWeek,
+                             final LocalTime pOpeningTime,
+                             final LocalTime pClosingTime) {
+        this.openingTime = pOpeningTime;
+        this.closingTime = pClosingTime;
+        this.dayOfWeek = pDayOfWeek;
     }
 
     /**
-     * Verifica si un horario dado está disponible en este horario de reserva.
+     * Verifica si un objeto Schedule está dentro de este horario.
      *
-     * @param scheduleDay Horario a verificar.
-     * @return true si el horario está disponible, false en caso contrario.
+     * @param pSchedule El horario a validar.
+     * @return true si está dentro del rango.
      */
-    public boolean isAvailable(DayOfWeek scheduleDay, LocalTime scheduleStartTime, LocalTime scheduleEndTime) {
-
-        boolean isDayAvailable = dayOfWeek.equals(scheduleDay);
-        boolean isTimeWithinRange = !scheduleStartTime.isBefore(this.openingTime) && !scheduleEndTime.isAfter(this.closingTime);
-
-        return isDayAvailable && isTimeWithinRange;
+    public final boolean isWithinSchedule(final Schedule pSchedule) {
+        DayOfWeek scheduleDay = pSchedule.getDay();
+        if (!dayOfWeek.equals(scheduleDay)) {
+            return false;
+        }
+        boolean afterStart = !pSchedule.getStartHour().isBefore(openingTime);
+        boolean beforeEnd = !pSchedule.getEndHour().isAfter(closingTime);
+        return afterStart && beforeEnd;
     }
 
-    // Clases internas para la serialización y deserialización de LocalTime y DayOfWeek
-    public static class LocalTimeSerializer extends JsonSerializer<LocalTime> {
+    /**
+     * Verifica si un horario dado está disponible.
+     *
+     * @param pDay       Día a verificar.
+     * @param pStart     Hora de inicio.
+     * @param pEnd       Hora de fin.
+     * @return true si el horario está disponible.
+     */
+    public final boolean isAvailable(final DayOfWeek pDay,
+                                     final LocalTime pStart,
+                                     final LocalTime pEnd) {
+        boolean isDayAvailable = dayOfWeek.equals(pDay);
+        boolean isTimeInRange = !pStart.isBefore(this.openingTime)
+                && !pEnd.isAfter(this.closingTime);
+
+        return isDayAvailable && isTimeInRange;
+    }
+
+    /** Serializador para LocalTime. */
+    public static final class LocalTimeSerializer
+            extends JsonSerializer<LocalTime> {
         @Override
-        public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(final LocalTime value, final JsonGenerator gen,
+                              final SerializerProvider provider)
+                throws IOException {
             if (value != null) {
                 gen.writeString(value.toString());
             }
         }
     }
 
-    public static class LocalTimeDeserializer extends JsonDeserializer<LocalTime> {
+    /** Deserializador para LocalTime. */
+    public static final class LocalTimeDeserializer
+            extends JsonDeserializer<LocalTime> {
         @Override
-        public LocalTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public LocalTime deserialize(final JsonParser p,
+                                     final DeserializationContext ctxt)
+                throws IOException {
             String timeString = p.getValueAsString();
             return timeString != null ? LocalTime.parse(timeString) : null;
         }
     }
 
-    public static class DayOfWeekSerializer extends JsonSerializer<DayOfWeek> {
+    /** Serializador para DayOfWeek. */
+    public static final class DayOfWeekSerializer
+            extends JsonSerializer<DayOfWeek> {
         @Override
-        public void serialize(DayOfWeek value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(final DayOfWeek value, final JsonGenerator gen,
+                              final SerializerProvider provider)
+                throws IOException {
             if (value != null) {
                 gen.writeString(value.name());
             }
         }
     }
 
-    public static class DayOfWeekDeserializer extends JsonDeserializer<DayOfWeek> {
+    /** Deserializador para DayOfWeek. */
+    public static final class DayOfWeekDeserializer
+            extends JsonDeserializer<DayOfWeek> {
         @Override
-        public DayOfWeek deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public DayOfWeek deserialize(final JsonParser p,
+                                     final DeserializationContext ctxt)
+                throws IOException {
             String dayString = p.getValueAsString();
             return dayString != null ? DayOfWeek.valueOf(dayString) : null;
         }

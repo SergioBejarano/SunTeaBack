@@ -15,30 +15,43 @@ import javax.net.ssl.SSLContext;
 import java.io.InputStream;
 import java.security.KeyStore;
 
+/**
+ * Configuration class for setting up RestTemplate with SSL support.
+ */
 @Configuration
 public class RestTemplateConf {
-
+    /** Path to the truststore resource. */
     @Value("${truststore.path}")
     private Resource trustStoreResource;
-
+    /** Password for the truststore. */
     @Value("${truststore.password}")
     private String trustStorePassword;
-
+     /**
+     * Creates and configures a RestTemplate bean.
+     *
+     * @return The configured RestTemplate instance.
+     */
     @Bean
     public RestTemplate restTemplate() {
 
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        final PoolingHttpClientConnectionManager connectionManager =
+            new PoolingHttpClientConnectionManager();
 
-        CloseableHttpClient httpClient = HttpClients.custom()
+        final CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(connectionManager)
                 .build();
 
-        HttpComponentsClientHttpRequestFactory factory =
+        final HttpComponentsClientHttpRequestFactory factory =
                 new HttpComponentsClientHttpRequestFactory(httpClient);
 
         return new RestTemplate(factory);
     }
-
+    /**
+     * Creates an SSLContext using the configured truststore.
+     *
+     * @return The configured SSLContext.
+     * @throws Exception If an error occurs during SSL context creation.
+     */
     private SSLContext createSSLContext() throws Exception {
         KeyStore trustStore = KeyStore.getInstance("PKCS12");
         try (InputStream trustStream = trustStoreResource.getInputStream()) {

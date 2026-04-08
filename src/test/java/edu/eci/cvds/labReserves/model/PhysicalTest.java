@@ -11,14 +11,14 @@ class PhysicalTest {
 
     @BeforeEach
     void setUp() {
-        physical = new Physical("pantalla",false,true,10);
+        physical = new Physical("pantalla", false, true, 10);
     }
 
     /**
      * Validate if it has projector
      */
     @Test
-    void testVerifyIfHasProjector(){
+    void testVerifyIfHasProjector() {
         assertFalse(physical.isProjector());
     }
 
@@ -26,7 +26,7 @@ class PhysicalTest {
      * validate if can change projector
      */
     @Test
-    void testChangeProjector(){
+    void testChangeProjector() {
         physical.setProjector(true);
         assertTrue(physical.isProjector());
     }
@@ -35,7 +35,7 @@ class PhysicalTest {
      * Validate if it has TV
      */
     @Test
-    void testVerifyIfHasTV(){
+    void testVerifyIfHasTV() {
         assertTrue(physical.isTV());
     }
 
@@ -43,7 +43,7 @@ class PhysicalTest {
      * Validate if can change TV
      */
     @Test
-    void testChangeTV(){
+    void testChangeTV() {
         physical.setTV(false);
         assertFalse(physical.isTV());
     }
@@ -52,18 +52,28 @@ class PhysicalTest {
      * Validate the total computers
      */
     @Test
-    void testVerifyTotalComputer(){
-        assertEquals(10,physical.getTotalComputer());
+    void testVerifyTotalComputer() {
+        assertEquals(10, physical.getTotalComputer());
     }
 
     /**
      * Validate if can change total computers
      */
     @Test
-    void testChangeTotalComputer(){
+    void testChangeTotalComputer() {
         physical.setTotalComputer(20);
-        assertEquals(20,physical.getTotalComputer());
+        assertEquals(20, physical.getTotalComputer());
     }
-
+    /**
+     * Validate if should have a TV
+     */
+    @Test
+    void shouldSetAndGetTV() {
+        Physical physical = new Physical();
+        physical.setTV(true);
+        assertTrue(physical.isTV());
+        physical.setTV(false);
+        assertFalse(physical.isTV());
+    }
 
 }

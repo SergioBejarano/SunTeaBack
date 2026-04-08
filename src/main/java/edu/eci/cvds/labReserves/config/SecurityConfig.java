@@ -12,60 +12,64 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 /**
- * SecurityConfig is responsible for configuring security settings for the application.
- * It defines authentication mechanisms, session policies, and request authorization rules.
+ * SecurityConfig is responsible for configuring
+ * security settings for the application.
+ * It defines authentication mechanisms, session policies,
+ * and request authorization rules.
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final JwtRequestFilter jwtRequestFilter; //Filter that processes JWT authentication for incoming requests.
-    private final AuthenticationProvider authenticationProvider; //Authentication provider for handling user authentication.
+    /** Filter that processes JWT authentication for incoming requests. */
+    private final JwtRequestFilter jwtRequestFilter;
+
+    /** Authentication provider for handling user authentication. */
+    private final AuthenticationProvider authenticationProvider;
 
     /**
      * Constructor to initialize dependencies.
      *
-     * @param jwtRequestFilter JWT authentication filter.
-     * @param authenticationProvider Authentication provider.
+     * @param jwtFilter JWT authentication filter.
+     * @param authProvider Authentication provider.
      */
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter, AuthenticationProvider authenticationProvider) {
-        this.jwtRequestFilter = jwtRequestFilter;
-        this.authenticationProvider = authenticationProvider;
+    public SecurityConfig(
+            final JwtRequestFilter jwtFilter,
+            final AuthenticationProvider authProvider) {
+        this.jwtRequestFilter = jwtFilter;
+        this.authenticationProvider = authProvider;
     }
 
     /**
-     * Defines the security filter chain, setting authentication rules, disabling CSRF,
-     * and configuring session management.
+     * Defines the security filter chain, setting authentication rules,
+     * disabling CSRF, and configuring session management.
      *
      * @param http The HttpSecurity object to configure security settings.
      * @return The configured SecurityFilterChain.
      * @throws Exception If an error occurs during configuration.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            final HttpSecurity http) throws Exception {
         http
-                // Disable CSRF protection as JWT is used for authentication
                 .csrf(AbstractHttpConfigurer::disable)
-                // Define authorization rules
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/**")
+                        req.requestMatchers("/api/**", "/actuator/health")
                                 .permitAll()
-                                //.anyRequest()
-                                //.authenticated()
                 )
-                // Set session management policy to stateless as JWT is used
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Set authentication provider
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                // Add JWT filter before processing authentication
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                // Configure logout handling
+                .addFilterBefore(
+                        jwtRequestFilter,
+                        UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
                         logout.logoutUrl("/api/auth/logout")
-                                .logoutSuccessHandler((request, response, authentication) ->
+                                .logoutSuccessHandler(
+                                        (request, response, authentication) ->
                                         SecurityContextHolder.clearContext())
                 );
         return http.build();

@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.*;
+import java.time.DateTimeException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 
 /**
- * The Schedule class represents a time schedule with a specific time of reserve
- * It includes information about hours, days, month and year
- * It includes methods to check if two schedules overlap.
+ * Represents a time schedule for a laboratory reservation.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,153 +20,96 @@ import java.time.*;
 @Setter
 public class Schedule {
 
-    /**
-     * -- GETTER --
-     *  Get the start time of the schedule.
-     *
-     *
-     * -- SETTER --
-     *  Set the start time of the schedule.
-     *
-     @return The start time
-      * @param startHour The start time
-      *
-     */
-    private LocalTime startHour; //start of resource
-    /**
-     * -- GETTER --
-     *  Get the end time of the schedule.
-     *
-     *
-     * -- SETTER --
-     *  Set the end time of the schedule.
-     *
-     @return The end time
-      * @param endHour The end time
-     */
-    private LocalTime endHour; //end of resource
+    /** Start time of the schedule. */
+    private LocalTime startHour;
+
+    /** End time of the schedule. */
+    private LocalTime endHour;
+
+    /** Day of the month. */
+    private int numberDay;
+
+    /** Day of the week. */
+    private DayOfWeek day;
+
+    /** Month of the schedule. */
+    private Month month;
+
+    /** Year of the schedule. */
+    private int year;
+
+    /** Laboratory associated with this schedule. */
+    private String laboratory;
 
     /**
-     * -- GETTER --
-     *  Get the day of the month.
+     * Constructs a Schedule object with specific details.
      *
-     *
-     * -- SETTER --
-     *  Set the day of the month.
-     *
-     @return The day of the month
-      * @param numberDay The day of the month
-      *
+     * @param pStartHour  The start time.
+     * @param pNumberDay  The day of the month.
+     * @param pDay        The day of the week.
+     * @param pMonth      The month.
+     * @param pYear       The year.
+     * @param pLaboratory The laboratory name.
+     * @throws LabReserveException If the values are invalid.
      */
-    private int numberDay; //number of day that generate resource
-    /**
-     * -- GETTER --
-     *  Get the day of the week.
-     *
-     *
-     * -- SETTER --
-     *  Set the day of the week.
-     *
-     @return The day of the week
-      * @param day The day of the week
-      *
-     */
-    private DayOfWeek day; //day that generate resource
-    /**
-     * -- GETTER --
-     *  Get the month of the schedule.
-     *
-     *
-     * -- SETTER --
-     *  Set the month of the schedule.
-     *
-     @return The month of the schedule
-      * @param month The month of the schedule
-      *
-     */
-    private Month month; //month that generate resource
-    /**
-     * -- GETTER --
-     *  Get the year of the schedule.
-     *
-     *
-     * -- SETTER --
-     *  Set the year of the schedule.
-     *
-     @return The year of the schedule
-      * @param year The year of the schedule
-      *
-     */
-    private int year; //year that generate resource
-
-    /**
-     * -- GETTER --
-     *  Get the Laboratory of the schedule.
-     *
-     *
-     * -- SETTER --
-     *  Set the Laboratory of the schedule.
-     *
-     @return The Laboratory
-      * @param laboratory The schedule ID
-     */
-    private String laboratory; //laboratory that resolve some reserves
-
-    /**
-     * Constructs a Schedule object with specified start time, day, month, and year.
-     * @param startHour The start time of the schedule
-     * @param numberDay The day of the month
-     * @param day The day of the week
-     * @param month The month of the year
-     * @param year The year of the schedule
-     * @throws LabReserveException If the provided values are invalid
-     */
-    public Schedule(LocalTime startHour, int numberDay, DayOfWeek day,
-                    Month month, int year, String laboratory) throws LabReserveException {
+    public Schedule(final LocalTime pStartHour, final int pNumberDay,
+                    final DayOfWeek pDay, final Month pMonth,
+                    final int pYear, final String pLaboratory)
+            throws LabReserveException {
         LocalDateTime referenceNow = LocalDateTime.now();
-        boolean correctSchedule = validateCorrectDateTime(numberDay,month,year,startHour,referenceNow);
-        if(correctSchedule){
-            setStartHour(startHour);
-            setNumberDay(numberDay);
-            setDay(day);
-            setMonth(month);
-            setYear(year);
-            setLaboratory(laboratory);
-        }else{
-            throw new LabReserveException(LabReserveException.INVALID_SCHEDULE_TIME);
+        boolean correctSchedule = validateCorrectDateTime(pNumberDay, pMonth,
+                pYear, pStartHour, referenceNow);
+        if (correctSchedule) {
+            this.startHour = pStartHour;
+            this.numberDay = pNumberDay;
+            this.day = pDay;
+            this.month = pMonth;
+            this.year = pYear;
+            this.laboratory = pLaboratory;
+        } else {
+            throw new LabReserveException(
+                LabReserveException.INVALID_SCHEDULE_TIME);
         }
     }
 
     /**
-     * Checks if this schedule overlaps with another schedule.
-     * @param other The other schedule to compare with
-     * @return true if the schedules overlap, false otherwise
+     * Checks if this schedule overlaps with another.
+     *
+     * @param other The other schedule to compare.
+     * @return true if they overlap.
      */
-    public boolean overlaps(Schedule other) {
+    public final boolean overlaps(final Schedule other) {
         if (!this.day.equals(other.day)) {
             return false;
         }
-        return (startHour.isBefore(other.endHour) && endHour.isAfter(other.startHour));
+        return (startHour.isBefore(other.endHour)
+                && endHour.isAfter(other.startHour));
     }
 
     /**
-     * Validates that a given date and time are not earlier than the provided reference date and time.
+     * Validates that a given date and time are not in the past.
      *
-     * @param numberDay     Day of the month to validate.
-     * @param month         Month corresponding to the provided day.
-     * @param year          Year corresponding to the provided date.
-     * @param givenHour     Specific time to validate.
-     * @param referenceNow  Reference date and time for validation.
-     * @return {@code true} if the provided date and time are not earlier than the reference, {@code false} otherwise.
-     * @throws LabReserveException If the provided date is invalid (e.g., February 30th).
+     * @param pNumDay      Day of the month.
+     * @param pMonth       Month.
+     * @param pYear        Year.
+     * @param pGivenHour   Specific time.
+     * @param pRefNow      Reference date and time.
+     * @return true if valid.
+     * @throws LabReserveException If date is invalid.
      */
-    public static boolean validateCorrectDateTime(int numberDay, Month month, int year,
-                                                  LocalTime givenHour, LocalDateTime referenceNow) throws LabReserveException {
+    public static boolean validateCorrectDateTime(final int pNumDay,
+                                                   final Month pMonth,
+                                                   final int pYear,
+                                                   final LocalTime pGivenHour,
+                                                   final LocalDateTime pRefNow)
+            throws LabReserveException {
         try {
-            LocalDateTime inputDateTime = LocalDateTime.of(year, month, numberDay, givenHour.getHour(), givenHour.getMinute());
-            return !inputDateTime.isBefore(referenceNow);
+            LocalDateTime inputDateTime = LocalDateTime.of(pYear, pMonth,
+                    pNumDay, pGivenHour.getHour(), pGivenHour.getMinute());
+            return !inputDateTime.isBefore(pRefNow);
         } catch (DateTimeException e) {
-            throw new LabReserveException("Invalid date provided: " + e.getMessage());
+            throw new LabReserveException("Invalid date provided: "
+                    + e.getMessage());
         }
     }
 }

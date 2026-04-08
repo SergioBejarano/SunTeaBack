@@ -6,7 +6,14 @@ import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +25,19 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final UserService userServ; //Service for handling user operations.
+    /** Message returned when a user is not found. */
+    private static final String USER_NOT_FOUND_MSG = "Usuario no encontrado.";
 
-    public UserController(UserService userServ) {
-        this.userServ = userServ;
+    /** Service for handling user operations. */
+    private final UserService userServ;
+
+    /**
+     * Constructor to inject UserService dependency.
+     *
+     * @param userService User service instance.
+     */
+    public UserController(final UserService userService) {
+        this.userServ = userService;
     }
 
     /**
@@ -32,13 +48,15 @@ public class UserController {
      * @throws LabReserveException If an error occurs during user creation.
      */
     @PostMapping("/signin")
-    public UserMongodb createUser(@RequestBody User user) throws LabReserveException {
-        try{
+    public UserMongodb createUser(
+            @RequestBody final User user) throws LabReserveException {
+        try {
             return userServ.createUser(user);
-        }catch(LabReserveException e){
+        } catch (LabReserveException e) {
             throw new LabReserveException(e.getMessage());
-        }catch (Exception e) {
-            throw new RuntimeException("Error inesperado: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Error inesperado: " + e.getMessage());
         }
     }
 
@@ -50,14 +68,16 @@ public class UserController {
      * @throws LabReserveException If an error occurs during deletion.
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable int id) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(id);
+    public ResponseEntity<String> deleteUser(
+            @PathVariable final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.deleteUser(userOptional.get());
             return ResponseEntity.ok("Usuario eliminado correctamente.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -70,14 +90,18 @@ public class UserController {
      * @throws LabReserveException If an error occurs during the update.
      */
     @PutMapping("/password/{password}")
-    public ResponseEntity<String> changePassword(@PathVariable String password, @RequestBody int id) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(id);
+    public ResponseEntity<String> changePassword(
+            @PathVariable final String password,
+            @RequestBody final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserPassword(password, userOptional.get());
-            return ResponseEntity.ok("Contraseña actualizada correctamente.");
+            return ResponseEntity.ok(
+                    "Contrasena actualizada correctamente.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -90,14 +114,17 @@ public class UserController {
      * @throws LabReserveException If an error occurs during the update.
      */
     @PutMapping("/mail/{mail}")
-    public ResponseEntity<String> changeMail(@PathVariable String mail, @RequestBody int id) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(id);
+    public ResponseEntity<String> changeMail(
+            @PathVariable final String mail,
+            @RequestBody final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserMail(mail, userOptional.get());
             return ResponseEntity.ok("Correo actualizado correctamente.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -110,13 +137,17 @@ public class UserController {
      * @throws LabReserveException If an error occurs during the update.
      */
     @PutMapping("/name/{name}")
-    public ResponseEntity<String> changeUserName(@PathVariable String name,@RequestBody int id) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(id);
+    public ResponseEntity<String> changeUserName(
+            @PathVariable final String name,
+            @RequestBody final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
+
         if (userOptional.isPresent()) {
             userServ.changeUserName(name, userOptional.get());
             return ResponseEntity.ok("Nombre actualizado correctamente.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -129,14 +160,17 @@ public class UserController {
      * @throws LabReserveException If an error occurs during the update.
      */
     @PutMapping("/rol/{rol}")
-    public ResponseEntity<String> changeRol(@PathVariable String rol, @RequestBody int id) throws LabReserveException {
-        Optional<User> userOptional = userServ.findUserById(id);
+    public ResponseEntity<String> changeRol(
+            @PathVariable final String rol,
+            @RequestBody final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
 
         if (userOptional.isPresent()) {
             userServ.changeUserRol(rol, userOptional.get());
             return ResponseEntity.ok("Rol actualizado correctamente.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -146,8 +180,8 @@ public class UserController {
      * @return A list of all users.
      */
     @GetMapping("/all")
-    public ResponseEntity<List<UserMongodb>> getAllUsers(){
-        List<UserMongodb> users = userServ.getAllUsers();
+    public ResponseEntity<List<UserMongodb>> getAllUsers() {
+        final List<UserMongodb> users = userServ.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -159,12 +193,15 @@ public class UserController {
      * @throws LabReserveException If the user is not found.
      */
     @GetMapping("/emails/{mail}")
-    public UserMongodb getUserByMail(@PathVariable String mail) throws LabReserveException{
-        Optional<UserMongodb> userOptional = userServ.findUserByMail(mail);
-        if(userOptional.isPresent()){
+    public UserMongodb getUserByMail(
+            @PathVariable final String mail) throws LabReserveException {
+        final Optional<UserMongodb> userOptional =
+                userServ.findUserByMail(mail);
+        if (userOptional.isPresent()) {
             return userOptional.get();
-        }else{
-            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        } else {
+            throw new LabReserveException(
+                    LabReserveException.USER_NOT_FOUND);
         }
     }
 
@@ -176,12 +213,14 @@ public class UserController {
      * @throws LabReserveException If the user is not found.
      */
     @GetMapping("/userinfo/{id}")
-    public User getUserInfoById(@PathVariable int id) throws LabReserveException{
-        Optional<User> userOptional = userServ.findUserById(id);
-        if(userOptional.isPresent()){
+    public User getUserInfoById(
+            @PathVariable final int id) throws LabReserveException {
+        final Optional<User> userOptional = userServ.findUserById(id);
+        if (userOptional.isPresent()) {
             return userOptional.get();
-        }else{
-            throw new LabReserveException(LabReserveException.USER_NOT_FOUND);
+        } else {
+            throw new LabReserveException(
+                    LabReserveException.USER_NOT_FOUND);
         }
     }
 }

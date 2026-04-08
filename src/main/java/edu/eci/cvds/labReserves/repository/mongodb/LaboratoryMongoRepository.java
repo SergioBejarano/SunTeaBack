@@ -6,11 +6,12 @@ import edu.eci.cvds.labReserves.collections.LaboratoryMongodb;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * The LaboratoryMongoRepository interface provides the data access layer for Laboratories entities.
- * It extends the MongoRepository interface, which provides basic CRUD operations.
+ * Interface for Laboratories entities data access.
+ * It extends MongoRepository for basic CRUD operations.
  */
 @Repository
-public interface LaboratoryMongoRepository extends MongoRepository<LaboratoryMongodb, String> {
+public interface LaboratoryMongoRepository
+        extends MongoRepository<LaboratoryMongodb, String> {
 
     /**
      * Busca un laboratorio por su abreviatura.
@@ -23,7 +24,7 @@ public interface LaboratoryMongoRepository extends MongoRepository<LaboratoryMon
     /**
      * Verifica si existe un laboratorio con la abreviatura dada.
      * @param abbreviation Abreviatura del laboratorio.
-     * @return true si existe un laboratorio con esa abreviatura, false en caso contrario.
+     * @return true si existe, false en caso contrario.
      */
     @Query(value = "{ 'abbreviation' : ?0 }", exists = true)
     boolean existsByAbbreviation(String abbreviation);
