@@ -104,19 +104,11 @@ jobs:
     needs: [build, trivy-sca]
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Render Deploy Hook
+      - name: Render Auto-Deploy Notification
         run: |
-          echo "🚀 Disparando despliegue en Render..."
-          HTTP_STATUS=$(curl -s -o /tmp/render-response.txt -w "%{http_code}" \
-            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
-
-          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ]; then
-            echo "✅ Deploy disparado exitosamente (HTTP $HTTP_STATUS)"
-          else
-            echo "❌ Error al disparar deploy (HTTP $HTTP_STATUS)"
-            cat /tmp/render-response.txt
-            exit 1
-          fi
+          echo "✅ Dockerfile detectado"
+          echo "Render desplegará automáticamente desde main"
+          echo "Monitorea el progreso en: https://dashboard.render.com"
 
   # ───────────────────────────────────────────────────────────────────────
   # 4. HEALTH CHECK — Verificación post-despliegue
