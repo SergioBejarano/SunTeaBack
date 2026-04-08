@@ -56,8 +56,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/**", "/actuator/health")
+                        req.requestMatchers("/api/**", "/actuator/**")
                                 .permitAll()
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
