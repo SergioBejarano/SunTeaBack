@@ -139,7 +139,7 @@ jobs:
         run: |
           MAX_RETRIES=5
           RETRY_DELAY=30
-          HEALTH_URL="${{ vars.PRODUCTION_URL }}/actuator/health"
+          HEALTH_URL="${{ vars.PRODUCTION_URL }}/api/health"
 
           echo "🔍 URL objetivo: $HEALTH_URL"
 
