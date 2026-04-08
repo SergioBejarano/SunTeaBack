@@ -108,7 +108,7 @@ jobs:
     steps:
       - name: Trigger Render Deploy Hook
         env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
           echo "🚀 Disparando despliegue en Render..."
           HTTP_STATUS=$(curl -s -o /tmp/render-response.txt -w "%{http_code}" \
