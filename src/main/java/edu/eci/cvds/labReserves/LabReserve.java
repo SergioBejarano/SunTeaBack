@@ -33,7 +33,7 @@ public class LabReserve {
      * @return Un Jackson2ObjectMapperBuilderCustomizer configurado.
      */
     @Bean
-    public final Jackson2ObjectMapperBuilderCustomizer customizer() {
+    public Jackson2ObjectMapperBuilderCustomizer customizer() {
         return builder -> {
             builder.modules(new JavaTimeModule());
             builder.featuresToDisable(
@@ -48,7 +48,7 @@ public class LabReserve {
      * @return Una instancia de WebMvcConfigurer con mapeos CORS.
      */
     @Bean
-    public final WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
