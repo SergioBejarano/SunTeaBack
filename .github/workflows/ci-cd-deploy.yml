@@ -78,7 +78,7 @@ jobs:
         run: mvn dependency:tree -DoutputFile=dependency-tree.txt --no-transfer-progress
 
       - name: Trivy — Escaneo de dependencias
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
