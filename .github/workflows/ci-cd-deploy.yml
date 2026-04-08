@@ -141,17 +141,37 @@ jobs:
           RETRY_DELAY=30
           HEALTH_URL="${{ vars.PRODUCTION_URL }}/actuator/health"
 
+          echo "🔍 URL objetivo: $HEALTH_URL"
+
           for i in $(seq 1 $MAX_RETRIES); do
-            echo "Intento $i/$MAX_RETRIES: GET $HEALTH_URL"
-            HTTP_STATUS=$(curl -s -o /tmp/health-response.json -w "%{http_code}" \
-              --max-time 15 "$HEALTH_URL" || echo "000")
+            echo ""
+            echo "── Intento $i/$MAX_RETRIES ──────────────────────────"
+
+            # Captura headers + body + código HTTP
+            HTTP_STATUS=$(curl -s \
+              -o /tmp/health-response.json \
+              -D /tmp/health-headers.txt \
+              -w "%{http_code}" \
+              --max-time 15 \
+              "$HEALTH_URL" 2>/tmp/health-curl-error.txt || echo "000")
+
+            echo "HTTP Status  : $HTTP_STATUS"
+
+            echo "--- Response headers ---"
+            cat /tmp/health-headers.txt 2>/dev/null || echo "(sin headers)"
+
+            echo "--- Response body ---"
+            cat /tmp/health-response.json 2>/dev/null || echo "(sin body)"
+
+            echo "--- curl stderr ---"
+            cat /tmp/health-curl-error.txt 2>/dev/null || echo "(sin errores curl)"
 
             if [ "$HTTP_STATUS" = "200" ]; then
               echo "✅ Servicio saludable (HTTP $HTTP_STATUS)"
               exit 0
             fi
 
-            echo "⚠ Respuesta: HTTP $HTTP_STATUS"
+            echo "⚠ Respuesta no esperada: HTTP $HTTP_STATUS"
             if [ $i -lt $MAX_RETRIES ]; then
               echo "Reintentando en ${RETRY_DELAY}s..."
               sleep $RETRY_DELAY
