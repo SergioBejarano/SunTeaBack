@@ -104,7 +104,6 @@ jobs:
     needs: [build, trivy-sca]
     runs-on: ubuntu-latest
     steps:
-<<<<<<< fix/testNotPassed
       - name: Trigger Render Deploy Hook
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
@@ -120,12 +119,6 @@ jobs:
             cat /tmp/render-response.txt
             exit 1
           fi
-=======
-      - name: Trigger Render Deploy
-        run: |
-          curl --fail-with-body -X POST \
-            "${{ secrets.RENDER_DEPLOY_HOOK }}"
->>>>>>> main
 
   # ───────────────────────────────────────────────────────────────────────
   # 4. HEALTH CHECK — Verificación post-despliegue
