@@ -114,7 +114,7 @@ jobs:
           HTTP_STATUS=$(curl -s -o /tmp/render-response.txt -w "%{http_code}" \
             "$RENDER_DEPLOY_HOOK_URL")
 
-          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ]; then
+          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ] || [ "$HTTP_STATUS" = "202" ]; then
             echo "✅ Deploy disparado exitosamente (HTTP $HTTP_STATUS)"
           else
             echo "❌ Error al disparar deploy (HTTP $HTTP_STATUS)"
