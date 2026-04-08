@@ -25,6 +25,9 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class UserController {
 
+    /** Message returned when a user is not found. */
+    private static final String USER_NOT_FOUND_MSG = "Usuario no encontrado.";
+
     /** Service for handling user operations. */
     private final UserService userServ;
 
@@ -74,7 +77,7 @@ public class UserController {
             return ResponseEntity.ok("Usuario eliminado correctamente.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado.");
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -98,7 +101,7 @@ public class UserController {
                     "Contrasena actualizada correctamente.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado.");
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -121,7 +124,7 @@ public class UserController {
             return ResponseEntity.ok("Correo actualizado correctamente.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado.");
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -144,7 +147,7 @@ public class UserController {
             return ResponseEntity.ok("Nombre actualizado correctamente.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado.");
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 
@@ -167,7 +170,7 @@ public class UserController {
             return ResponseEntity.ok("Rol actualizado correctamente.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado.");
+                    .body(USER_NOT_FOUND_MSG);
         }
     }
 

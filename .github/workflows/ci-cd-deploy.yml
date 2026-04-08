@@ -78,7 +78,7 @@ jobs:
         run: mvn dependency:tree -DoutputFile=dependency-tree.txt --no-transfer-progress
 
       - name: Trivy — Escaneo de dependencias
-        uses: aquasecurity/trivy-action@v0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -105,10 +105,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy Hook
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           echo "🚀 Disparando despliegue en Render..."
           HTTP_STATUS=$(curl -s -o /tmp/render-response.txt -w "%{http_code}" \
-            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+            "$RENDER_DEPLOY_HOOK_URL")
 
           if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ]; then
             echo "✅ Deploy disparado exitosamente (HTTP $HTTP_STATUS)"
