@@ -104,11 +104,10 @@ jobs:
     needs: [build, trivy-sca]
     runs-on: ubuntu-latest
     steps:
-      - name: Render Auto-Deploy Notification
+      - name: Trigger Render Deploy
         run: |
-          echo "✅ Dockerfile detectado"
-          echo "Render desplegará automáticamente desde main"
-          echo "Monitorea el progreso en: https://dashboard.render.com"
+          curl --fail-with-body -X POST \
+            "${{ secrets.RENDER_DEPLOY_HOOK }}"
 
   # ───────────────────────────────────────────────────────────────────────
   # 4. HEALTH CHECK — Verificación post-despliegue
