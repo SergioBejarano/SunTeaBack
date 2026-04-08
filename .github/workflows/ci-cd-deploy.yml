@@ -1,0 +1,158 @@
+# =============================================================================
+# .github/workflows/ci-cd-deploy.yml
+# Pipeline 2 — Integración continua y despliegue a Render
+#
+# Se activa en: push a main (después del merge del PR)
+# Flujo:
+#   1. Build y pruebas
+#   2. Trivy SCA sobre dependencias
+#   3. Deploy a Render (trigger via Deploy Hook)
+#   4. Health check post-despliegue
+# =============================================================================
+
+name: "🚀 CI/CD — Build, Test & Deploy"
+
+on:
+  push:
+    branches:
+      - main
+
+# Evita despliegues simultáneos
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  security-events: write            # Para subir resultados SARIF
+
+env:
+  JAVA_VERSION: '17'
+
+jobs:
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 1. BUILD — Compilación y pruebas
+  # ───────────────────────────────────────────────────────────────────────
+  build:
+    name: "1 · Build & Test"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Cache de Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build y pruebas
+        run: mvn -B verify --no-transfer-progress
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 2. TRIVY — Escaneo de dependencias (SCA)
+  # Bloquea si detecta vulnerabilidades CRITICAL en dependencias
+  # ───────────────────────────────────────────────────────────────────────
+  trivy-sca:
+    name: "2 · Trivy — Escaneo de dependencias"
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Generar árbol de dependencias Maven
+        run: mvn dependency:tree -DoutputFile=dependency-tree.txt --no-transfer-progress
+
+      - name: Trivy — Escaneo de dependencias
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-sca.sarif'
+          severity: 'CRITICAL'
+          exit-code: '1'
+          vuln-type: 'library'
+
+      - name: Subir resultados a GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-sca.sarif
+          category: trivy-sca-deploy
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 3. DEPLOY — Trigger de despliegue en Render
+  # Render hace el build y deploy automáticamente al recibir el hook
+  # ───────────────────────────────────────────────────────────────────────
+  deploy:
+    name: "3 · Deploy a Render"
+    needs: [build, trivy-sca]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          echo "🚀 Disparando despliegue en Render..."
+          HTTP_STATUS=$(curl -s -o /tmp/render-response.txt -w "%{http_code}" \
+            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+
+          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ]; then
+            echo "✅ Deploy disparado exitosamente (HTTP $HTTP_STATUS)"
+          else
+            echo "❌ Error al disparar deploy (HTTP $HTTP_STATUS)"
+            cat /tmp/render-response.txt
+            exit 1
+          fi
+
+  # ───────────────────────────────────────────────────────────────────────
+  # 4. HEALTH CHECK — Verificación post-despliegue
+  # ───────────────────────────────────────────────────────────────────────
+  health-check:
+    name: "4 · Health Check"
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      # Render necesita tiempo para build + deploy (~2-3 min para Spring Boot)
+      - name: Esperar build de Render
+        run: sleep 180
+
+      - name: Health check del endpoint
+        run: |
+          MAX_RETRIES=5
+          RETRY_DELAY=30
+          HEALTH_URL="${{ vars.PRODUCTION_URL }}/actuator/health"
+
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Intento $i/$MAX_RETRIES: GET $HEALTH_URL"
+            HTTP_STATUS=$(curl -s -o /tmp/health-response.json -w "%{http_code}" \
+              --max-time 15 "$HEALTH_URL" || echo "000")
+
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "✅ Servicio saludable (HTTP $HTTP_STATUS)"
+              exit 0
+            fi
+
+            echo "⚠ Respuesta: HTTP $HTTP_STATUS"
+            if [ $i -lt $MAX_RETRIES ]; then
+              echo "Reintentando en ${RETRY_DELAY}s..."
+              sleep $RETRY_DELAY
+            fi
+          done
+
+          echo "❌ Health check falló después de $MAX_RETRIES intentos"
+          echo "⚠ Render hace rollback automático si el health check de la plataforma falla"
+          exit 1

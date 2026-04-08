@@ -1,5 +1,10 @@
 package edu.eci.cvds.labReserves.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.*;
 
 /**
@@ -7,22 +12,103 @@ import java.time.*;
  * It includes information about hours, days, month and year
  * It includes methods to check if two schedules overlap.
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Schedule {
 
+    /**
+     * -- GETTER --
+     *  Get the start time of the schedule.
+     *
+     *
+     * -- SETTER --
+     *  Set the start time of the schedule.
+     *
+     @return The start time
+      * @param startHour The start time
+      *
+     */
     private LocalTime startHour; //start of resource
+    /**
+     * -- GETTER --
+     *  Get the end time of the schedule.
+     *
+     *
+     * -- SETTER --
+     *  Set the end time of the schedule.
+     *
+     @return The end time
+      * @param endHour The end time
+     */
     private LocalTime endHour; //end of resource
 
+    /**
+     * -- GETTER --
+     *  Get the day of the month.
+     *
+     *
+     * -- SETTER --
+     *  Set the day of the month.
+     *
+     @return The day of the month
+      * @param numberDay The day of the month
+      *
+     */
     private int numberDay; //number of day that generate resource
+    /**
+     * -- GETTER --
+     *  Get the day of the week.
+     *
+     *
+     * -- SETTER --
+     *  Set the day of the week.
+     *
+     @return The day of the week
+      * @param day The day of the week
+      *
+     */
     private DayOfWeek day; //day that generate resource
+    /**
+     * -- GETTER --
+     *  Get the month of the schedule.
+     *
+     *
+     * -- SETTER --
+     *  Set the month of the schedule.
+     *
+     @return The month of the schedule
+      * @param month The month of the schedule
+      *
+     */
     private Month month; //month that generate resource
+    /**
+     * -- GETTER --
+     *  Get the year of the schedule.
+     *
+     *
+     * -- SETTER --
+     *  Set the year of the schedule.
+     *
+     @return The year of the schedule
+      * @param year The year of the schedule
+      *
+     */
     private int year; //year that generate resource
 
-    private String laboratory; //laboratory that resolve some reserves
-
     /**
-     * Default constructor.
+     * -- GETTER --
+     *  Get the Laboratory of the schedule.
+     *
+     *
+     * -- SETTER --
+     *  Set the Laboratory of the schedule.
+     *
+     @return The Laboratory
+      * @param laboratory The schedule ID
      */
-    public Schedule() { }
+    private String laboratory; //laboratory that resolve some reserves
 
     /**
      * Constructs a Schedule object with specified start time, day, month, and year.
@@ -59,126 +145,6 @@ public class Schedule {
             return false;
         }
         return (startHour.isBefore(other.endHour) && endHour.isAfter(other.startHour));
-    }
-
-    // Getters y setters
-
-    /**
-     * Get the start time of the schedule.
-     * @return The start time
-     */
-    public LocalTime getStartHour() {
-        return startHour;
-    }
-
-    /**
-     * Set the start time of the schedule.
-     * @param startHour The start time
-     * @throws LabReserveException If the start time is before the current time
-     */
-    public void setStartHour(LocalTime startHour) {
-        this.startHour = startHour;
-    }
-
-    /**
-     * Get the end time of the schedule.
-     * @return The end time
-     */
-    public LocalTime getEndHour() {
-        return endHour;
-    }
-
-    /**
-     * Set the end time of the schedule.
-     * @param endHour The end time
-     */
-    public void setEndHour(LocalTime endHour) {
-        this.endHour = endHour;
-    }
-
-    /**
-     * Get the day of the month.
-     * @return The day of the month
-     */
-    public int getNumberDay() {
-        return numberDay;
-    }
-
-    /**
-     * Set the day of the month.
-     * @param numberDay The day of the month
-     * @throws LabReserveException If the day is before the current day
-     */
-    public void setNumberDay(int numberDay) {
-        this.numberDay = numberDay;
-    }
-
-    /**
-     * Get the day of the week.
-     * @return The day of the week
-     */
-    public DayOfWeek getDay() {
-        return day;
-    }
-
-    /**
-     * Set the day of the week.
-     * @param day The day of the week
-     * @throws LabReserveException If the day is before the current day
-     */
-    public void setDay(DayOfWeek day) {
-        this.day = day;
-    }
-
-    /**
-     * Get the month of the schedule.
-     * @return The month of the schedule
-     */
-    public Month getMonth() {
-        return month;
-    }
-
-    /**
-     * Set the month of the schedule.
-     * @param month The month of the schedule
-     * @throws LabReserveException If the month is before the current month
-     */
-    public void setMonth(Month month) {
-        this.month = month;
-    }
-
-    /**
-     * Get the year of the schedule.
-     * @return The year of the schedule
-     */
-    public int getYear() {
-        return year;
-    }
-
-    /**
-     * Set the year of the schedule.
-     * @param year The year of the schedule
-     * @throws LabReserveException If the year is before the current year
-     */
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    /**
-     * Set the Laboratory of the schedule.
-     * @param laboratory The schedule ID
-     */
-    public void setLaboratory(String laboratory) {
-        this.laboratory = laboratory;
-    }
-
-    /**
-     * Get the Laboratory of the schedule.
-     *
-     * @return The Laboratory
-     */
-    public String getLaboratory() {
-        return laboratory;
     }
 
     /**

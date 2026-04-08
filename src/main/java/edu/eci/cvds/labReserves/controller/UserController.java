@@ -4,7 +4,6 @@ import edu.eci.cvds.labReserves.collections.UserMongodb;
 import edu.eci.cvds.labReserves.services.UserService;
 import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,11 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private UserService userServ; //Service for handling user operations.
+    private final UserService userServ; //Service for handling user operations.
+
+    public UserController(UserService userServ) {
+        this.userServ = userServ;
+    }
 
     /**
      * Creates a new user.
@@ -142,10 +144,9 @@ public class UserController {
      * Retrieves all users.
      *
      * @return A list of all users.
-     * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/all")
-    public ResponseEntity<List<UserMongodb>> getAllUsers() throws LabReserveException{
+    public ResponseEntity<List<UserMongodb>> getAllUsers(){
         List<UserMongodb> users = userServ.getAllUsers();
         return ResponseEntity.ok(users);
     }

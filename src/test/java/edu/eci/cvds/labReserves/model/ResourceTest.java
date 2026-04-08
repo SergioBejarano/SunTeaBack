@@ -1,18 +1,15 @@
-package edu.eci.cvds.labReserves;
+package edu.eci.cvds.labReserves.model;
 
-import edu.eci.cvds.labReserves.model.LabReserveException;
-import edu.eci.cvds.labReserves.model.Resource;
-import edu.eci.cvds.labReserves.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ResourceTest {
+class ResourceTest {
     private Resource resource;
 
     @BeforeEach
-    void setUp() throws LabReserveException {
+    void setUp() {
         resource = new Resource("monitor");
     }
 

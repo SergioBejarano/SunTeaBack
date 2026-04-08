@@ -5,7 +5,6 @@ import edu.eci.cvds.labReserves.dto.TokenResponse;
 import edu.eci.cvds.labReserves.model.LabReserveException;
 import edu.eci.cvds.labReserves.model.User;
 import edu.eci.cvds.labReserves.services.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
     private final AuthService service; //Service that manages authentication logic.
 
     /**
@@ -47,10 +45,9 @@ public class AuthController {
      *
      * @param authRequest The authentication request containing user credentials.
      * @return JWT tokens upon successful authentication.
-     * @throws Exception If authentication fails.
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> loginUser(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<TokenResponse> loginUser(@RequestBody AuthRequest authRequest) {
         TokenResponse token = service.login(authRequest);
         return ResponseEntity.ok(token);
     }

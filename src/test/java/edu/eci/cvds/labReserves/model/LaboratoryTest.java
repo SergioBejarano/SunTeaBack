@@ -1,6 +1,5 @@
-package edu.eci.cvds.labReserves;
+package edu.eci.cvds.labReserves.model;
 
-import edu.eci.cvds.labReserves.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +31,7 @@ class LaboratoryTest {
         Map<DayOfWeek, ScheduleReference> daySchedules = new HashMap<>();
         daySchedules.put(DayOfWeek.MONDAY, new ScheduleReference(DayOfWeek.MONDAY,LocalTime.of(7,0),LocalTime.of(5,30)));
         daySchedules.put(DayOfWeek.WEDNESDAY, new ScheduleReference(DayOfWeek.WEDNESDAY,LocalTime.of(7,0),LocalTime.of(5,30)));
-        ArrayList arraySchedules = new ArrayList<>(daySchedules.values());
+        ArrayList<ScheduleReference> arraySchedules = new ArrayList<>(daySchedules.values());
         laboratory.setReferenceSchedules(daySchedules);
         assertEquals(arraySchedules,laboratory.getScheduleReferences());
     }
@@ -135,7 +134,7 @@ class LaboratoryTest {
         Map<DayOfWeek, ScheduleReference> daySchedules = new HashMap<>();
         daySchedules.put(DayOfWeek.MONDAY, new ScheduleReference(DayOfWeek.MONDAY,LocalTime.of(7,0),LocalTime.of(5,30)));
         daySchedules.put(DayOfWeek.WEDNESDAY, new ScheduleReference(DayOfWeek.WEDNESDAY,LocalTime.of(7,0),LocalTime.of(5,30)));
-        ArrayList arraySchedules = new ArrayList<>(daySchedules.values());
+        ArrayList<ScheduleReference> arraySchedules = new ArrayList<>(daySchedules.values());
         laboratory.setScheduleReferences(arraySchedules);
         assertEquals(arraySchedules,laboratory.getScheduleReferences());
     }
@@ -153,6 +152,6 @@ class LaboratoryTest {
      */
     @Test
     void testShouldNotGetScheduleReferenceForDay() {
-        assertEquals(null,laboratory.getScheduleReferenceForDay(DayOfWeek.MONDAY));
+        assertNull(laboratory.getScheduleReferenceForDay(DayOfWeek.MONDAY));
     }
 }

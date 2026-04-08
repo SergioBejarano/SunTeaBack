@@ -1,19 +1,11 @@
-package edu.eci.cvds.labReserves;
+package edu.eci.cvds.labReserves.model;
 
-import edu.eci.cvds.labReserves.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PhysicalTest {
+class PhysicalTest {
 
     private Physical physical;
 

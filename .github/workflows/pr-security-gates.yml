@@ -1,0 +1,261 @@
+# =============================================================================
+# .github/workflows/pr-security-gates.yml
+# Pipeline 2 — Gates obligatorios de seguridad en Pull Request
+#
+# Se activa en: pull_request hacia main/master
+# Bloquea el merge si CUALQUIERA de los 4 gates falla:
+#   Gate 1 → SonarCloud  (calidad de código)
+#   Gate 2 → Checkmarx   (SAST)
+#   Gate 3 → Trivy       (SCA — dependencias y contenedor)
+#   Gate 4 → GitHub Adv. Security (secretos)
+# =============================================================================
+
+name: "🔐 PR Security Gates"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    types: [opened, synchronize, reopened]
+
+# Cancela ejecuciones anteriores del mismo PR para ahorrar minutos de Actions
+concurrency:
+  group: pr-security-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permisos mínimos necesarios
+permissions:
+  contents: read
+  pull-requests: write       # Para comentar resultados en el PR
+  security-events: write     # Para subir resultados SARIF a Security tab
+
+# ---------------------------------------------------------------------------
+# Variables de entorno globales
+# ---------------------------------------------------------------------------
+env:
+  JAVA_VERSION: '17'
+  SEVERITY_THRESHOLD: HIGH    # Umbral de bloqueo: LOW | MEDIUM | HIGH | CRITICAL
+
+jobs:
+
+  # ───────────────────────────────────────────────────────────────────────
+  # GATE 1 — Calidad de código con SonarCloud
+  # Bloquea si: Quality Gate no superado (cobertura, deuda técnica, etc.)
+  # ───────────────────────────────────────────────────────────────────────
+  gate-1-sonarcloud:
+    name: "Gate 1 · SonarCloud Quality Gate"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0             # Necesario para análisis completo de SonarCloud
+
+      - name: Configurar Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Cache de Maven y SonarCloud
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.sonar/cache
+          key: ${{ runner.os }}-maven-sonar-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-sonar-
+
+      - name: Build, test y análisis SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >
+          mvn -B verify
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=SergioBejarano_SunTeaBack
+          -Dsonar.qualitygate.wait=true
+          -Dsonar.qualitygate.timeout=300
+          --no-transfer-progress
+
+  # ───────────────────────────────────────────────────────────────────────
+  # GATE 2 — Análisis SAST con CodeQL (gratuito en repos públicos y privados)
+  # Bloquea si: hallazgo de severidad HIGH o CRITICAL en el código del PR
+  # ───────────────────────────────────────────────────────────────────────
+  gate-2-codeql-sast:
+    name: "Gate 2 · CodeQL SAST"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Inicializar CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
+          queries: security-and-quality
+
+      - name: Build para CodeQL
+        run: mvn -B compile -DskipTests --no-transfer-progress
+
+      - name: Análisis CodeQL
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: codeql-sast
+
+  # ───────────────────────────────────────────────────────────────────────
+  # GATE 3 — Análisis SCA con Trivy (dependencias)
+  # Bloquea si: dependencia con CVE sin versión corregida disponible
+  # ───────────────────────────────────────────────────────────────────────
+  gate-3-trivy-sca:
+    name: "Gate 3 · Trivy SCA"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Cache de Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      # Genera el árbol de dependencias para que Trivy pueda analizarlo
+      - name: Generar árbol de dependencias Maven
+        run: mvn dependency:tree -DoutputFile=dependency-tree.txt --no-transfer-progress
+
+      - name: Trivy — Escaneo de dependencias (SCA)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'             # Filesystem scan (analiza pom.xml, package.json, etc.)
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-sca.sarif'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'             # Falla el job si encuentra vulnerabilidades
+          ignore-unfixed: false       # Bloquea incluso si no hay fix disponible
+          vuln-type: 'library'
+          # Excluye vulnerabilidades sin fix disponible (ajusta según política):
+          # ignore-unfixed: true      # Descomenta para ignorar sin-fix
+
+      - name: Subir resultados SCA a GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-sca.sarif
+          category: trivy-sca
+
+      - name: Comentar resumen en el PR
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## ❌ Gate 3 — Trivy SCA\n\nSe detectaron dependencias con vulnerabilidades **HIGH** o **CRITICAL**.\n\nRevisa la pestaña **Security → Vulnerability alerts** para ver el detalle y actualiza las dependencias afectadas antes de hacer merge.'
+            })
+
+  # ───────────────────────────────────────────────────────────────────────
+  # GATE 4 — Detección de secretos con GitHub Advanced Security
+  # Bloquea si: cualquier credencial, token o secreto detectado en el diff
+  # Nota: Secret Scanning de GHAS se activa en Settings del repositorio.
+  #       Este job añade una capa adicional con gitleaks como refuerzo.
+  # ───────────────────────────────────────────────────────────────────────
+  gate-4-secret-scanning:
+    name: "Gate 4 · Secret Scanning (Gitleaks + GHAS)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0             # Necesario para escanear historial completo
+
+      - name: Gitleaks — Detección de secretos
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Solo requerido para repos privados
+
+      - name: Comentar en PR si se detectan secretos
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## ❌ Gate 4 — Secret Scanning\n\n⚠️ **Se detectaron credenciales, tokens o secretos en el código.**\n\n**Acciones requeridas:**\n1. Revoca INMEDIATAMENTE cualquier credencial expuesta.\n2. Elimina los secretos del código — nunca los commits directamente.\n3. Usa GitHub Secrets o un gestor de secretos (Vault, AWS SSM).\n4. Consulta la guía: [Removing sensitive data from a repository](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)'
+            })
+
+  # ───────────────────────────────────────────────────────────────────────
+  # RESUMEN — Verifica que los 4 gates pasaron antes de habilitar el merge
+  # Este job actúa como "required status check" en la rama protegida
+  # ───────────────────────────────────────────────────────────────────────
+  pr-gates-summary:
+    name: "✅ PR Security Gates — Resumen"
+    needs:
+      - gate-1-sonarcloud
+      - gate-2-codeql-sast
+      - gate-3-trivy-sca
+      - gate-4-secret-scanning
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Verificar resultado de todos los gates
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const jobs = ${{ toJson(needs) }};
+            const results = Object.entries(jobs).map(([name, job]) => ({
+              name,
+              result: job.result
+            }));
+
+            const failed = results.filter(j => j.result !== 'success');
+            const passed = results.filter(j => j.result === 'success');
+
+            let summary = '## 🔐 PR Security Gates — Resumen\n\n';
+            summary += '| Gate | Estado |\n|------|--------|\n';
+
+            const gateNames = {
+              'gate-1-sonarcloud': 'Gate 1 · SonarCloud Quality Gate',
+              'gate-2-codeql-sast': 'Gate 2 · CodeQL SAST',
+              'gate-3-trivy-sca': 'Gate 3 · Trivy SCA',
+              'gate-4-secret-scanning': 'Gate 4 · Secret Scanning'
+            };
+
+            for (const job of results) {
+              const icon = job.result === 'success' ? '✅' : '❌';
+              const name = gateNames[job.name] || job.name;
+              summary += `| ${name} | ${icon} ${job.result} |\n`;
+            }
+
+            if (failed.length > 0) {
+              summary += `\n\n❌ **${failed.length} gate(s) fallaron.** El merge permanece bloqueado hasta corregir todos los hallazgos.`;
+              core.setFailed(`${failed.length} security gate(s) failed`);
+            } else {
+              summary += '\n\n✅ **Todos los gates superados.** El merge está habilitado.';
+            }
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

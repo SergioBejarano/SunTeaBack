@@ -1,11 +1,20 @@
 package edu.eci.cvds.labReserves.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Arrays;
 
 /**
  * The Reserve class represents a reservation for a laboratory made by a user with a specific schedule.
  * It defines the type, state, and reason for the reservation.
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Reserve {
 
     private static String[] typeReserve = new String[] {"lesson","available"}; //types of reserves
@@ -16,12 +25,6 @@ public class Reserve {
     private int userId; //id of user that made it
     private String scheduleId; //id of its schedule
     private int priority; //priority of Reserve
-
-    /**
-     * Constructs a Reserve object with a specified type, reason, and user.
-     */
-    public Reserve() {
-    }
 
     /**
      * Constructs a Reserve object with a specified type, reason, and user.
@@ -44,12 +47,6 @@ public class Reserve {
     }
 
     /**
-     * Get the type of the reserve.
-     * @return The type of the reserve
-     */
-    public String getType() { return type; }
-
-    /**
      * Set the type of the reserve.
      * @param type The new type of the reserve
      * @throws LabReserveException If the type is invalid
@@ -61,26 +58,6 @@ public class Reserve {
             throw new LabReserveException(LabReserveException.TYPE_RESERVE_NOT_FOUND);
         }
     }
-
-    /**
-     * Get the reason for the reserve.
-     * @return The reason for the reserve
-     */
-    public String getReason() { return reason; }
-
-    /**
-     * Set the reason for the reserve.
-     * @param reason The new reason for the reserve
-     */
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    /**
-     * Get the current state of the reserve.
-     * @return The current state of the reserve
-     */
-    public String getState() { return state; }
 
     /**
      * Set the state of the reserve.
@@ -121,10 +98,6 @@ public class Reserve {
      */
     public void setSchedule(String schedule){
         this.scheduleId = schedule;
-    }
-
-    public int getPriority(){
-        return priority;
     }
 
     public void setPriority(int priority) throws LabReserveException{

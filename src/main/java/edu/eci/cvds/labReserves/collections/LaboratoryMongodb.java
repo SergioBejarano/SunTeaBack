@@ -1,22 +1,26 @@
 package edu.eci.cvds.labReserves.collections;
 
 import edu.eci.cvds.labReserves.model.Laboratory;
-import edu.eci.cvds.labReserves.model.Resource;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.List;
-import edu.eci.cvds.labReserves.model.ScheduleReference;
-import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.annotation.Id;
-
-
 
 /**
  * LaboratoryMongodb class specifically for MongoDB persistence.
  * This class maps to the "laboratories" collection in MongoDB.
  */
+@Getter
+@Setter
 @Document(collection = "laboratory")
 public class LaboratoryMongodb extends Laboratory {
 
+    /**
+     * -- GETTER --
+     *  Gets the id time of the laboratory.
+     *
+     * @return The id
+     */
     @Id
     private String id;
 
@@ -35,12 +39,4 @@ public class LaboratoryMongodb extends Laboratory {
         this.id = laboratory.getAbbreviation();
     }
 
-    /**
-     * Gets the id time of the laboratory.
-     * @return The id
-     */
-    public String getId(){
-        return id;
-    }
 }
-

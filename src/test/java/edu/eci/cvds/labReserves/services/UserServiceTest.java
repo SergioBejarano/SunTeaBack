@@ -1,0 +1,197 @@
+package edu.eci.cvds.labReserves.services;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import edu.eci.cvds.labReserves.collections.UserMongodb;
+import edu.eci.cvds.labReserves.model.LabReserveException;
+import edu.eci.cvds.labReserves.model.User;
+import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+    @Mock
+    private UserMongoRepository userRepo;
+
+    @InjectMocks
+    private UserService userService;
+
+    private User user;
+    private UserMongodb userMongo;
+
+    @BeforeEach
+    void setUp() throws LabReserveException {
+        user = new User(1, "Juan", "juan@mail.com","xd", "admin");
+        userMongo = new UserMongodb(user);
+
+    }
+
+    /**
+     * Test that a user can be created
+     * @throws LabReserveException
+     */
+    @Test
+    void testCreateUser() throws LabReserveException{
+        when(userRepo.save(any(UserMongodb.class))).thenReturn(userMongo);
+        UserMongodb result = userService.createUser(user);
+        assertEquals(user.getName(), result.getName());
+        assertEquals(user.getMail(), result.getMail());
+        verify(userRepo, times(1)).save(any(UserMongodb.class));
+    }
+
+    /**
+     * Test a User can not be created
+     */
+    @Test
+    void testCreateUserThrowsException() {
+        when(userRepo.save(any(UserMongodb.class))).thenThrow(new RuntimeException("user not created"));
+        assertThrows(LabReserveException.class, () -> userService.createUser(user));
+    }
+
+    /**
+     * Test a user is found by id
+     */
+    @Test
+    void testFindUserById_UserExists() {
+        when(userRepo.findById(1)).thenReturn(userMongo);
+        Optional<User> result = userService.findUserById(1);
+        assertTrue(result.isPresent(), "El usuario debería estar presente");
+        assertEquals(user.getId(),result.get().getId());
+        assertEquals(user.getMail(),result.get().getMail());
+        assertEquals(user.getName(),result.get().getName());
+        assertEquals(user.getPassword(),result.get().getPassword());
+        assertEquals(user.getRol(),result.get().getRol());
+        verify(userRepo, times(1)).findById(1);
+    }
+
+    /**
+     * Test a user is not found by id
+     */
+    @Test
+    void testFindUserById_UserNotExists() {
+        when(userRepo.findById(2)).thenReturn(null);
+        Optional<User> result = userService.findUserById(2);
+        assertFalse(result.isPresent(), "El usuario NO debería estar presente");
+        verify(userRepo, times(1)).findById(2);
+    }
+
+
+    /**
+     * Test a user is found by Mail
+     */
+    @Test
+    void testFindUserByMail_UserExists() {
+        when(userRepo.findByMail("juan@mail.com")).thenReturn(userMongo);
+        Optional<UserMongodb> result = userService.findUserByMail("juan@mail.com");
+        assertTrue(result.isPresent(), "El usuario debería estar presente");
+        assertEquals(user.getId(),result.get().getId());
+        assertEquals(user.getMail(),result.get().getMail());
+        assertEquals(user.getName(),result.get().getName());
+        assertEquals(user.getPassword(),result.get().getPassword());
+        assertEquals(user.getRol(),result.get().getRol());
+        verify(userRepo, times(1)).findByMail("juan@mail.com");
+    }
+
+    /**
+     * Test a user is not found by id
+     */
+    @Test
+    void testFindUserByMail_UserNotExists() {
+        when(userRepo.findById(2)).thenReturn(null);
+        Optional<User> result = userService.findUserById(2);
+        assertFalse(result.isPresent(), "El usuario NO debera estar presente");
+        verify(userRepo, times(1)).findById(2);
+    }
+
+    @Test
+    void testFindUserByName_UserExists() {
+        when(userRepo.findByName("Juan")).thenReturn(userMongo);
+        Optional<User> result = userService.findUserByName("Juan");
+        assertTrue(result.isPresent());
+        assertEquals("Juan", result.get().getName());
+        verify(userRepo, times(1)).findByName("Juan");
+    }
+
+    @Test
+    void testFindUserByName_UserNotExists() {
+        when(userRepo.findByName("NoExiste")).thenReturn(null);
+        Optional<User> result = userService.findUserByName("NoExiste");
+        assertFalse(result.isPresent());
+        verify(userRepo, times(1)).findByName("NoExiste");
+    }
+
+    @Test
+    void testChangeUserPassword() throws LabReserveException {
+        User updatedUser = new User(1, "Juan", "juan@mail.com","newPass", "admin");
+        UserMongodb updatedMongo = new UserMongodb(updatedUser);
+        when(userRepo.save(any(UserMongodb.class))).thenReturn(updatedMongo);
+        User result = userService.changeUserPassword("newPass", user);
+        assertEquals("newPass", result.getPassword());
+        verify(userRepo, times(1)).save(any(UserMongodb.class));
+    }
+
+    @Test
+    void testChangeUserMail() throws LabReserveException {
+        User updatedUser = new User(1, "Juan", "new@mail.com","xd", "admin");
+        UserMongodb updatedMongo = new UserMongodb(updatedUser);
+        when(userRepo.save(any(UserMongodb.class))).thenReturn(updatedMongo);
+        User result = userService.changeUserMail("new@mail.com", user);
+        assertEquals("new@mail.com", result.getMail());
+        verify(userRepo, times(1)).save(any(UserMongodb.class));
+    }
+
+    @Test
+    void testChangeUserName() throws LabReserveException {
+        User updatedUser = new User(1, "NewName", "juan@mail.com","xd", "admin");
+        UserMongodb updatedMongo = new UserMongodb(updatedUser);
+        when(userRepo.save(any(UserMongodb.class))).thenReturn(updatedMongo);
+        User result = userService.changeUserName("NewName", user);
+        assertEquals("NewName", result.getName());
+        verify(userRepo, times(1)).save(any(UserMongodb.class));
+    }
+
+    @Test
+    void testChangeUserRol() throws LabReserveException {
+        User updatedUser = new User(1, "Juan", "juan@mail.com","xd", "teacher");
+        UserMongodb updatedMongo = new UserMongodb(updatedUser);
+        when(userRepo.save(any(UserMongodb.class))).thenReturn(updatedMongo);
+        User result = userService.changeUserRol("teacher", user);
+        assertEquals("teacher", result.getRol());
+        verify(userRepo, times(1)).save(any(UserMongodb.class));
+    }
+
+    @Test
+    void testDeleteUser() throws LabReserveException {
+        doNothing().when(userRepo).deleteById(1);
+        userService.deleteUser(user);
+        verify(userRepo, times(1)).deleteById(1);
+    }
+
+    @Test
+    void testGetAllUsers() {
+        java.util.List<UserMongodb> users = new java.util.ArrayList<>();
+        users.add(userMongo);
+        when(userRepo.findAll()).thenReturn(users);
+        java.util.List<UserMongodb> result = userService.getAllUsers();
+        assertEquals(1, result.size());
+        verify(userRepo, times(1)).findAll();
+    }
+
+    @Test
+    void testGetUserInfor() throws LabReserveException {
+        when(userRepo.findById(1)).thenReturn((UserMongodb) userMongo);
+        java.util.List<String> result = userService.getUserInfor(1);
+        assertEquals(3, result.size());
+        assertEquals("Juan", result.get(0));
+        assertEquals("juan@mail.com", result.get(1));
+        assertEquals("admin", result.get(2));
+        verify(userRepo, times(1)).findById(1);
+    }
+}

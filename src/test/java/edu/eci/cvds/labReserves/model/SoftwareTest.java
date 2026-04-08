@@ -1,14 +1,11 @@
-package edu.eci.cvds.labReserves;
+package edu.eci.cvds.labReserves.model;
 
-import edu.eci.cvds.labReserves.model.LabReserveException;
-import edu.eci.cvds.labReserves.model.Physical;
-import edu.eci.cvds.labReserves.model.Software;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SoftwareTest {
+class SoftwareTest {
     private Software software;
 
     @BeforeEach
