@@ -93,7 +93,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-sca.sarif
-          category: trivy-sca-deploy
+          category: trivy-sca
 
   # ───────────────────────────────────────────────────────────────────────
   # 3. DEPLOY — Trigger de despliegue en Render
