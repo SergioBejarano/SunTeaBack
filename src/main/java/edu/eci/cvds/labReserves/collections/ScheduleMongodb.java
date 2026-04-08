@@ -20,15 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ScheduleMongodb extends Schedule {
 
     /**
-     * -- GETTER --
-     * Get the schedule ID.
-     *
-     *
-     * -- SETTER --
-     * Set the schedule ID.
-     *
-     * @return The schedule ID.
-     * @param id The schedule ID.
+     * Identifier of the schedule in MongoDB.
      */
     @Id
     private String id = new ObjectId().toString();
