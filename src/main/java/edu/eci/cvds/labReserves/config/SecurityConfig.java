@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +45,17 @@ public class SecurityConfig {
     }
 
     /**
+     * Completely bypasses the security filter chain for actuator endpoints,
+     * so Spring Security does not interfere with health checks.
+     *
+     * @return WebSecurityCustomizer that ignores actuator paths.
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/actuator/**");
+    }
+
+    /**
      * Defines the security filter chain, setting authentication rules,
      * disabling CSRF, and configuring session management.
      *
@@ -56,7 +69,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/**", "/actuator/**")
+                        req.requestMatchers("/api/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
