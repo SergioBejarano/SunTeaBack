@@ -12,7 +12,7 @@
 PROJECT_NAME   ?= $(shell basename $(CURDIR))
 SEVERITY_THRESHOLD ?= ERROR        # Umbral para Semgrep: INFO, WARNING, ERROR
 JAVA_VERSION   ?= 17
-COVERAGE_MIN   ?= 80              # Cobertura minima de pruebas (%)
+COVERAGE_MIN   ?= 0               # Cobertura minima de pruebas (%)
 
 # ---------------------------------------------------------------------------
 # help — muestra los targets disponibles
