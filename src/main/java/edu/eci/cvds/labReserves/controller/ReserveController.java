@@ -18,7 +18,6 @@ import java.time.DayOfWeek;
 import java.time.Month;
 import java.util.List;
 
-
 /**
  * The ReserveController class handles HTTP requests for managing reserves.
  * It provides endpoints to create, retrieve, update, and delete reserves.
@@ -27,10 +26,16 @@ import java.util.List;
 @RequestMapping("/api/reserve")
 public class ReserveController {
 
-    private final ReserveService reserveService; //Service of Reserve (logic code)
+    /** Service of Reserve (logic code). */
+    private final ReserveService reserveService;
 
-    public ReserveController (ReserveService reserveService) {
-        this.reserveService = reserveService;
+    /**
+     * Constructor to inject ReserveService dependency.
+     *
+     * @param resService Reserve service instance.
+     */
+    public ReserveController(final ReserveService resService) {
+        this.reserveService = resService;
     }
 
     /**
@@ -38,22 +43,27 @@ public class ReserveController {
      *
      * @param reserveRequest The request body containing reservation details.
      * @return The created ReserveMongodb object.
-     * @throws LabReserveException If an error occurs during reservation creation.
+     * @throws LabReserveException If an error occurs during creation.
      */
     @PostMapping("/")
-    public ReserveMongodb createReserve(@RequestBody ReserveRequest reserveRequest) throws LabReserveException {
+    public ReserveMongodb createReserve(
+            @RequestBody final ReserveRequest reserveRequest)
+            throws LabReserveException {
         return reserveService.saveReserve(reserveRequest);
     }
 
     /**
      * Deletes all reserves associated with a specific schedule.
      *
-     * @param schedule The schedule associated with the reserves to be deleted.
+     * @param schedule The schedule associated with the reserves to delete.
      * @throws LabReserveException If an error occurs during deletion.
      */
     @DeleteMapping("/schedules")
-    public void deleteReserveBySchedule(@RequestBody Schedule schedule) throws LabReserveException {
-        ScheduleMongodb scheduleMongodb = reserveService.getScheduleBySchedule(schedule);
+    public void deleteReserveBySchedule(
+            @RequestBody final Schedule schedule)
+            throws LabReserveException {
+        final ScheduleMongodb scheduleMongodb =
+                reserveService.getScheduleBySchedule(schedule);
         reserveService.deleteReserveByScheduleId(scheduleMongodb.getId());
         reserveService.deleteById(scheduleMongodb.getId());
     }
@@ -65,8 +75,10 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during deletion.
      */
     @DeleteMapping("/users/{userId}")
-    public void deleteReserveByUser(@PathVariable int userId) throws LabReserveException {
-        List<ReserveMongodb> reserveMongodbs = reserveService.getReserveByUserId(userId);
+    public void deleteReserveByUser(
+            @PathVariable final int userId) throws LabReserveException {
+        final List<ReserveMongodb> reserveMongodbs =
+                reserveService.getReserveByUserId(userId);
         for (ReserveMongodb reserveMongodb : reserveMongodbs) {
             reserveService.deleteReserveById(reserveMongodb.getId());
             reserveService.deleteById(reserveMongodb.getSchedule());
@@ -92,7 +104,9 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/lab/{labAbbreviation}")
-    public List<ReserveRequest> getReserveByLaboratory(@PathVariable String labAbbreviation) throws LabReserveException {
+    public List<ReserveRequest> getReserveByLaboratory(
+            @PathVariable final String labAbbreviation)
+            throws LabReserveException {
         return reserveService.getReserveByLaboratory(labAbbreviation);
     }
 
@@ -104,7 +118,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/users/{userId}")
-    public List<ReserveRequest> getReserveByUser(@PathVariable int userId) throws LabReserveException {
+    public List<ReserveRequest> getReserveByUser(
+            @PathVariable final int userId) throws LabReserveException {
         return reserveService.getReserveByUser(userId);
     }
 
@@ -116,7 +131,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/day/{day}")
-    public List<ReserveRequest> getReserveByDay(@PathVariable DayOfWeek day) throws LabReserveException {
+    public List<ReserveRequest> getReserveByDay(
+            @PathVariable final DayOfWeek day) throws LabReserveException {
         return reserveService.getReserveByDay(day);
     }
 
@@ -128,7 +144,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/month/{month}")
-    public List<ReserveMongodb> getReserveByMonth(@PathVariable Month month) throws LabReserveException {
+    public List<ReserveMongodb> getReserveByMonth(
+            @PathVariable final Month month) throws LabReserveException {
         return reserveService.getReserveByMonth(month);
     }
 
@@ -140,7 +157,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/{id}")
-    public ReserveRequest getReserveById(@PathVariable String id) throws LabReserveException {
+    public ReserveRequest getReserveById(
+            @PathVariable final String id) throws LabReserveException {
         return reserveService.getReserveById(id);
     }
 
@@ -152,7 +170,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during retrieval.
      */
     @GetMapping("/reserves/{id}")
-    public ReserveMongodb getOnlyReserveById(@PathVariable String id) throws LabReserveException {
+    public ReserveMongodb getOnlyReserveById(
+            @PathVariable final String id) throws LabReserveException {
         return reserveService.getOnlyReserveById(id);
     }
 
@@ -163,7 +182,8 @@ public class ReserveController {
      * @throws LabReserveException If an error occurs during generation.
      */
     @PostMapping("/random")
-    public List<ReserveRequest> postReservesRandom() throws LabReserveException{
+    public List<ReserveRequest> postReservesRandom()
+            throws LabReserveException {
         return reserveService.generateRandomReserves();
     }
 }

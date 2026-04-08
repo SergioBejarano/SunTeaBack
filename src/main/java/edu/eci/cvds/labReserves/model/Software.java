@@ -7,7 +7,7 @@ import lombok.Setter;
 
 /**
  * Represents a software resource in the lab reservation system.
- * Extends the Resource class and includes additional information about the operating system and partition.
+ * Extends the Resource class with OS and partition info.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,37 +15,23 @@ import lombok.Setter;
 @Setter
 public class Software extends Resource {
 
-    /**
-     * -- GETTER --
-     *  Get the operating system on which the software is running.
-     * -- SETTER --
-     *  Set the operating system on which the software runs.
-     *
-     @return The operating system of the software.
-      * @param operativeSystem The operating system to assign.
-     */
+    /** The operating system of the software. */
     private String operativeSystem;
-    /**
-     * -- GETTER --
-     *  Get the software requires a special partition.
-     * -- SETTER --
-     *  Set the software requires a special partition.
-     *
-     @return true if partition is required, false otherwise.
-      * @param partition true if partition is required, false otherwise.
-     */
+
+    /** Indicates if a special partition is required. */
     private boolean partition;
 
     /**
      * Constructor with parameters.
      *
-     * @param name Name of the software.
-     * @param operativeSystem Operating system the software runs on.
-     * @param partition Indicates if the software requires a special partition.
+     * @param pName Name of the software.
+     * @param pOperativeSystem Operating system the software runs on.
+     * @param pPartition Indicates if a special partition is required.
      */
-    public Software(String name, String operativeSystem, boolean partition) {
-        super(name);
-        this.operativeSystem = operativeSystem;
-        this.partition = partition;
+    public Software(final String pName, final String pOperativeSystem,
+                    final boolean pPartition) {
+        super(pName);
+        this.operativeSystem = pOperativeSystem;
+        this.partition = pPartition;
     }
 }

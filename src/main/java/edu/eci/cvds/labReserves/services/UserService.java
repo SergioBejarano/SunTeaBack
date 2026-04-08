@@ -1,8 +1,9 @@
 package edu.eci.cvds.labReserves.services;
 
 import edu.eci.cvds.labReserves.collections.UserMongodb;
-import edu.eci.cvds.labReserves.repository.mongodb.*;
-import edu.eci.cvds.labReserves.model.*;
+import edu.eci.cvds.labReserves.repository.mongodb.UserMongoRepository;
+import edu.eci.cvds.labReserves.model.User;
+import edu.eci.cvds.labReserves.model.LabReserveException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,129 +11,140 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The {@code UserService} class provides business logic for managing reserves within the application.
- * It handles operations related to User, including creating, updating, deleting, and retrieving.
+ * The {@code UserService} class provides business logic for managing
+ * users within the application.
  */
 @Service
-public class UserService{
+public class UserService {
 
+    /** The repository for user data access. */
     private final UserMongoRepository userRepo;
 
-    public UserService(UserMongoRepository userRepo) {
-        this.userRepo = userRepo;
+    /**
+     * Constructor for UserService.
+     * @param pUserRepo The user repository.
+     */
+    public UserService(final UserMongoRepository pUserRepo) {
+        this.userRepo = pUserRepo;
     }
 
     /**
      * Creates and saves a new user.
      *
-     * @param user The user object to be saved.
+     * @param pUser The user object to be saved.
      * @return The saved {@code UserMongodb} object.
      * @throws LabReserveException If an error occurs while creating the user.
      */
-    public UserMongodb createUser(User user) throws LabReserveException {
-        try{
-            UserMongodb userMongo = new UserMongodb(user);
+    public final UserMongodb createUser(final User pUser)
+            throws LabReserveException {
+        try {
+            UserMongodb userMongo = new UserMongodb(pUser);
             return userRepo.save(userMongo);
 
-        } catch(Exception e){
-            throw new LabReserveException("Error al crear el usuario: " + e.getMessage());
+        } catch (Exception e) {
+            throw new LabReserveException("Error al crear el usuario: "
+                    + e.getMessage());
         }
     }
 
     /**
      * Searches for a user by ID.
      *
-     * @param user The user ID.
-     * @return An {@code Optional} containing the found user or empty if not found.
+     * @param pUserId The user ID.
+     * @return An {@code Optional} containing the found user.
      */
-    public Optional<User> findUserById(int user){
-        return Optional.ofNullable(userRepo.findById(user));
+    public final Optional<User> findUserById(final int pUserId) {
+        return Optional.ofNullable(userRepo.findById(pUserId));
     }
 
     /**
      * Searches for a user by email.
      *
-     * @param email The user's email address.
-     * @return An {@code Optional} containing the found user or empty if not found.
+     * @param pEmail The user's email address.
+     * @return An {@code Optional} containing the found user.
      */
-    public Optional<UserMongodb> findUserByMail(String email){
-        return Optional.ofNullable(userRepo.findByMail(email));
+    public final Optional<UserMongodb> findUserByMail(final String pEmail) {
+        return Optional.ofNullable(userRepo.findByMail(pEmail));
     }
 
     /**
      * Searches for a user by name.
      *
-     * @param name The user's name.
-     * @return An {@code Optional} containing the found user or empty if not found.
+     * @param pName The user's name.
+     * @return An {@code Optional} containing the found user.
      */
-    public Optional<User> findUserByName(String name){
-        return Optional.ofNullable(userRepo.findByName(name));
+    public final Optional<User> findUserByName(final String pName) {
+        return Optional.ofNullable(userRepo.findByName(pName));
     }
 
     /**
      * Changes the user's password.
      *
-     * @param newPassword The new password to be set.
-     * @param user The user whose password is being changed.
+     * @param pNewPassword The new password to be set.
+     * @param pUser The user whose password is being changed.
      * @return The updated user object.
-     * @throws LabReserveException If an error occurs while updating the password.
+     * @throws LabReserveException If an error occurs.
      */
-    public User changeUserPassword(String newPassword, User user) throws LabReserveException {
-        user.setPassword(newPassword);
-        UserMongodb userMongodb = new UserMongodb(user);
+    public final User changeUserPassword(final String pNewPassword,
+            final User pUser) throws LabReserveException {
+        pUser.setPassword(pNewPassword);
+        UserMongodb userMongodb = new UserMongodb(pUser);
         return userRepo.save(userMongodb);
     }
 
     /**
      * Changes the user's email.
      *
-     * @param newMail The new email to be set.
-     * @param user The user whose email is being changed.
+     * @param pNewMail The new email to be set.
+     * @param pUser The user whose email is being changed.
      * @return The updated user object.
-     * @throws LabReserveException If an error occurs while updating the email.
+     * @throws LabReserveException If an error occurs.
      */
-    public User changeUserMail(String newMail, User user) throws LabReserveException {
-        user.setMail(newMail);
-        UserMongodb userMongodb = new UserMongodb(user);
+    public final User changeUserMail(final String pNewMail,
+            final User pUser) throws LabReserveException {
+        pUser.setMail(pNewMail);
+        UserMongodb userMongodb = new UserMongodb(pUser);
         return userRepo.save(userMongodb);
     }
 
     /**
      * Changes the user's name.
      *
-     * @param newName The new name to be set.
-     * @param user The user whose name is being changed.
+     * @param pNewName The new name to be set.
+     * @param pUser The user whose name is being changed.
      * @return The updated user object.
-     * @throws LabReserveException If an error occurs while updating the name.
+     * @throws LabReserveException If an error occurs.
      */
-    public User changeUserName(String newName, User user) throws LabReserveException {
-        user.setName(newName);
-        UserMongodb userMongodb = new UserMongodb(user);
+    public final User changeUserName(final String pNewName,
+            final User pUser) throws LabReserveException {
+        pUser.setName(pNewName);
+        UserMongodb userMongodb = new UserMongodb(pUser);
         return userRepo.save(userMongodb);
     }
 
     /**
      * Changes the user's role.
      *
-     * @param newRol The new role to be set.
-     * @param user The user whose role is being changed.
+     * @param pNewRol The new role to be set.
+     * @param pUser The user whose role is being changed.
      * @return The updated user object.
-     * @throws LabReserveException If an error occurs while updating the role.
+     * @throws LabReserveException If an error occurs.
      */
-    public User changeUserRol(String newRol, User user) throws LabReserveException {
-        user.setRol(newRol);
-        UserMongodb userMongodb = new UserMongodb(user);
+    public final User changeUserRol(final String pNewRol,
+            final User pUser) throws LabReserveException {
+        pUser.setRol(pNewRol);
+        UserMongodb userMongodb = new UserMongodb(pUser);
         return userRepo.save(userMongodb);
     }
 
     /**
      * Deletes a user.
      *
-     * @param user The user to be deleted.
-     * @throws LabReserveException If an error occurs while deleting the user.
+     * @param pUser The user to be deleted.
+     * @throws LabReserveException If an error occurs.
      */
-    public void deleteUser(User user) throws LabReserveException {
-        userRepo.deleteById(user.getId());
+    public final void deleteUser(final User pUser) throws LabReserveException {
+        userRepo.deleteById(pUser.getId());
     }
 
     /**
@@ -140,19 +152,20 @@ public class UserService{
      *
      * @return A list of all users.
      */
-    public List<UserMongodb> getAllUsers() {
+    public final List<UserMongodb> getAllUsers() {
         return userRepo.findAll();
     }
 
     /**
      * Retrieves user information by ID.
      *
-     * @param user The user ID.
+     * @param pUserId The user ID.
      * @return A list containing the user's name, email, and role.
-     * @throws LabReserveException If an error occurs while retrieving the user information.
+     * @throws LabReserveException If an error occurs.
      */
-    public List<String> getUserInfor(int user) throws LabReserveException{
-        User actualUser = userRepo.findById(user);
+    public final List<String> getUserInfor(final int pUserId)
+            throws LabReserveException {
+        User actualUser = userRepo.findById(pUserId);
         List<String> userInfo = new ArrayList<>();
         userInfo.add(actualUser.getName());
         userInfo.add(actualUser.getMail());

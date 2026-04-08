@@ -1,10 +1,9 @@
 package edu.eci.cvds.labReserves.model;
 
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.*;
 
 /**
  * Represents a user in LabReserves system.
@@ -16,73 +15,58 @@ import java.util.*;
 @Setter
 public class User {
 
-    private static Set<String> rolType = Set.of("teacher", "admin"); // Set of valid role types for a user.
-    /**
-     * -- GETTER --
-     *  get the id of a user
-     *
-     * @return the id of a user
-     */
-    private int id; // Unique identifier for the user
-    /**
-     * -- GETTER --
-     *  Get the full name of the user.
-     *
-     * @return The user's name.
-     */
-    private String name; // Full name of the user
-    /**
-     * -- GETTER --
-     *  Get the email address of the user.
-     *
-     * @return The user's email.
-     */
-    private String mail; // Email address of the user
-    /**
-     * -- GETTER --
-     *  Get the password of the user.
-     *
-     * @return The user's password.
-     */
-    private String password; // Password associated with the user account
-    /**
-     * -- GETTER --
-     *  get the rol of a user
-     *
-     * @return the rol of a user
-     */
-    private String rol; // Role assigned to the user
+    /** Set of valid role types for a user. */
+    private static Set<String> rolType = Set.of("teacher", "admin");
+
+    /** Unique identifier for the user. */
+    private int id;
+
+    /** Full name of the user. */
+    private String name;
+
+    /** Email address of the user. */
+    private String mail;
+
+    /** Password associated with the user account. */
+    private String password;
+
+    /** Role assigned to the user. */
+    private String rol;
 
     /**
      * Constructs a new User with the given attributes.
      *
-     * @param id        Unique identifier for the user.
-     * @param name      Full name of the user.
-     * @param mail      Email address of the user.
-     * @param password  Password associated with the user account.
-     * @param rol       Role assigned to the user (must be "teacher" or "admin").
+     * @param pId       Unique identifier for the user.
+     * @param pName     Full name of the user.
+     * @param pMail     Email address of the user.
+     * @param pPassword Password associated with the account.
+     * @param pRol      Role assigned to the user.
      * @throws LabReserveException If the provided role is not valid.
      */
-    public User(int id, String name, String mail, String password, String rol) throws  LabReserveException {
-        this.id = id;
-        this.name = name;
-        this.mail = mail;
-        this.password = password;
-        if (rolType.contains(rol)){
-            this.rol = rol;
-        }else{
+    public User(final int pId, final String pName, final String pMail,
+                final String pPassword, final String pRol)
+            throws LabReserveException {
+        this.id = pId;
+        this.name = pName;
+        this.mail = pMail;
+        this.password = pPassword;
+        if (rolType.contains(pRol)) {
+            this.rol = pRol;
+        } else {
             throw new LabReserveException(LabReserveException.INVALID_ROL_TYPE);
         }
     }
 
     /**
-     * set a new rol for a user
-     * @param newRol
+     * Sets a new role for a user.
+     *
+     * @param pNewRol The new role to assign.
+     * @throws LabReserveException If the role is invalid.
      */
-    public void setRol(String newRol) throws LabReserveException {
-        if (rolType.contains(newRol)){
-            this.rol = newRol;
-        }else{
+    public final void setRol(final String pNewRol) throws LabReserveException {
+        if (rolType.contains(pNewRol)) {
+            this.rol = pNewRol;
+        } else {
             throw new LabReserveException(LabReserveException.INVALID_ROL_TYPE);
         }
     }

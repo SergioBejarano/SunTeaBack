@@ -132,7 +132,7 @@ Developer writes code
 
 ```properties
 mongodb+srv://admin:admin@classroomdatabase.ddlng.mongodb.net/LabReserve
-spring.data.mongodb.uri=mongodb+srv://admin:admin@classroomdatabase.ddlng.mongodb.net/...
+spring.data.mongodb.uri=mongodb+srv://admin:admin@classroomdatabase.ddlng.mongodb.net/... <!-- pragma: allowlist secret -->
 ```
 
 **Risk:** MongoDB Atlas credentials (`admin:admin`) are hardcoded in source code and committed to the Git history. Anyone with repo access has full database access.
@@ -152,7 +152,7 @@ spring.data.mongodb.uri=${MONGODB_URI}
 **Line:** 20
 
 ```java
-private String SECRET_KEY = "CVDSECIRESERVE2025PAULAALEJANDROJUANSANTIAGO";
+private String SECRET_KEY = "CVDSECIRESERVE2025PAULAALEJANDROJUANSANTIAGO"; <!-- pragma: allowlist secret -->
 ```
 
 **Risk:** JWT signing key is hardcoded and committed to the repository. An attacker can forge valid JWT tokens for any user, including administrators, enabling full account takeover.

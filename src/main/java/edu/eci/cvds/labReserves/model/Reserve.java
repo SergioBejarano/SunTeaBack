@@ -8,8 +8,7 @@ import lombok.Setter;
 import java.util.Arrays;
 
 /**
- * The Reserve class represents a reservation for a laboratory made by a user with a specific schedule.
- * It defines the type, state, and reason for the reservation.
+ * Represents a reservation for a laboratory made by a user.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,94 +16,137 @@ import java.util.Arrays;
 @Setter
 public class Reserve {
 
-    private static String[] typeReserve = new String[] {"lesson","available"}; //types of reserves
-    private static String[] stateReserve = new String[] {"reserved","occupied","free"}; //states of reserves
-    private String type; //type of this reserve at moment
-    private String reason; //reason why this reserve was created
-    private String state; //state of this reserve at moment
-    private int userId; //id of user that made it
-    private String scheduleId; //id of its schedule
-    private int priority; //priority of Reserve
+    /** Types of reserves allowed. */
+    private static String[] typeReserve = new String[] {"lesson", "available"};
+
+    /** States of reserves allowed. */
+    private static String[] stateReserve =
+        new String[] {"reserved", "occupied", "free"};
+
+    /** Type of this reserve. */
+    private String type;
+
+    /** Reason why this reserve was created. */
+    private String reason;
+
+    /** State of this reserve. */
+    private String state;
+
+    /** ID of user that made it. */
+    private int userId;
+
+    /** ID of its schedule. */
+    private String scheduleId;
+
+    /** Priority of Reserve. */
+    private int priority;
 
     /**
-     * Constructs a Reserve object with a specified type, reason, and user.
-     * @param type   The type of the reserve
-     * @param reason The reason for the reserve
-     * @throws LabReserveException If any parameter is invalid
+     * Constructs a Reserve object with specified details.
+     *
+     * @param pType   The type of the reserve.
+     * @param pReason The reason for the reserve.
+     * @param pUserId The ID of the user.
+     * @throws LabReserveException If any parameter is invalid.
      */
-    public Reserve(String type, String reason, int userId) throws LabReserveException {
-        if (!Arrays.asList(typeReserve).contains(type)) {
-            throw new LabReserveException(LabReserveException.TYPE_RESERVE_NOT_FOUND);
-        }else if (reason.isEmpty()) {
-            throw new LabReserveException(LabReserveException.REASON_RESERVE_NOT_FOUND);
-        } else if (userId < 0) {
-            throw new LabReserveException(LabReserveException.USER_RESERVE_NOT_FOUND);
+    public Reserve(final String pType, final String pReason,
+                   final int pUserId) throws LabReserveException {
+        if (!Arrays.asList(typeReserve).contains(pType)) {
+            throw new LabReserveException(
+                LabReserveException.TYPE_RESERVE_NOT_FOUND);
+        } else if (pReason.isEmpty()) {
+            throw new LabReserveException(
+                LabReserveException.REASON_RESERVE_NOT_FOUND);
+        } else if (pUserId < 0) {
+            throw new LabReserveException(
+                LabReserveException.USER_RESERVE_NOT_FOUND);
         }
-        this.type = type;
-        this.reason = reason;
-        this.userId = userId;
+        this.type = pType;
+        this.reason = pReason;
+        this.userId = pUserId;
         this.state = "reserved";
     }
 
     /**
      * Set the type of the reserve.
-     * @param type The new type of the reserve
-     * @throws LabReserveException If the type is invalid
+     *
+     * @param pType The new type.
+     * @throws LabReserveException If the type is invalid.
      */
-    public void setType(String type) throws LabReserveException {
-        if (Arrays.asList(typeReserve).contains(type)) {
-            this.type = type;
-        }else {
-            throw new LabReserveException(LabReserveException.TYPE_RESERVE_NOT_FOUND);
+    public final void setType(final String pType) throws LabReserveException {
+        if (Arrays.asList(typeReserve).contains(pType)) {
+            this.type = pType;
+        } else {
+            throw new LabReserveException(
+                LabReserveException.TYPE_RESERVE_NOT_FOUND);
         }
     }
 
     /**
      * Set the state of the reserve.
-     * @param state The new state of the reserve
-     * @throws LabReserveException If the state is invalid
+     *
+     * @param pState The new state.
+     * @throws LabReserveException If the state is invalid.
      */
-    public void setState(String state) throws LabReserveException {
-        if (Arrays.asList(stateReserve).contains(state)) {
-            this.state = state;
+    public final void setState(final String pState) throws LabReserveException {
+        if (Arrays.asList(stateReserve).contains(pState)) {
+            this.state = pState;
         } else {
-            throw new LabReserveException(LabReserveException.STATE_RESERVE_NOT_FOUND);
+            throw new LabReserveException(
+                LabReserveException.STATE_RESERVE_NOT_FOUND);
         }
     }
 
     /**
      * Get the user who created the reserve.
-     * @return The user who created the reserve
+     *
+     * @return The user ID.
      */
-    public int getUser() { return userId; }
+    public final int getUser() {
+        return userId;
+    }
 
     /**
      * Set the user for the reserve.
-     * @param user The user who created the reserve
+     *
+     * @param pUser The user ID.
      */
-    public void setUser(int user) {
-        this.userId = user;
+    public final void setUser(final int pUser) {
+        this.userId = pUser;
     }
 
     /**
      * Get the schedule associated with this reserve.
-     * @return The schedule of the reserve
+     *
+     * @return The schedule ID.
      */
-    public String getSchedule() { return scheduleId; }
+    public final String getSchedule() {
+        return scheduleId;
+    }
 
     /**
      * Set the schedule of the reserve.
-     * @param schedule The new schedule of the reserve
+     *
+     * @param pSchedule The new schedule ID.
      */
-    public void setSchedule(String schedule){
-        this.scheduleId = schedule;
+    public final void setSchedule(final String pSchedule) {
+        this.scheduleId = pSchedule;
     }
 
-    public void setPriority(int priority) throws LabReserveException{
-        if (priority>0 && priority<6) {
-            this.priority = priority;
-        }else {
-            throw new LabReserveException(LabReserveException.PRIORITY_NOT_IN_RANGE);
+    /**
+     * Sets the priority of the reserve.
+     *
+     * @param pPriority The priority value (1-5).
+     * @throws LabReserveException If out of range.
+     */
+    public final void setPriority(final int pPriority)
+            throws LabReserveException {
+        final int maxPriority = 6;
+        if (pPriority > 0 && pPriority < maxPriority) {
+            this.priority = pPriority;
+        } else {
+            throw new LabReserveException(
+                LabReserveException.PRIORITY_NOT_IN_RANGE);
         }
     }
 }

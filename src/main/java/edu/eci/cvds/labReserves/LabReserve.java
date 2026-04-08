@@ -1,20 +1,19 @@
 package edu.eci.cvds.labReserves;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Clase principal de la aplicación LabReserve.
  *
- * Esta clase inicializa la aplicación Spring Boot y configura la serialización de fechas con Jackson.
+ * Esta clase inicializa la aplicación Spring Boot y configura
+ * la serialización de fechas con Jackson.
  */
 @SpringBootApplication
 public class LabReserve {
@@ -22,44 +21,51 @@ public class LabReserve {
     /**
      * Método principal que inicia la aplicación Spring Boot.
      *
-     * @param args Argumentos de línea de comandos pasados a la aplicación.
+     * @param args Argumentos de línea de comandos.
      */
-	public static void main(String[] args) {
-		SpringApplication.run(LabReserve.class, args);
-	}
+    public static void main(final String[] args) {
+        SpringApplication.run(LabReserve.class, args);
+    }
 
     /**
-     * Configura un Bean para personalizar la serialización de fechas en Jackson.
-     *
-     * Este método realiza las siguientes configuraciones:
-     * - Agrega el módulo JavaTimeModule para soportar las clases de fecha y hora de Java 8+.
-     * - Deshabilita la escritura de fechas como timestamps para que se serialicen en formato ISO-8601.
+     * Configura un Bean para personalizar la serialización de fechas.
      *
      * @return Un Jackson2ObjectMapperBuilderCustomizer configurado.
      */
-	@Bean
-    public Jackson2ObjectMapperBuilderCustomizer customizer() {
+    @Bean
+    public final Jackson2ObjectMapperBuilderCustomizer customizer() {
         return builder -> {
             builder.modules(new JavaTimeModule());
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            builder.featuresToDisable(
+                SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
+            );
         };
     }
 
+    /**
+     * Configura el intercambio de recursos de origen cruzado (CORS).
+     *
+     * @return Una instancia de WebMvcConfigurer con mapeos CORS.
+     */
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public final WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry){
+            public void addCorsMappings(final CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://labreserveeci-hcfwbkh6czhhggba.eastus2-01.azurewebsites.net/",
-                                "https://labreserveecidevelop-cbfjhdbqb3h5end7.canadacentral-01.azurewebsites.net/",
-                                "http://localhost:8080/",
-                                "http://localhost:3000/")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedOrigins(
+                            "https://labreserveeci-hcfwbkh6czhhggba"
+                                + ".eastus2-01.azurewebsites.net/",
+                            "https://labreserveecidevelop-cbfjhdbqb3h5end7"
+                                + ".canadacentral-01.azurewebsites.net/",
+                            "http://localhost:8080/",
+                            "http://localhost:3000/"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE",
+                                        "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
     }
-
 }

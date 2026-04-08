@@ -21,26 +21,28 @@ public class ScheduleMongodb extends Schedule {
 
     /**
      * -- GETTER --
-     *  Get the schedule ID.
+     * Get the schedule ID.
      *
      *
      * -- SETTER --
-     *  Set the schedule ID.
+     * Set the schedule ID.
      *
-     @return The schedule ID.
-      * @param id The schedule ID.
+     * @return The schedule ID.
+     * @param id The schedule ID.
      */
     @Id
-    private String id = new ObjectId().toString(); //identifier for the scheduleMongodb (auto-generated).
+    private String id = new ObjectId().toString();
+    // identifier for the scheduleMongodb (auto-generated).
 
     /**
      * Constructs a ScheduleMongodb instance based on a Schedule object.
      *
      * @param schedule the Schedule object to copy properties from
      */
-    public ScheduleMongodb(Schedule schedule) throws LabReserveException {
+    public ScheduleMongodb(final Schedule schedule) throws LabReserveException {
         super(schedule.getStartHour(), schedule.getNumberDay(),
-                schedule.getDay(), schedule.getMonth(), schedule.getYear(), schedule.getLaboratory());
+                schedule.getDay(), schedule.getMonth(),
+                schedule.getYear(), schedule.getLaboratory());
     }
 
 }

@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.time.Month;
 
 /**
- * The ReserveRequest class represents a request for a reservae and its schedule
+ * The ReserveRequest class represents a request for a reserve and its schedule.
  * It contains details about the reservation type, reason, state,
  * user information, and schedule details.
  */
@@ -22,29 +22,44 @@ import java.time.Month;
 @AllArgsConstructor
 public class ReserveRequest {
 
-    /**
-     * -- GETTER --
-     * Getters for the class fields.
-     */
-    private String type; //type of this reserve at moment
-    private String reason; //reason why this reserve was created
-    private String state; //state of this reserve at moment
-    private int userId; //id of user that made it
+    /** Type of this reserve. */
+    private String type;
 
-    private LocalTime startHour; //start of resource
-    private int numberDay; //number of day that generate resource
-    private DayOfWeek day; //day that generate resource
-    private Month month; //month that generate resource
-    private int year; //year that generate resource
-    private String laboratoryName; //laboratory of the reserve
+    /** Reason why this reserve was created. */
+    private String reason;
+
+    /** State of this reserve at the moment. */
+    private String state;
+
+    /** ID of the user that made the reservation. */
+    private int userId;
+
+    /** Start hour of the resource. */
+    private LocalTime startHour;
+
+    /** Day number of the resource. */
+    private int numberDay;
+
+    /** Day of the week of the resource. */
+    private DayOfWeek day;
+
+    /** Month of the resource. */
+    private Month month;
+
+    /** Year of the resource. */
+    private int year;
+
+    /** Laboratory associated with the reserve. */
+    private String laboratoryName;
 
     /**
-     * Constructs a ReserveRequest based on a ReserveMongodb and ScheduleMongodb.
+     * Constructs a ReserveRequest based on MongoDB objects.
      *
      * @param reserveMongodb  The reservation data.
      * @param scheduleMongodb The schedule data.
      */
-    public ReserveRequest(ReserveMongodb reserveMongodb, ScheduleMongodb scheduleMongodb) {
+    public ReserveRequest(final ReserveMongodb reserveMongodb,
+                          final ScheduleMongodb scheduleMongodb) {
         this.type = reserveMongodb.getType();
         this.reason = reserveMongodb.getReason();
         this.state = reserveMongodb.getState();
@@ -57,5 +72,4 @@ public class ReserveRequest {
         this.year = scheduleMongodb.getYear();
         this.laboratoryName = scheduleMongodb.getLaboratory();
     }
-
 }

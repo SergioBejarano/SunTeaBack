@@ -8,11 +8,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 /**
- * The ReserveMongoRepository interface provides the data access layer for Reserves entities.
- * It extends the MongoRepository interface, which provides basic CRUD operations.
+ * Interface for data access layer for Reserves entities.
+ * Extends MongoRepository to provide basic CRUD operations.
  */
 @Repository
-public interface ReserveMongoRepository extends MongoRepository<ReserveMongodb, String>{
+public interface ReserveMongoRepository
+        extends MongoRepository<ReserveMongodb, String> {
 
     /**
      * Finds all reservations made by a specific user.

@@ -5,16 +5,17 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * Repository interface for performing CRUD operations on {@code UserMongodb} documents.
+ * Repository interface for CRUD operations on UserMongodb documents.
  */
 @Repository
-public interface UserMongoRepository extends MongoRepository<UserMongodb, String> {
+public interface UserMongoRepository
+        extends MongoRepository<UserMongodb, String> {
 
     /**
      * Finds a user by their unique identifier.
      *
      * @param id The user ID.
-     * @return The corresponding {@code UserMongodb} object, or {@code null} if not found.
+     * @return The UserMongodb object, or null if not found.
      */
     UserMongodb findById(int id);
 
@@ -22,7 +23,7 @@ public interface UserMongoRepository extends MongoRepository<UserMongodb, String
      * Finds a user by their email address.
      *
      * @param mail The user's email.
-     * @return The corresponding {@code UserMongodb} object, or {@code null} if not found.
+     * @return The UserMongodb object, or null if not found.
      */
     UserMongodb findByMail(String mail);
 
@@ -30,7 +31,7 @@ public interface UserMongoRepository extends MongoRepository<UserMongodb, String
      * Finds a user by their name.
      *
      * @param name The user's name.
-     * @return The corresponding {@code UserMongodb} object, or {@code null} if not found.
+     * @return The UserMongodb object, or null if not found.
      */
     UserMongodb findByName(String name);
 

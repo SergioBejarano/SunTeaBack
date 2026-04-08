@@ -23,18 +23,23 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * JwtRequestFilter is a security filter that intercepts HTTP requests to validate JWT tokens.
- * It ensures that authenticated users have valid tokens before processing the request.
+ * JwtRequestFilter is a security filter that
+ * intercepts HTTP requests to validate JWT tokens.
+ * It ensures that authenticated users
+ * have valid tokens before processing the request.
  */
 @Component
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
-
-    private JwtUtil jwtUtil; //Utility class for handling JWT operations.
-    private CustomUserDetailsService customUserDetailsService; //Service for retrieving user details.
-    private UserDetailsService userDetailsService; //Spring Security service for loading user details.
-    private UserMongoRepository userRepo; //Repository for accessing user data from MongoDB.
+    /** Utility class for handling JWT operations. */
+    private JwtUtil jwtUtil;
+    /** Service for retrieving user details. */
+    private CustomUserDetailsService customUserDetailsService;
+    /** Spring Security service for loading user details. */
+    private UserDetailsService userDetailsService;
+    /** Repository for accessing user data from MongoDB. */
+    private UserMongoRepository userRepo;
 
     /**
      * Filters incoming requests and validates JWT authentication tokens.
@@ -47,9 +52,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final FilterChain filterChain
     ) throws ServletException, IOException {
 
         // Skip authentication for /api/auth endpoints
@@ -68,12 +73,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Extract token and user email
         final String token = authHeader.substring(7);
         final String email = jwtUtil.extractUserEmail(token);
-        if (email == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email == null
+            || SecurityContextHolder.getContext().getAuthentication() == null) {
             return;
         }
 
         // Load user details from the database
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        final UserDetails userDetails =
+        userDetailsService.loadUserByUsername(email);
         final Optional<UserMongodb> user = userRepo.findById(email);
         if (user.isEmpty()) {
             filterChain.doFilter(request, response);
@@ -92,7 +99,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 null,
                 userDetails.getAuthorities()
         );
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        authToken.setDetails(
+            new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         // Continue with the filter chain

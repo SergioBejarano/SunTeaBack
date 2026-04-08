@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Representa un laboratorio con sus respectivos recursos físicos, de software y horarios disponibles.
+ * Representa un laboratorio con sus recursos físicos, software y horarios.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,47 +20,63 @@ import java.util.Map;
 @Setter
 public class Laboratory {
 
+    /** Abreviatura del laboratorio. */
     private String abbreviation;
+
+    /** Nombre del laboratorio. */
     private String name;
+
+    /** Capacidad total del laboratorio. */
     private int totalCapacity;
+
+    /** Ubicación del laboratorio. */
     private String location;
+
+    /** Recurso físico asociado. */
     private Physical physicalResource;
+
+    /** Recurso de software asociado. */
     private Software softwareResource;
+
+    /** Lista de horarios de referencia. */
     private List<ScheduleReference> scheduleReferences;
 
     /**
-     * Constructor con parámetros para inicializar un laboratorio con datos específicos.
+     * Constructor con parámetros para inicializar un laboratorio.
      *
-     * @param name              Nombre del laboratorio.
-     * @param abbreviation      Abreviatura del laboratorio.
-     * @param totalCapacity     Capacidad total del laboratorio.
-     * @param location          Ubicación del laboratorio.
-     * @param scheduleReferences Lista de horarios de referencia del laboratorio.
+     * @param pName           Nombre del laboratorio.
+     * @param pAbbreviation    Abreviatura del laboratorio.
+     * @param pTotalCapacity   Capacidad total.
+     * @param pLocation        Ubicación.
+     * @param pSchedules       Lista de horarios de referencia.
      */
-    public Laboratory(String name, String abbreviation, int totalCapacity, String location, List<ScheduleReference> scheduleReferences) {
-        this.name = name;
-        this.abbreviation = abbreviation;
-        this.totalCapacity = totalCapacity;
-        this.location = location;
-        this.scheduleReferences = scheduleReferences;
+    public Laboratory(final String pName, final String pAbbreviation,
+                      final int pTotalCapacity, final String pLocation,
+                      final List<ScheduleReference> pSchedules) {
+        this.name = pName;
+        this.abbreviation = pAbbreviation;
+        this.totalCapacity = pTotalCapacity;
+        this.location = pLocation;
+        this.scheduleReferences = pSchedules;
     }
 
     /**
-     * Establece los horarios de referencia del laboratorio a partir de un mapa de días y horarios.
+     * Establece los horarios a partir de un mapa.
      *
-     * @param daySchedules Mapa que asocia días de la semana con horarios de referencia.
+     * @param daySchedules Mapa de días y horarios.
      */
-    public void setReferenceSchedules(Map<DayOfWeek, ScheduleReference> daySchedules) {
+    public final void setReferenceSchedules(
+            final Map<DayOfWeek, ScheduleReference> daySchedules) {
         this.scheduleReferences = new ArrayList<>(daySchedules.values());
     }
 
     /**
-     * Agrega o actualiza un horario de referencia en función del día de la semana.
-     * Si ya existe un horario para ese día, lo actualiza; de lo contrario, lo agrega.
+     * Agrega o actualiza un horario de referencia.
      *
-     * @param scheduleReference Horario de referencia a agregar o actualizar.
+     * @param scheduleReference Horario a agregar o actualizar.
      */
-    public void addScheduleReference(ScheduleReference scheduleReference) {
+    public final void addScheduleReference(
+            final ScheduleReference scheduleReference) {
         DayOfWeek day = scheduleReference.getDayOfWeek();
         for (int i = 0; i < scheduleReferences.size(); i++) {
             if (scheduleReferences.get(i).getDayOfWeek().equals(day)) {
@@ -72,25 +88,28 @@ public class Laboratory {
     }
 
     /**
-     * Agrega un día disponible con un horario de apertura y cierre.
+     * Agrega un día disponible con un horario específico.
      *
-     * @param day          Día de la semana en el que el laboratorio estará disponible.
-     * @param openingTime  Hora de apertura.
-     * @param closingTime  Hora de cierre.
+     * @param day         Día de la semana.
+     * @param openingTime Hora de apertura.
+     * @param closingTime Hora de cierre.
      */
-    public void addAvailableDay(DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
-        ScheduleReference reference = new ScheduleReference(day, openingTime, closingTime);
+    public final void addAvailableDay(final DayOfWeek day,
+                                      final LocalTime openingTime,
+                                      final LocalTime closingTime) {
+        ScheduleReference reference = new ScheduleReference(day,
+                openingTime, closingTime);
         addScheduleReference(reference);
     }
 
-    // Getters y setters
     /**
      * Obtiene el horario de referencia para un día específico.
      *
      * @param day Día de la semana a consultar.
-     * @return Horario de referencia correspondiente, o null si no existe.
+     * @return Horario de referencia o null.
      */
-    public ScheduleReference getScheduleReferenceForDay(DayOfWeek day) {
+    public final ScheduleReference getScheduleReferenceForDay(
+            final DayOfWeek day) {
         for (ScheduleReference ref : scheduleReferences) {
             if (ref.getDayOfWeek().equals(day)) {
                 return ref;
@@ -99,11 +118,18 @@ public class Laboratory {
         return null;
     }
 
-    public void setScheduleReference(ScheduleReference scheduleReference){
+    /**
+     * Actualiza o añade una referencia de horario.
+     *
+     * @param scheduleReference La referencia a establecer.
+     */
+    public final void setScheduleReference(
+            final ScheduleReference scheduleReference) {
         boolean updated = false;
 
         for (int i = 0; i < scheduleReferences.size(); i++) {
-            if (scheduleReferences.get(i).getDayOfWeek().equals(scheduleReference.getDayOfWeek())) {
+            DayOfWeek existingDay = scheduleReferences.get(i).getDayOfWeek();
+            if (existingDay.equals(scheduleReference.getDayOfWeek())) {
                 scheduleReferences.set(i, scheduleReference);
                 updated = true;
                 break;
@@ -114,6 +140,4 @@ public class Laboratory {
             scheduleReferences.add(scheduleReference);
         }
     }
-
-
 }

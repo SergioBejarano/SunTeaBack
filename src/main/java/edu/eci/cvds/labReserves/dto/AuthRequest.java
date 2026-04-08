@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * AuthRequest represents a data transfer object (DTO) for handling authentication requests.
- * It contains user credentials (email and password) required for authentication.
+ * AuthRequest represents a data transfer object
+ * (DTO) for handling authentication requests.
+ * It contains user credentials
+ * (email and password) required for authentication.
  */
 @AllArgsConstructor
 @NoArgsConstructor

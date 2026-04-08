@@ -11,65 +11,80 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 /**
- * AuthService provides authentication and registration functionalities for the system.
- * It handles user registration, login, and JWT token generation.
+ * Service providing authentication and registration functionalities.
+ * Handles user registration, login, and JWT token generation.
  */
 @Service
 public class AuthService {
 
-    private final AuthenticationManager authenticationManager; //Manages authentication processes.
+    /** Manages authentication processes. */
+    private final AuthenticationManager authenticationManager;
 
-    private final UserMongoRepository userRepo; //Repository for interacting with the user database.
+    /** Repository for interacting with the user database. */
+    private final UserMongoRepository userRepo;
 
-    private final PasswordEncoder passwordEncoder; //Handles password encryption.
+    /** Handles password encryption. */
+    private final PasswordEncoder passwordEncoder;
 
-    private final JwtUtil jwtUtil; //Utility class for generating JWT tokens.
+    /** Utility class for generating JWT tokens. */
+    private final JwtUtil jwtUtil;
 
-    public AuthService(AuthenticationManager authenticationManager, UserMongoRepository userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+    /**
+     * Constructs the AuthService with necessary dependencies.
+     *
+     * @param pAuthManager Manager for authentication.
+     * @param pUserRepo    Repository for user data.
+     * @param pPassEncoder Encoder for passwords.
+     * @param pJwtUtil     Utility for JWT tokens.
+     */
+    public AuthService(final AuthenticationManager pAuthManager,
+                       final UserMongoRepository pUserRepo,
+                       final PasswordEncoder pPassEncoder,
+                       final JwtUtil pJwtUtil) {
+        this.authenticationManager = pAuthManager;
+        this.userRepo = pUserRepo;
+        this.passwordEncoder = pPassEncoder;
+        this.jwtUtil = pJwtUtil;
     }
 
     /**
      * Registers a new user in the system.
-     * Encrypts the password before storing it in the database and generates authentication tokens.
      *
-     * @param user The user to be registered.
-     * @return A TokenResponse containing the JWT token and refresh token.
-     * @throws LabReserveException If an error occurs during user registration.
+     * @param pUser The user to be registered.
+     * @return A TokenResponse containing the JWT and refresh token.
+     * @throws LabReserveException If an error occurs during registration.
      */
-    public TokenResponse register(User user) throws LabReserveException {
-        try{
-            UserMongodb userMongo = new UserMongodb(user);
-            userMongo.setPassword(passwordEncoder.encode(user.getPassword()));
+    public TokenResponse register(final User pUser)
+            throws LabReserveException {
+        try {
+            UserMongodb userMongo = new UserMongodb(pUser);
+            userMongo.setPassword(passwordEncoder.encode(pUser.getPassword()));
             userRepo.save(userMongo);
             String jwtToken = jwtUtil.generateToken(userMongo);
             String refreshToken = jwtUtil.generateRefreshToken(userMongo);
-            return  new TokenResponse(jwtToken, refreshToken);
-
-        } catch(Exception e){
-            throw new LabReserveException("Error al crear el usuario: " + e.getMessage());
+            return new TokenResponse(jwtToken, refreshToken);
+        } catch (Exception e) {
+            throw new LabReserveException("Error al crear el usuario: "
+                    + e.getMessage());
         }
     }
 
     /**
-     * Authenticates a user based on the provided email and password.
-     * Generates and returns authentication tokens if authentication is successful.
+     * Authenticates a user based on provided credentials.
      *
-     * @param authRequest The authentication request containing user credentials.
-     * @return A TokenResponse containing the JWT token and refresh token.
+     * @param pAuthRequest The authentication request containing credentials.
+     * @return A TokenResponse containing tokens.
      */
-    public TokenResponse login(AuthRequest authRequest){
+    public final TokenResponse login(final AuthRequest pAuthRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(),
-                        authRequest.getPassword()
+                        pAuthRequest.getEmail(),
+                        pAuthRequest.getPassword()
                 )
         );
-        UserMongodb userMongodb = userRepo.findByMail(authRequest.getEmail());
+        UserMongodb userMongodb = userRepo.findByMail(pAuthRequest.getEmail());
         String token = jwtUtil.generateToken(userMongodb);
         String refreshToken = jwtUtil.generateRefreshToken(userMongodb);
         return new TokenResponse(token, refreshToken);
