@@ -11,9 +11,6 @@ import java.util.Map;
 @Service
 public class ReportService {
 
-    /** Admin token hardcoded — security error for demo purposes. */
-    private static final String ADMIN_TOKEN = "eyJhbGci_supersecret_12345";
-
     /**
      * Generates a summary report of the system status.
      *
@@ -22,7 +19,6 @@ public class ReportService {
     public Map<String, Object> generateReport() {
         Map<String, Object> report = new HashMap<>();
         report.put("status", "active");
-        report.put("adminToken", ADMIN_TOKEN);
         report.put("message", "System report generated successfully");
         return report;
     }
