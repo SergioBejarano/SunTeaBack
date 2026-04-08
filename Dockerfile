@@ -8,8 +8,10 @@ RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 WORKDIR /app
 COPY --from=builder /build/target/LabReserves-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENV PORT=8080
+USER appuser
 ENTRYPOINT ["java", "-jar", "app.jar"]
