@@ -74,7 +74,7 @@ jobs:
         run: >
           mvn -B verify
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.projectKey=Waldron63_SunTeaBack
+          -Dsonar.projectKey=SergioBejarano_SunTeaBack
           -Dsonar.qualitygate.wait=true
           -Dsonar.qualitygate.timeout=300
           --no-transfer-progress

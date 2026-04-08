@@ -162,7 +162,7 @@ Ve a: **Settings → Security & analysis**
 
 ```xml
 <properties>
-  <sonar.organization>sunteaback</sonar.organization>
+  <sonar.organization>sergiobejarano</sonar.organization>
   <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 </properties>
 ```
